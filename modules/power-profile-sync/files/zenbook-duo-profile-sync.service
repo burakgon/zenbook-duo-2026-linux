@@ -2,6 +2,7 @@
 Description=Zenbook Duo: sync power profile to asus-wmi, SoC slider and Xe GPU
 After=power-profiles-daemon.service
 Requires=power-profiles-daemon.service
+PartOf=power-profiles-daemon.service
 
 [Service]
 ExecStart=/usr/lib/zenbook-duo/zenbook-duo-profile-sync
