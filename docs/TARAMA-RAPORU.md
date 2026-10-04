@@ -173,3 +173,9 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 | ISH firmware | ✅ ASUS imzalı (Dell kendi imajını linux-firmware'e koymuş, ASUS koymamış) |
 | LVFS/fwupd | ➖ ASUS BIOS'u LVFS'te yok, yalnız UEFI dbx güncellemesi var |
 | FRED | ✅ çekirdekte etkin (`fred_sysvec_*` izleri) |
+
+## 8. Anlık ters dönme + dokunmatiğin kaybolması (çözüldü)
+- KWin, çıkışın dönüşü her değiştiğinde dokunmatik aygıtlarının yön ayarını sıfırlıyor. Hareket sırasında ivmeölçerin anlık yön değişiklikleri, otomatik döndürmeyi ("Always") tetikleyip ekranı bir an çeviriyor ve dokunmatiği bozuyordu.
+- Çözüm: her iki çıkışta otomatik döndürme "InTabletMode" (cihazda tablet modu anahtarı yok, fiilen kapalı) + sabit 180°. `kscreen-doctor` bu ayarı yapamadığı için `tools/duo-kscreen` (libkscreen) yazıldı: `duo-kscreen eDP-1 autorotate intabletmode rotation inverted`.
+- Dokunmatik yön ayarı (Orientation=8) her oturum açılışında `~/.config/autostart/zenbook-duo-touch.desktop` ile yeniden uygulanıyor.
+- Tablet/kitap kullanımı için ileride menteşe sensörüne dayalı kendi döndürme mantığımız (duo-screen) gerekecek.
