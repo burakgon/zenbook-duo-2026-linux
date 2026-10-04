@@ -10,7 +10,8 @@
 //  * KWin reacts to every orientation change instantly.
 //
 // Behaviour:
-//  * keyboard docked over USB (0b05:1cd7): laptop posture, no rotation;
+//  * keyboard docked over USB (0b05:1cd7), i.e. lying on the bottom panel: laptop
+//    posture, bottom panel disabled; lifted off: bottom panel enabled again;
 //  * otherwise follow iio-sensor-proxy, but only after an orientation has been
 //    stable for STABLE_MS;
 //  * after any output change (ours, KWin's or the user's) re-apply touch mapping.
@@ -103,13 +104,14 @@ public:
         m_touch.setInterval(TOUCH_DELAY_MS);
         connect(&m_touch, &QTimer::timeout, this, [this] { applyTouch(); });
 
-        m_dockPoll.setInterval(1000);
+        m_dockPoll.setInterval(500);
         connect(&m_dockPoll, &QTimer::timeout, this, [this] {
             const bool d = keyboardDocked();
             if (d != m_docked) {
                 m_docked = d;
                 log(QStringLiteral("keyboard %1").arg(d ? QStringLiteral("docked") : QStringLiteral("detached")));
-                m_stable.start();
+                m_dockChanged = true;
+                applyRotation();
             }
         });
         m_docked = keyboardDocked();
@@ -135,6 +137,7 @@ public:
             KScreen::ConfigMonitor::instance()->addConfig(m_config);
             connect(KScreen::ConfigMonitor::instance(), &KScreen::ConfigMonitor::configurationChanged, this,
                     [this] { m_touch.start(); });
+            m_dockChanged = true; // enforce the panel state once at startup
             applyRotation();
         });
     }
@@ -181,6 +184,17 @@ private:
         set(t, top);
         if (b)
             set(b, bottom);
+
+        // The keyboard covers the bottom panel when docked. Only act on dock
+        // transitions so a manual choice in System Settings sticks until then.
+        if (b && m_dockChanged) {
+            m_dockChanged = false;
+            if (b->isEnabled() == m_docked) {
+                b->setEnabled(!m_docked);
+                changed = true;
+                log(QStringLiteral("bottom panel %1").arg(m_docked ? QStringLiteral("off") : QStringLiteral("on")));
+            }
+        }
 
         // Lay the panels out around the hinge. The hinge is at the top panel's
         // scan-out top edge (the panel is mounted upside down).
@@ -253,6 +267,7 @@ private:
     QDBusInterface *m_sensor = nullptr;
     QString m_orientation;
     bool m_docked = false;
+    bool m_dockChanged = false;
     QTimer m_stable, m_touch, m_dockPoll;
 };
 
