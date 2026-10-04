@@ -176,6 +176,6 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 
 ## 8. Anlık ters dönme + dokunmatiğin kaybolması (çözüldü)
 - KWin, çıkışın dönüşü her değiştiğinde dokunmatik aygıtlarının yön ayarını sıfırlıyor. Hareket sırasında ivmeölçerin anlık yön değişiklikleri, otomatik döndürmeyi ("Always") tetikleyip ekranı bir an çeviriyor ve dokunmatiği bozuyordu.
-- Çözüm: her iki çıkışta otomatik döndürme "InTabletMode" (cihazda tablet modu anahtarı yok, fiilen kapalı) + sabit 180°. `kscreen-doctor` bu ayarı yapamadığı için `tools/duo-kscreen` (libkscreen) yazıldı: `duo-kscreen eDP-1 autorotate intabletmode rotation inverted`.
+- Çözüm: her iki çıkışta otomatik döndürme "InTabletMode" (cihazda tablet modu anahtarı yok, fiilen kapalı). Üst panel (eDP-1) ters takılı → sabit 180°; alt panel (eDP-2) düz takılı → 0° (kullanıcı doğruladı, ilk varsayım yanlıştı). Dokunmatik yönü: üst 8, alt 0. `kscreen-doctor` bu ayarı yapamadığı için `tools/duo-kscreen` (libkscreen) yazıldı: `duo-kscreen eDP-1 autorotate intabletmode rotation inverted`.
 - Dokunmatik yön ayarı (Orientation=8) her oturum açılışında `~/.config/autostart/zenbook-duo-touch.desktop` ile yeniden uygulanıyor.
 - Tablet/kitap kullanımı için ileride menteşe sensörüne dayalı kendi döndürme mantığımız (duo-screen) gerekecek.
