@@ -129,3 +129,28 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 - İki panel de 180° ters takılı. KWin DRM `panel_orientation` özelliğini uygulamıyor; çekirdek parametresi denendi ve geri alındı.
 - Çözüm: `sensors-accel-mount` (hwdb `ACCEL_MOUNT_MATRIX=-1,0,0;0,-1,0;0,0,1`). Laptop dik dururken sensör `bottom-up` raporluyor ve KWin otomatik döndürme ile `Rotated180` uyguluyor.
 - Dokunmatik katman ters takılı değil (ham koordinatlar kullanıcının gördüğü yönde), ama KWin dokunuşları çıkış dönüşümüyle birlikte 180° çeviriyor. libinput kalibrasyon matrisi (`-1 0 1 0 -1 1`) KWin'de tüm dokunuşları tek noktaya topluyor, kullanılamaz. Çözüm: KWin'in aygıt başına yön ayarı `Orientation=8` + eşleme RAYD0001→eDP-1, RAYD0002→eDP-2 (`tools/kde-touch-setup.sh`, `~/.config/kcminputrc`).
+
+## 6. Derin denetim (2026-10-04 gece, 7.2.9, AC'de)
+**Güç**
+- Boşta paket gücü 0,66–0,79 W (CorWatt 0,03, GFX 0,01, RAM 0,14). Dell XPS PTL raporlarıyla (sistem 1,4–1,5 W) aynı sınıfta. Ekran motoru DC6'ya giriyor, GT C6'da, NVMe 100 ms'de PS3'e, 2 sn'de PS4'e iniyor.
+- `SysWatt` (psys) AC'de ve batarya doluyken anlamsız (~16–17 W, ekran kapatılınca değişmiyor). Gerçek ölçüm pildeyken `tools/power-measure.sh` ile yapılmalı.
+- Ekran kapalıyken bile Pkg%pc10 ≈ %0 ve `slp_s0` artmıyor. Ölçüm sırasında Brave'de YouTube açıktı (ses akışı açık, pipewire-pulse ~94/s, xe vcs3). Gerçek boşta S0ix değerlendirmesi tarayıcı kapalıyken tekrarlanmalı.
+- **TRM (termal vektör) fırtınası:** ~640 kesme/s, tüm çekirdekler. ftrace: her kesmede `intel_thermal_interrupt → therm_throt_process ×2, notify_hwp_interrupt, intel_hfi_process_event`, ama paket bildirimi yok. HFI (PKG_THERM_INTERRUPT bit 25) ya da HWP bildirimleri (MSR 0x773) kapatılınca oran değişmiyor; thermald'den bağımsız. Kaynak belirsiz, upstream'e bildirilmeli.
+- Profiller (power-profile-sync ile): power-saver = Whisper (ODV0=1, PL1 30 W, PL2 35 W, TCC 11, EPP power, Xe power_saving); balanced = Standard (42/55 W); performance = 55/64 W, TCC 3.
+- Balanced tam yük (16 iş parçacığı, 60 sn): ilk ~20 sn 55 W / 3,2 GHz / 93 °C, sonra thermald MSR PL1'i 30 W'a çekiyor (2,5 GHz, 80 °C). Throttle nedenleri: Thermal, PL1, PL2 log. Davranış Windows DTT pasif politikasıyla uyumlu. DTT sensörlerinden SEN1/3/4/6/7/8 0 °C okuyor (ACPI _TMP), SEN2 gerçek değer veriyor.
+- intel_lpmd (PTL M204 config, WLT ipuçları) ve thermald birlikte çalışıyor; Omarchy/Dell de aynı kombinasyonu kullanıyor.
+
+**Ekran**
+- VRR "Never": Panther Lake eDP VRR'ı şu an bozuk (xe #8976 vmin'e sabitlenme, #9253/#9296 DSB/takılma, #9385). Bu boot'ta 0 DSB hatası.
+- Panel Replay SU (Early Transport) aktif ve SLEEP durumuna giriyor. Alternatif `xe.enable_panel_replay=0 xe.enable_psr=1` (PSR1), takılma veya bozulma görülürse denenecek (xe #8923, #9119, Omarchy #11016: 7.2'de PR gecikmesi).
+- Bilinen açık hatalar (bu model): xe #7764 (klavye takılıyken boot → eDP-2 flip_done timeout, LOBF), #9196 (PHY B refclk, ancak tam güç kesintisiyle düzeliyor), #8392.
+- Parlaklık: `xe.enable_dpcd_backlight=1` gerekmedi (intel_backlight 38400 kademe, KDE kontrol ediyor).
+
+**Ağ**
+- BE201: 6 GHz/320 MHz MLO, −57 dBm, Rx 3,46 Gbps (EHT-MCS 8, NSS 2), Tx 1,73 Gbps (NSS 1). 7.2.9 firmware c106 yüklüyor (7.3: c107; c108 kernel'de desteklenmiyor).
+- Güç tasarrufu açıkken ağ geçidi gecikmesi ortalama 16 ms / en fazla 158 ms, kapalıyken 7 ms. `wifi-powersave-ac` modülü eklendi.
+- Boot sonrası mesh AP'ler arasında 2 roam, sonra kararlı. Omarchy, Dell için BE201'de EHT'yi kapatıyor (`disable_11be`); burada gerek yok, Tx NSS1 izlenecek.
+
+**Ses / sistem**
+- PulseAudio, pipewire-pulse'un yerine geçmişti (21:02, bizden önce). Geri alındı; tarayıcı/YouTube sorunu buydu.
+- `hwrng` TPM'i saniyede ~20 kez okuyordu, kapatıldı (`power-tpm-rng`). Runtime PM, 10 platform PCI fonksiyonu için "auto" yapıldı (`power-runtime-pm`).
