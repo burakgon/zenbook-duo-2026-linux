@@ -154,3 +154,22 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 **Ses / sistem**
 - PulseAudio, pipewire-pulse'un yerine geçmişti (21:02, bizden önce). Geri alındı; tarayıcı/YouTube sorunu buydu.
 - `hwrng` TPM'i saniyede ~20 kez okuyordu, kapatıldı (`power-tpm-rng`). Runtime PM, 10 platform PCI fonksiyonu için "auto" yapıldı (`power-runtime-pm`).
+
+## 7. Dell XPS / Omarchy iddialarıyla karşılaştırma
+| Başlık | Bu makinede |
+|---|---|
+| Panel Replay / PSR | ✅ PR + SU + Early Transport aktif, panel RFB'den gösteriyor, hata yok. A/B ölçüm: paket 1,06 W (PR) / 1,29 W (kapalı) |
+| ALPM / LOBF | ✅ aux-less ALPM açık; LOBF kapalı (PR ile gerekmiyor) |
+| DC5/DC6 | ✅ sayaçlar sürekli artıyor; boşta yalnız PW_A açık |
+| FBC | ➖ SU etkinken devre dışı (beklenen, XPS'te de aynı) |
+| VRR | ⚠️ upstream'de bozuk, bilinçli olarak "Never" |
+| Ses | ✅ Cirrus CS35L56'ya ASUS'a özel tuning ve kalibrasyon yükleniyor (XPS'in gerektirdiği EQ katmanı burada firmware'de) |
+| Kamera | ✅ UVC 1080p + IR (Windows Hello). XPS'in IPU7 sorunları bu makinede yok. IR yüz tanıma kurulmadı |
+| NPU | ✅ intel_vpu + fw 2026-08-20; `intel-npu-driver` + Level Zero kuruldu, "Intel AI Boost" listeleniyor (kullanıcı `render` grubuna eklendi). CachyOS `openvino` paketi yalnız CPU eklentisi içeriyor; GPU/NPU için pip ile OpenVINO gerekir |
+| GPU hesaplama | ✅ intel-compute-runtime: Level Zero + OpenCL (Intel ve rusticl) |
+| Donanımsal video | ✅ intel-media-driver, libvpl, vpl-gpu-rt; VA-API H.264/VP9/AV1 |
+| Wi-Fi 7 | ✅ (bkz. bölüm 6); EHT kapatma gerekmedi |
+| lpmd + thermald | ✅ ikisi de çalışıyor; thermald Windows DTT tablolarını uyguluyor |
+| ISH firmware | ✅ ASUS imzalı (Dell kendi imajını linux-firmware'e koymuş, ASUS koymamış) |
+| LVFS/fwupd | ➖ ASUS BIOS'u LVFS'te yok, yalnız UEFI dbx güncellemesi var |
+| FRED | ✅ çekirdekte etkin (`fred_sysvec_*` izleri) |
