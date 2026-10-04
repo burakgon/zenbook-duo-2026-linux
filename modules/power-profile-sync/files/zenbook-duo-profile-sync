@@ -1,0 +1,43 @@
+#!/bin/bash
+# zenbook-duo-profile-sync: complete what power-profiles-daemon cannot do on the UX8407AA.
+#
+# The legacy platform_profile only offers the choices common to all handlers. asus-wmi
+# has "quiet", the Intel SoC Power Slider has "low-power", so neither survives and
+# PPD's power-saver leaves the firmware in "balanced" (no Whisper DTT limits, no quiet
+# fans). Xe's GuC power profile is not managed by PPD at all.
+set -u
+
+asus=""; soc=""
+for p in /sys/class/platform-profile/*; do
+	case "$(cat "$p/name")" in
+	asus-wmi) asus="$p/profile" ;;
+	"SoC Power Slider") soc="$p/profile" ;;
+	esac
+done
+
+set_gpu() { for f in /sys/class/drm/card*/device/tile*/gt*/freq0/power_profile; do echo "$1" >"$f" 2>/dev/null; done; }
+
+apply() {
+	local prof
+	prof="$(powerprofilesctl get 2>/dev/null)" || return
+	case "$prof" in
+	power-saver)
+		[[ -n $asus ]] && echo quiet >"$asus"
+		[[ -n $soc ]] && echo low-power >"$soc"
+		set_gpu power_saving
+		;;
+	balanced | performance)
+		# PPD cannot leave the "custom" mixed state on its own; set both handlers
+		[[ -n $asus ]] && echo "$prof" >"$asus"
+		[[ -n $soc ]] && echo "$prof" >"$soc"
+		set_gpu base
+		;;
+	esac
+	logger -t zenbook-duo-profile-sync "profile=$prof asus=$(cat "$asus" 2>/dev/null) soc=$(cat "$soc" 2>/dev/null)"
+}
+
+apply
+gdbus monitor --system --dest org.freedesktop.UPower.PowerProfiles 2>/dev/null |
+	while read -r line; do
+		[[ $line == *ActiveProfile* ]] && { sleep 0.3; apply; }
+	done
