@@ -1,8 +1,0 @@
-#!/bin/sh
-# Pacman hook (zenbook-duo-linux, module display-brightness-per-panel): say so when a
-# repository update replaced the patched kwin/powerdevil builds.
-for p in kwin powerdevil; do
-	LC_ALL=C pacman -Qi "$p" 2>/dev/null | grep -q '^Packager *: zenbook-duo-linux$' && continue
-	echo "zenbook-duo: $p was updated from the repository, the bottom panel's brightness is software-dimmed again."
-	echo "zenbook-duo: rebuild the patch for the new version with: sudo duo apply display-brightness-per-panel"
-done
