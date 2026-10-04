@@ -1,0 +1,14 @@
+[Unit]
+Description=Zenbook Duo: Panel Replay without Early Transport (ghost cursors on eDP-1)
+After=systemd-modules-load.service sys-kernel-debug.mount
+ConditionPathExists=/sys/kernel/debug/dri/0/i915_edp_psr_debug
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# 0x20 = I915_PSR_DEBUG_SU_REGION_ET_DISABLE, mode stays default (Panel Replay SU on)
+ExecStart=/bin/sh -c 'echo 0x20 > /sys/kernel/debug/dri/0/i915_edp_psr_debug'
+ExecStop=/bin/sh -c 'echo 0 > /sys/kernel/debug/dri/0/i915_edp_psr_debug'
+
+[Install]
+WantedBy=multi-user.target

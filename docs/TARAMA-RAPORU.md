@@ -142,7 +142,7 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 
 **Ekran**
 - VRR "Never": Panther Lake eDP VRR'ı şu an bozuk (xe #8976 vmin'e sabitlenme, #9253/#9296 DSB/takılma, #9385). Bu boot'ta 0 DSB hatası.
-- Panel Replay SU (Early Transport) aktif ve SLEEP durumuna giriyor. Alternatif `xe.enable_panel_replay=0 xe.enable_psr=1` (PSR1), takılma veya bozulma görülürse denenecek (xe #8923, #9119, Omarchy #11016: 7.2'de PR gecikmesi).
+- Panel Replay SU aktif ve SLEEP durumuna giriyor. Early Transport (ET) açıkken üst panelde (180° takılı) imlecin eski kopyaları ekranda kalıyor (2–3 hayalet imleç; kullanıcı doğruladı). PR kapatılınca ve yalnızca ET kapatılınca (debugfs `i915_edp_psr_debug=0x20`) sorun bitiyor. ET için modül parametresi yok; `display-psr-et-off` açılışta bu biti yazıyor. 7.2.9 ve 7.3-rc5'teki ET düzeltmeleri bu hatayı gidermiyor (upstream'e bildirilecek). Alternatif `xe.enable_panel_replay=0 xe.enable_psr=1` (PSR1), takılma veya bozulma görülürse denenecek (xe #8923, #9119, Omarchy #11016: 7.2'de PR gecikmesi).
 - Bilinen açık hatalar (bu model): xe #7764 (klavye takılıyken boot → eDP-2 flip_done timeout, LOBF), #9196 (PHY B refclk, ancak tam güç kesintisiyle düzeliyor), #8392.
 - Parlaklık: ilk değerlendirme yanlıştı. PWM backlight değeri değişiyor ama panele ulaşmıyor; `xe.enable_dpcd_backlight=1` gerekiyor (bkz. bölüm 10).
 

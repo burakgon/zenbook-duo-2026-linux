@@ -53,6 +53,7 @@ hardware-scan/          ACPI tabloları (DSDT/SSDT .dat + .dsl), DTT veri kasas�
 | `keyboard-hid-asus` | Yamalı hid-asus (DKMS): klavye ışığı, Fn tuşları, USB+BT | 7.2.x, 7.3.x |
 | `sensors-accel-mount` | İvmeölçere panellerin 180° ters takılı olduğunu bildirir (hwdb ACCEL_MOUNT_MATRIX): otomatik döndürme doğru çalışır | hepsi |
 | `display-dpcd-backlight` | OLED panellerin parlaklığını DPCD (AUX) üzerinden sürer (`xe.enable_dpcd_backlight=1`) | hepsi |
+| `display-psr-et-off` | Panel Replay'de yalnızca Early Transport'u kapatır: üst ekranda hayalet imleç kalmaz | hepsi |
 
 ## Yeni modül eklemek
 
