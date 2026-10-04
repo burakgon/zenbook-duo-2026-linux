@@ -43,10 +43,14 @@ Sonuç: Bu donanım için 7.3, 7.2'den belirgin şekilde daha olgun. 7.2.9 için
 ## 3. Bulgular (alt sistem bazında)
 
 ### 3.1 Ekran / xe
-- `[CRTC:153:pipe A] DSB 0 poll error`: 7.3-rc5'te de sürekli (ortalama 4–5/dk, ekran aktivitesiyle ilişkili). VRR "Always" ↔ "Automatic" denemesi **sonuçsuz** kaldı.
+- `[CRTC:153:pipe A] DSB 0 poll error`: 7.3-rc5'te de sürekli (ortalama 4–5/dk, sadece ekran açıkken).
+  - **Kök neden:** Upstream'de doğrulandı (xe #8564, #9253, #9296, #9385, #9258): üst panelde VRR açıkken v7.0'da gelen "VRR DC balance" özelliği. KDE'de eDP-1 VRR politikası "Always"tı (DSB'nin tek olası poll noktası `intel_vrr_check_push_sent()`).
+  - **Düzeltme:** `c034e8a46e4c drm/i915/vrr: Disable DC balance by default` mainline'a 2026-10-03'te girdi (7.3-rc6), `Cc: stable # v7.0+`. 7.2.y kuyruğunda henüz yok. `kernel/patches/0002-…` olarak kaydedildi, 7.2.9 ve 7.3-rc5'e temiz uygulanıyor.
+  - **Uygulanan geçici çözüm:** KDE VRR politikası her iki panelde "Automatic" yapıldı (VRR sadece tam ekran oyun/video). Ayrıca OLED'de düşük Hz titreşimini önler. Tamamen kapatmak için "Never", ya da `xe.enable_dsb=0`.
 - Üst panelde Panel Replay Selective Update (Early Transport) aktif; alt panel kapalı.
 - `Selective fetch area calculation failed in pipe A` (7.2.9).
-- `not enough stolen space for compressed buffer (need 27525120 more bytes)` → FBC kapalı (güç kaybı). 7.3'te `0687ec06f5` ve `f0cabcc880` bununla ilgili.
+- `not enough stolen space for compressed buffer (need 27525120 more bytes)`: 27.525.120 bayt, 2560 piksel genişliğinde bir plane'in (Studio Display'in bir yarısı/tile) sıkıştırılmış buffer boyutu, yani eDP panelleriyle ilgili değil. FBC sadece o plane için atlanıyor, zararsız.
+- 7.2.9 + Studio Display çökmesi bilinen örüntüyle birebir aynı (xe #9253, #9385): PSR idle timeout → `intel_psr_resume` WARN, plane fault, FIFO underrun. Muhtemel yol: 5K ekran CDCLK'yi yükseltiyor, `intel_set_cdclk()` PSR'yi duraklatıyor, duraklatma 2 sn'de zaman aşımına uğruyor. vblank WARN'ı 7.2-rc1'deki d08e46efae16'dan geliyor (#9449, düzeltme yok). Bekleyen seri: Jouni Högander'in "Selective fetch calculation fixes" (8 patch, 2026-09-29; 1/8 ve 4/8 stable etiketli). #9385'te `KWIN_DRM_NO_DIRECT_SCANOUT=1` sorunu tamamen önlemiş. İlgili: #9153 (Studio Display soğuk boot'ta siyah), #8991 (5K tile senkronu).
 - `asus_screenpad` backlight değeri 130816/255: DSDT `0x00050032` için `parlaklık | 0xFF00 | 0x10000` döndürüyor, asus-wmi init'te maskelemiyor. Upstream düzeltme (Denis Benato) pdx86'da, 7.4 bekleniyor. Duo'da bu cihaz zaten anlamsız: alt panelin parlaklığı `card0-eDP-2-backlight`.
 - Uyarı: drm/xe #9196 açık. eDP-2'nin yeniden etkinleştirilmesi PHY B'yi kilitleyebiliyor ("PHY B failed to request refclk"). Duo ekran yöneticisi bu nedenle temkinli tasarlanmalı.
 
@@ -66,7 +70,8 @@ Sonuç: Bu donanım için 7.3, 7.2'den belirgin şekilde daha olgun. 7.2.9 için
 
 ### 3.4 Görüntü kalitesi: 10-bit
 - eDP-1, 2880×1800@144 Hz'de **bpp=18 (6 bit + dithering)** ile sürülüyor. HBR2×4 (17.28 Gbps efektif) 8 bpc'ye (20.4 Gbps) yetmiyor. Panel DSC destekliyor (RGB, 4 slice, 1/16 bpp) ama sürücü DSC yerine bpc'yi düşürmeyi seçiyor. Sink HBR3'ü de listeliyor ama `max_link_rate` 540000 ile sınırlı.
-- Hedef: DSC ile 144 Hz'de 10-bit. Deneysel; Panel Replay ile etkileşimi test edilmeli.
+- Upstream genel "DP/eDP'de DSC'yi tercih et" değişikliğini reddetti (Imre Deak: güç ve DSC güvenilirliği). Birleştirilen 22931a311193 sadece DP→HDMI dönüştürücüleri kapsıyor ve eDP'de 6 bpc'ye düşme bilinçli olarak korunuyor. Modül parametresi yok.
+- Seçenekler: (1) **KDE'de eDP-1 için HDR'ı açmak**, sürücüyü ≥30 bpp kullanmaya, yani DSC'ye zorlar (kodda doğrulandı); (2) yalnız eDP ile sınırlı 12 satırlık yerel patch; (3) `eDP-1/i915_dsc_fec_support`'a 1 yazmak (bir sonraki modeset'te geçerli, reboot'ta kaybolur). Risk: açık PTL hatası #8923 (2880×1800 DSC panellerde Panel Replay early transport ile bozulma). Sürücü, panelin "Panel Replay DSC support" yeteneğine göre PR/SU'yu kendisi düşürüyor.
 
 ### 3.5 Güç / performans: en büyük kazanım
 BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-scan/dtt/`). Windows bu tabloları uyguluyor, Linux ise uygulamıyordu:
@@ -107,8 +112,10 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 | P0 | `audio-ghost-rt722`: 7.2.x ses | ✅ uygulandı (DKMS, 7.2.9 için derlendi) |
 | P0 | `sensors-ish-firmware`: döndürme/ALS/menteşe | ✅ uygulandı, canlı çalışıyor |
 | P0 | `power-dtt`: Windows güç tabloları | ✅ uygulandı, doğrulandı |
-| P0 | `display-xe-*`: 7.2 siyah ekran/uyku donması, DSB hataları | 🔄 araştırma sonucu bekleniyor |
-| P1 | `keyboard-hid-asus`: arka ışık, Fn tuşları, Fn-lock (USB + BT 0x1cd8) | 🔜 DKMS hid-asus (protokol doğrulandı) |
+| P0 | DSB hataları: VRR → Automatic (KDE) | ✅ uygulandı; kalıcı düzeltme 7.3-rc6 / 7.2.y stable |
+| P0 | `display-xe-*`: 7.2 + harici 5K ekranda siyah ekran/uyku donması | 🔄 geçici: 7.2'de harici ekranı login sonrası tak; `KWIN_DRM_NO_DIRECT_SCANOUT=1` seçeneği; asıl çözüm 7.3 |
+| P1 | `keyboard-backlight`: arka ışık LED'i (udev → hid-asus) | ✅ uygulandı |
+| P1 | `keyboard-hotkeys`: Fn tuşları (descriptor düzeltmesi, HID-BPF), Fn-lock, BT 0x1cd8 | 🔜 Fn tuş yakalama testi gerekli |
 | P1 | `power-profile-sync`: power-saver → quiet + low-power | 🔜 |
 | P1 | `duo-screen`: klavye tak/çıkar → alt ekran, duruş (menteşe) ile yerleşim | 🔜 (xe #9196'ya dikkat) |
 | P1 | `keyboard-bluetooth`: eşleştirme yardımcısı | 🔜 |

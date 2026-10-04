@@ -235,8 +235,10 @@ health_summary() {
 	ls /sys/class/leds/ | grep -q "kbd_backlight" && pass "Keyboard backlight LED present" || warn "No kbd_backlight LED"
 
 	# Sensors (ISH): accelerometer/ALS are required for rotation & auto brightness.
-	if grep -q "ISH loader: cmd .* failed" <<<"$k"; then
-		fail "ISH firmware load failed (no accelerometer/ALS/hinge): $(grep -o 'ISH loader: load firmware: [^ ]*' <<<"$k" | tail -1)"
+	if grep -q "ISH loader: firmware loaded" <<<"$k"; then
+		pass "ISH firmware: $(grep -o 'ISH loader: load firmware: [^ ]*' <<<"$k" | tail -1 | sed 's/.*: //') ($(grep -o 'FW base version: [^ ]*' <<<"$k" | tail -1))"
+	elif grep -q "ISH loader: cmd .* failed" <<<"$k"; then
+		fail "ISH firmware rejected (no accelerometer/ALS/hinge): $(grep -o 'ISH loader: load firmware: [^ ]*' <<<"$k" | tail -1)"
 	fi
 	t="$(for d in /sys/bus/iio/devices/iio:device*; do cat $d/name 2>/dev/null; done | tr '\n' ' ')"
 	[[ $t == *accel* ]] && pass "Accelerometer present ($t)" || fail "No accelerometer IIO device (iio: ${t:-none})"
@@ -257,8 +259,16 @@ health_summary() {
 	((t == 0)) && pass "No xe DSB poll errors" || warn "xe DSB poll errors: $t"
 	grep -q -E "vblank wait timed out|Timed out waiting PSR idle|flip_done timed out" <<<"$k" && fail "xe vblank/PSR/flip timeouts present (risk of hang on suspend/modeset)"
 	grep -q "plane .* fault" <<<"$k" && warn "xe plane faults present"
-	t="$(as_root grep -o 'bpp=[0-9]*' /sys/kernel/debug/dri/0000:00:02.0/i915_display_info 2>/dev/null | head -1)"
-	[[ $t == bpp=30 || $t == bpp=36 ]] && pass "eDP pipe $t (10-bit+)" || warn "eDP-1 pipe $t (below 10 bpc; panel supports 10-bit, DSC not used)"
+	# bpp of every active pipe (inactive pipes report bpp=0, e.g. while the screen is blanked)
+	t="$(as_root awk '/^\[CRTC/{a=0} /uapi: enable=yes, active=yes/{a=1} a && /pipe src=/{match($0,/bpp=[0-9]+/); print substr($0,RSTART+4,RLENGTH-4)}' \
+		/sys/kernel/debug/dri/0000:00:02.0/i915_display_info 2>/dev/null | tr '\n' ' ')"
+	if [[ -z ${t// /} ]]; then
+		warn "No active display pipe right now (screens blanked), bpc check skipped"
+	elif [[ $t == *18* || $t == *24* ]]; then
+		warn "Active pipe bpp: $t(below 10 bpc at 144 Hz; panels are 10-bit, DSC not used)"
+	else
+		pass "Active pipe bpp: $t"
+	fi
 	grep -q "not enough stolen space for compressed buffer" <<<"$k" && warn "FBC disabled (stolen memory too small)"
 	[[ -n "$(journalctl -b -o cat 2>/dev/null | grep -m1 'plymouth-quit.service: start operation timed out')" ]] && fail "plymouth-quit timed out (DRM master deadlock -> black screen)"
 	grep -q "asus_screenpad: Failed to read current brightness" <(journalctl -b -o cat 2>/dev/null) && warn "asus_screenpad backlight broken (bogus brightness value)"

@@ -4,7 +4,7 @@ ASUS Zenbook Duo **UX8407AA** (2026, Intel Panther Lake) için modüler Linux do
 Her donanım düzeltmesi kendi başına uygulanabilen, durumu denetlenebilen ve tek komutla geri alınabilen ayrı bir **modüldür**.
 
 Hedef platform: CachyOS (Arch), Limine, KDE Plasma (Wayland), **stable kernel** (şu an `linux-cachyos` 7.2.x, ileride 7.3.x).
-Ayrıntılı donanım analizi: [`docs/TARAMA-RAPORU.md`](docs/TARAMA-RAPORU.md)
+Ayrıntılı donanım analizi: [`docs/TARAMA-RAPORU.md`](docs/TARAMA-RAPORU.md) · Upstream kaynaklar: [`docs/ARASTIRMA-NOTLARI.md`](docs/ARASTIRMA-NOTLARI.md)
 
 ## Hızlı başlangıç
 
@@ -50,6 +50,7 @@ hardware-scan/          ACPI tabloları (DSDT/SSDT .dat + .dsl), DTT veri kasas�
 | `audio-ghost-rt722` | BIOS'taki hayalet RT722 kodeğini filtreler (upstream ca02ffd4975c backport'u, DKMS) → 7.2.x'te ses | < 7.3-rc1 |
 | `sensors-ish-firmware` | ASUS imzalı PTL ISH firmware'i (ASUS sürücü paketinden indirip doğrular) → ivmeölçer, ALS, menteşe | hepsi |
 | `power-dtt` | thermald --adaptive: BIOS'taki Windows DTT tablolarını uygular (PL1/PL2/TCC profil başına) | hepsi |
+| `keyboard-backlight` | Klavyenin ASUS kontrol arayüzünü hid-asus'a bağlar → `asus::kbd_backlight` (0–3), KDE'den kontrol | hepsi |
 
 ## Yeni modül eklemek
 
