@@ -54,6 +54,7 @@ hardware-scan/          ACPI tabloları (DSDT/SSDT .dat + .dsl), DTT veri kasas�
 | `sensors-accel-mount` | İvmeölçere panellerin 180° ters takılı olduğunu bildirir (hwdb ACCEL_MOUNT_MATRIX): otomatik döndürme doğru çalışır | hepsi |
 | `display-dpcd-backlight` | OLED panellerin parlaklığını DPCD (AUX) üzerinden sürer (`xe.enable_dpcd_backlight=1`) | hepsi |
 | `display-psr-et-off` | Panel Replay'de yalnızca Early Transport'u kapatır: üst ekranda hayalet imleç kalmaz | hepsi |
+| `display-dsc-10bit` | Paneller 6-bit + dithering yerine DSC ile 10-bit | hepsi |
 
 ## Yeni modül eklemek
 

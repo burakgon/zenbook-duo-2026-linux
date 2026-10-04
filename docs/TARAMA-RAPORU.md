@@ -119,7 +119,7 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 | P1 | `power-profile-sync`: power-saver → quiet + low-power | ✅ |
 | P1 | duo-rotate: klavye tak/çıkar → alt ekran, döndürme, yerleşim, dokunmatik | ✅ (menteşe sensörüyle duruş algılama yok) |
 | P1 | Bluetooth klavye | ✅ eşleşti, ışık ve tuşlar çalışıyor |
-| P2 | `display-10bit-dsc`: 144 Hz 10-bit | 🧪 deneysel |
+| P2 | `display-dsc-10bit`: 10-bit (DSC) | ✅ bpp 18 → 30, PR SU açık kalıyor, güç farkı yok (4,95 / 4,78 W) |
 | P2 | `asus-screenpad`: sahte backlight'ı devre dışı bırak (+ upstream patch) | 🔜 |
 | P2 | `suspend`: s2idle doğrulama, S0i2.x | 🔜 bu boot'ta hiç uyku yok; s2idle varsayılan, deep (S3) de listeleniyor |
 | P2 | Pil şarj sınırı | 🔜 `charge_control_end_threshold`=100 (KDE Güç ayarından %80 seçilebilir) |
@@ -209,3 +209,4 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 - Paket 1,11 W (çekirdek 0,06, GPU 0,04, RAM 0,30), Busy %2,3, PC10 yalnız %10, S0ix %3: açık terminal oturumları sürekli ekran çizdiriyor. Gerçek boşta değer daha düşük (önceki ölçüm 0,66–0,79 W paket).
 - EAS (enerji-farkında zamanlama): enerji modeli kayıtlı ama `intel_pstate` active modda olduğu için kapalı ("cpufreq is not ready"). EAS için passive + schedutil gerekir, bu modda EPP kullanılamaz. Omarchy de active modda kalıyor. Panther Lake için A/B ölçüm yapılmadı.
 - FRED 7.2'de varsayılan açık (Omarchy'nin `fred=on` parametresi gereksiz).
+- 10-bit: `display-dsc-10bit` açılışta debugfs `i915_dsc_fec_support=1` yazıyor (eDP-1/eDP-2). Canlı test: bpp 18 (dither) → 30, DSC açık, Panel Replay SU açık ve SLEEP'e giriyor, güç 4,95 → 4,78 W. Kullanıcı gözle büyük fark görmedi (beklenen: fark koyu gradyanlarda). Bir sonraki açılışta KWin'in ilk modeset'inde devreye girdiği doğrulanmalı.

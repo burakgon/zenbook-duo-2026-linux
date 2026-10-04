@@ -1,0 +1,15 @@
+[Unit]
+Description=Zenbook Duo: drive the OLED panels at 10 bpc through DSC
+After=systemd-modules-load.service sys-kernel-debug.mount zenbook-duo-psr-et-off.service
+Before=display-manager.service
+ConditionPathExists=/sys/kernel/debug/dri/0/eDP-1/i915_dsc_fec_support
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# Takes effect on the next modeset of each panel (the compositor's first commit).
+ExecStart=/bin/sh -c 'for c in eDP-1 eDP-2; do f=/sys/kernel/debug/dri/0/$c/i915_dsc_fec_support; [ -e $f ] && echo 1 > $f; done'
+ExecStop=/bin/sh -c 'for c in eDP-1 eDP-2; do f=/sys/kernel/debug/dri/0/$c/i915_dsc_fec_support; [ -e $f ] && echo 0 > $f; done'
+
+[Install]
+WantedBy=multi-user.target
