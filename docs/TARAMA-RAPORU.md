@@ -198,3 +198,14 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 - Çözüm (yama yok, KDE ayarı): KWin çıktı ayarında alt panel (eDP-2) için `allowSdrSoftwareBrightness=false` (`~/.config/kwinoutputconfig.json`). KWin alt panele parlaklık kaydırıcısı açmıyor (kscreen-doctor: "Brightness control: unsupported"). Tek kaydırıcı ve parlaklık tuşları eDP-1'i sürüyor; PowerDevil aynı değeri iki panelin donanımına yazıyor. Doğrulama: %60'ta iki panel 303, %79'da 398. Yazılımsal karartma yok. Bu ayar kaybolursa (yapılandırma sıfırlanırsa) alt panel yeniden yazılım karartmalı bir kaydırıcı alır.
 - Denenip bırakılan: PowerDevil + KWin yamalı paketleri (her panel ayrı donanım kaydırıcısı). Çalıştı ama her KDE sürümünde yeniden derleme gerektirdiği için kaldırıldı (git geçmişinde 695e1b2).
 - Parlaklık tuşlarıyla yaşanan bir donmanın nedeni bulunamadı; lockup detector + pstore ile yakalanmaya hazır (bkz. oturum notları).
+
+## 11. Pil ölçümü (2026-10-05, pilde, balanced, tarayıcı kapalı, terminal açık)
+| Durum | Sistem (BAT0 power_now) |
+|---|---|
+| Klavye takılı (alt panel kapalı), üst panel %32, 144 Hz | 9,5–10,2 W |
+| Aynı, 60 Hz | 9,9 W (fark gürültü içinde; Panel Replay ile yenileme hızı önemsiz) |
+| Klavye ayrık (BT), alt panel kapalı | 4,7–6,4 W |
+- Takılı klavye ~3,5 W çekiyordu: klavye pili %91'deydi ve pogo pinlerinden şarj oluyordu (donanım/EC davranışı, Windows'ta da aynı). Klavye %100 olunca takılıyken tekrar ölçülecek.
+- Paket 1,11 W (çekirdek 0,06, GPU 0,04, RAM 0,30), Busy %2,3, PC10 yalnız %10, S0ix %3: açık terminal oturumları sürekli ekran çizdiriyor. Gerçek boşta değer daha düşük (önceki ölçüm 0,66–0,79 W paket).
+- EAS (enerji-farkında zamanlama): enerji modeli kayıtlı ama `intel_pstate` active modda olduğu için kapalı ("cpufreq is not ready"). EAS için passive + schedutil gerekir, bu modda EPP kullanılamaz. Omarchy de active modda kalıyor. Panther Lake için A/B ölçüm yapılmadı.
+- FRED 7.2'de varsayılan açık (Omarchy'nin `fred=on` parametresi gereksiz).
