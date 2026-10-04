@@ -42,7 +42,7 @@ The details behind each line are in [`docs/hardware-report.md`](docs/hardware-re
 ## Quick start
 
 ```sh
-git clone https://github.com/<you>/zenbook-duo-linux.git
+git clone https://github.com/burakgon/zenbook-duo-linux.git
 cd zenbook-duo-linux
 
 ./duo list                       # every module: needed? applied? healthy?
