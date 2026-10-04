@@ -124,3 +124,8 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 | P2 | `suspend`: s2idle doğrulama, S0i2.2 | 🔜 |
 | P3 | `camera-ir-howdy`: IR yüz tanıma, `presence`: uzaklaşınca kilitle | 🔜 |
 | P3 | `audio-speaker-eq`: hoparlör EQ (PipeWire filter-chain) | 🔜 |
+
+## 5. Yön ve dokunmatik (2026-10-04, 7.2.9 sonrası)
+- İki panel de 180° ters takılı. KWin DRM `panel_orientation` özelliğini uygulamıyor; çekirdek parametresi denendi ve geri alındı.
+- Çözüm: `sensors-accel-mount` (hwdb `ACCEL_MOUNT_MATRIX=-1,0,0;0,-1,0;0,0,1`). Laptop dik dururken sensör `bottom-up` raporluyor ve KWin otomatik döndürme ile `Rotated180` uyguluyor.
+- Dokunmatik katman ters takılı değil, ama KWin dokunuşları çıkış dönüşümüyle birlikte 180° çeviriyor. Telafi olarak KWin kalibrasyon matrisi `-1,0,0,1,0,-1,0,1,0,0,1,0,0,0,0,1` RAYD0001/RAYD0002 dokunma ve kalem aygıtlarına uygulandı (`~/.config/kcminputrc`, kullanıcı ayarı). Eşleme: RAYD0001 → eDP-1 (üst), RAYD0002 → eDP-2 (alt).
