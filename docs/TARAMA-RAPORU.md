@@ -144,7 +144,7 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 - VRR "Never": Panther Lake eDP VRR'ı şu an bozuk (xe #8976 vmin'e sabitlenme, #9253/#9296 DSB/takılma, #9385). Bu boot'ta 0 DSB hatası.
 - Panel Replay SU (Early Transport) aktif ve SLEEP durumuna giriyor. Alternatif `xe.enable_panel_replay=0 xe.enable_psr=1` (PSR1), takılma veya bozulma görülürse denenecek (xe #8923, #9119, Omarchy #11016: 7.2'de PR gecikmesi).
 - Bilinen açık hatalar (bu model): xe #7764 (klavye takılıyken boot → eDP-2 flip_done timeout, LOBF), #9196 (PHY B refclk, ancak tam güç kesintisiyle düzeliyor), #8392.
-- Parlaklık: `xe.enable_dpcd_backlight=1` gerekmedi (intel_backlight 38400 kademe, KDE kontrol ediyor).
+- Parlaklık: ilk değerlendirme yanlıştı. PWM backlight değeri değişiyor ama panele ulaşmıyor; `xe.enable_dpcd_backlight=1` gerekiyor (bkz. bölüm 10).
 
 **Ağ**
 - BE201: 6 GHz/320 MHz MLO, −57 dBm, Rx 3,46 Gbps (EHT-MCS 8, NSS 2), Tx 1,73 Gbps (NSS 1). 7.2.9 firmware c106 yüklüyor (7.3: c107; c108 kernel'de desteklenmiyor).
@@ -191,5 +191,6 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 
 ## 10. Parlaklık
 - Paneller parlaklığı yalnız AUX/DPCD ile kabul ediyor (DPCD 0x701=0x99, 0x702=0x86). `display-dpcd-backlight` → `xe.enable_dpcd_backlight=1`, aralık 0–504. İki panel de sysfs düzeyinde bağımsız kontrol edilebiliyor; 22 hızlı değişiklikle (PR açık ve kapalı) donma yok.
-- KDE sınırlaması (bug 525717): PowerDevil backlighthelper, KDE'deki üst ekran değerini tüm panel parlaklık aygıtlarına yazıyor; alt ekranın kaydırıcısı ise yalnızca yazılım karartması. Sonuç: üst kaydırıcı = iki panelin donanım parlaklığı, alt kaydırıcı = alt panele ek karartma. Senkronizasyon denemesi bu iki katmanı çarptığı için kaldırıldı.
+- KDE sınırlaması (bug 525717): PowerDevil backlighthelper iki parlaklık cihazını tek "Built-in Screen" olarak sunuyor ve aynı değeri ikisine birden yazıyor. KWin bu tek cihazı ilk dahili çıkışa (eDP-1) bağladığı için alt ekranın kaydırıcısı yalnızca yazılım karartması oluyor. Sonuç: üst kaydırıcı iki panelin donanım parlaklığını değiştiriyor, alt kaydırıcı alt panele ek karartma uyguluyor.
+- Düzeltme `display-brightness-per-panel`. PowerDevil yaması: her panelin arka ışığı ayrı bir parlaklık cihazı olur ve panelin EDID'sini taşır. KWin yaması: dahili çıkışlar bu cihazlarla EDID üzerinden eşleşir. Paketler kurulu sürümün Arch PKGBUILD'inden derleniyor. Doğrulama: KDE'de eDP-1 %60'a çekildiğinde yalnız `intel_backlight` değişti (397→303), eDP-2 için yalnız `card0-eDP-2-backlight` değişti; iki çıkışta da yazılım karartması %100. duo-rotate'teki geçici "alt panel karartmasını %100'de tut" kodu kaldırıldı.
 - Parlaklık tuşlarıyla yaşanan bir donmanın nedeni bulunamadı; lockup detector + pstore ile yakalanmaya hazır (bkz. oturum notları).

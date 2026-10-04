@@ -1,0 +1,551 @@
+diff --git a/daemon/controllers/backlightbrightness.cpp b/daemon/controllers/backlightbrightness.cpp
+index c627bcb..d0840e9 100644
+--- a/daemon/controllers/backlightbrightness.cpp
++++ b/daemon/controllers/backlightbrightness.cpp
+@@ -14,6 +14,7 @@
+ #include <powerdevil_debug.h>
+ 
+ #include <QDebug>
++#include <QFile>
+ #include <QFileInfo>
+ #include <QTimer>
+ 
+@@ -38,15 +39,20 @@ BacklightDetector::BacklightDetector(QObject *parent)
+ 
+ void BacklightDetector::detect()
+ {
+-    if (m_display) {
+-        disconnect(m_display.get(), nullptr, nullptr, nullptr);
++    for (const auto &display : m_displays) {
++        disconnect(display.get(), nullptr, nullptr, nullptr);
+     }
+-    std::shared_ptr<BacklightBrightness> deleteOld(m_display.release());
++    auto deleteOld = std::make_shared<DisplayList>(std::move(m_displays));
++    m_displays.clear();
++    const quint64 serial = ++m_detectionSerial;
+ 
+     KAuth::Action brightnessAction(u"org.kde.powerdevil.backlighthelper.brightness"_s);
+     brightnessAction.setHelperId(HELPER_ID);
+     KAuth::ExecuteJob *brightnessJob = brightnessAction.execute();
+-    connect(brightnessJob, &KJob::result, this, [this, brightnessJob, deleteOld = std::move(deleteOld)] {
++    connect(brightnessJob, &KJob::result, this, [this, brightnessJob, serial, deleteOld = std::move(deleteOld)] {
++        if (serial != m_detectionSerial) {
++            return;
++        }
+         if (brightnessJob->error()) {
+             qCWarning(POWERDEVIL) << "org.kde.powerdevil.backlighthelper.brightness failed";
+             qCDebug(POWERDEVIL) << brightnessJob->errorText();
+@@ -58,7 +64,10 @@ void BacklightDetector::detect()
+         KAuth::Action brightnessMaxAction(u"org.kde.powerdevil.backlighthelper.brightnessmax"_s);
+         brightnessMaxAction.setHelperId(HELPER_ID);
+         KAuth::ExecuteJob *brightnessMaxJob = brightnessMaxAction.execute();
+-        connect(brightnessMaxJob, &KJob::result, this, [this, brightnessMaxJob, cachedBrightness, deleteOld = std::move(deleteOld)] {
++        connect(brightnessMaxJob, &KJob::result, this, [this, brightnessMaxJob, cachedBrightness, serial, deleteOld = std::move(deleteOld)] {
++            if (serial != m_detectionSerial) {
++                return;
++            }
+             if (brightnessMaxJob->error()) {
+                 qCWarning(POWERDEVIL) << "org.kde.powerdevil.backlighthelper.brightnessmax failed";
+                 qCDebug(POWERDEVIL) << brightnessMaxJob->errorText();
+@@ -72,26 +81,36 @@ void BacklightDetector::detect()
+             // the sysfs calls always fail, leading to detectionFinished(false) emission.
+             // Skip that command and carry on with the information that we do have.
+             if (maxBrightness > 0) {
+-                m_display.reset(new BacklightBrightness(cachedBrightness, maxBrightness, QString()));
++                m_displays.emplace_back(new BacklightBrightness(cachedBrightness, maxBrightness, QString()));
+             }
+-            Q_EMIT detectionFinished(m_display != nullptr);
++            Q_EMIT detectionFinished(!m_displays.empty());
+ #else
+             KAuth::Action syspathAction(u"org.kde.powerdevil.backlighthelper.syspath"_s);
+             syspathAction.setHelperId(HELPER_ID);
+             KAuth::ExecuteJob* syspathJob = syspathAction.execute();
+-            connect(syspathJob, &KJob::result, this, [this, syspathJob, cachedBrightness, maxBrightness, deleteOld = std::move(deleteOld)] {
++            connect(syspathJob, &KJob::result, this, [this, syspathJob, cachedBrightness, maxBrightness, serial, deleteOld = std::move(deleteOld)] {
++                if (serial != m_detectionSerial) {
++                    return;
++                }
+                 if (syspathJob->error()) {
+                     qCWarning(POWERDEVIL) << "org.kde.powerdevil.backlighthelper.syspath failed";
+                     qCDebug(POWERDEVIL) << syspathJob->errorText();
+                     Q_EMIT detectionFinished(false);
+                     return;
+                 }
++                // Several backlights of separate built-in displays (e.g. dual-screen laptops)
++                // get one BacklightBrightness each, so they can be matched to their outputs.
++                const QStringList syspaths = syspathJob->data()[u"syspaths"_s].toStringList();
++                if (syspaths.size() > 1) {
++                    detectSeparateDisplays(syspaths, deleteOld);
++                    return;
++                }
+                 if (maxBrightness > 0) {
+                     QString syspath = syspathJob->data()[u"syspath"_s].toString();
+                     syspath = QFileInfo(syspath).symLinkTarget();
+-                    m_display.reset(new BacklightBrightness(cachedBrightness, maxBrightness, syspath));
++                    m_displays.emplace_back(new BacklightBrightness(cachedBrightness, maxBrightness, syspath));
+                 }
+-                Q_EMIT detectionFinished(m_display != nullptr);
++                Q_EMIT detectionFinished(!m_displays.empty());
+             });
+             syspathJob->start();
+ #endif
+@@ -101,14 +120,94 @@ void BacklightDetector::detect()
+     brightnessJob->start();
+ }
+ 
++void BacklightDetector::detectSeparateDisplays(QStringList syspaths, std::shared_ptr<DisplayList> deleteOld)
++{
++    if (syspaths.isEmpty()) {
++        Q_EMIT detectionFinished(!m_displays.empty());
++        return;
++    }
++    const QString helperDevice = syspaths.takeFirst();
++    const quint64 serial = m_detectionSerial;
++
++    KAuth::Action brightnessAction(u"org.kde.powerdevil.backlighthelper.brightness"_s);
++    brightnessAction.setHelperId(HELPER_ID);
++    brightnessAction.addArgument(u"device"_s, helperDevice);
++    KAuth::ExecuteJob *brightnessJob = brightnessAction.execute();
++    connect(brightnessJob, &KJob::result, this, [this, brightnessJob, helperDevice, syspaths, serial, deleteOld] {
++        if (serial != m_detectionSerial) {
++            return;
++        }
++        if (brightnessJob->error()) {
++            qCWarning(POWERDEVIL) << "org.kde.powerdevil.backlighthelper.brightness failed for" << helperDevice << brightnessJob->errorText();
++            detectSeparateDisplays(syspaths, deleteOld);
++            return;
++        }
++        const int cachedBrightness = brightnessJob->data()[u"brightness"_s].toInt();
++
++        KAuth::Action brightnessMaxAction(u"org.kde.powerdevil.backlighthelper.brightnessmax"_s);
++        brightnessMaxAction.setHelperId(HELPER_ID);
++        brightnessMaxAction.addArgument(u"device"_s, helperDevice);
++        KAuth::ExecuteJob *brightnessMaxJob = brightnessMaxAction.execute();
++        connect(brightnessMaxJob, &KJob::result, this, [this, brightnessMaxJob, helperDevice, syspaths, cachedBrightness, serial, deleteOld] {
++            if (serial != m_detectionSerial) {
++                return;
++            }
++            const int maxBrightness = brightnessMaxJob->error() ? 0 : brightnessMaxJob->data()[u"brightnessmax"_s].toInt();
++            if (maxBrightness <= 0) {
++                qCWarning(POWERDEVIL) << "org.kde.powerdevil.backlighthelper.brightnessmax failed for" << helperDevice << brightnessMaxJob->errorText();
++                detectSeparateDisplays(syspaths, deleteOld);
++                return;
++            }
++
++            // The backlight's parent is the DRM connector of its panel, e.g.
++            // /sys/devices/pci0000:00/0000:00:02.0/drm/card0/card0-eDP-2/card0-eDP-2-backlight
++            const QString syspath = QFileInfo(helperDevice).symLinkTarget();
++            const QString connectorPath = QFileInfo(syspath).path();
++            QString connector = QFileInfo(connectorPath).fileName();
++            connector = connector.mid(connector.indexOf(u'-') + 1); // card0-eDP-2 -> eDP-2
++
++            std::optional<QByteArray> edid;
++            if (QFile edidFile(connectorPath + u"/edid"_s); edidFile.open(QIODevice::ReadOnly)) {
++                if (QByteArray data = edidFile.readAll(); !data.isEmpty()) {
++                    edid = data;
++                }
++            }
++
++            // keep the id of the first (primary) display stable for existing configurations
++            const QString id = m_displays.empty() ? u"display"_s : u"display:"_s + QFileInfo(helperDevice).fileName();
++            const QString label = i18nc("Display label, %1 is the connector name like eDP-2", "Built-in Screen (%1)", connector);
++            m_displays.emplace_back(new BacklightBrightness(cachedBrightness, maxBrightness, syspath, helperDevice, id, label, edid));
++
++            detectSeparateDisplays(syspaths, deleteOld);
++        });
++        brightnessMaxJob->start();
++    });
++    brightnessJob->start();
++}
++
+ QList<DisplayBrightness *> BacklightDetector::displays() const
+ {
+-    return m_display ? QList<DisplayBrightness *>(1, m_display.get()) : QList<DisplayBrightness *>();
++    QList<DisplayBrightness *> result;
++    for (const auto &display : m_displays) {
++        result.append(display.get());
++    }
++    return result;
+ }
+ 
+-BacklightBrightness::BacklightBrightness(int observedBrightness, int maxBrightness, QString syspath, QObject *parent)
++BacklightBrightness::BacklightBrightness(int observedBrightness,
++                                         int maxBrightness,
++                                         QString syspath,
++                                         QString helperDevice,
++                                         QString id,
++                                         QString label,
++                                         std::optional<QByteArray> edid,
++                                         QObject *parent)
+     : DisplayBrightness(parent)
+     , m_syspath(syspath)
++    , m_helperDevice(helperDevice)
++    , m_id(id)
++    , m_label(label)
++    , m_edid(edid)
+     , m_observedBrightness(observedBrightness)
+     , m_requestedBrightness(observedBrightness)
+     , m_executedBrightness(observedBrightness)
+@@ -181,13 +280,13 @@ void BacklightBrightness::onDeviceChanged(const UdevQt::Device &device)
+ 
+ QString BacklightBrightness::id() const
+ {
+-    // BacklightDetector only ever owns one BacklightBrightness object, so this is necessarily unique
+-    return u"display"_s;
++    // BacklightDetector assigns a unique id to each of its BacklightBrightness objects
++    return m_id;
+ }
+ 
+ QString BacklightBrightness::label() const
+ {
+-    return i18nc("Display label", "Built-in Screen");
++    return m_label.isEmpty() ? i18nc("Display label", "Built-in Screen") : m_label;
+ }
+ 
+ int BacklightBrightness::knownSafeMinBrightness() const
+@@ -249,6 +348,9 @@ void BacklightBrightness::setBrightness(int newBrightness, bool allowAnimations)
+     KAuth::Action action(u"org.kde.powerdevil.backlighthelper.setbrightness"_s);
+     action.setHelperId(HELPER_ID);
+     action.addArgument(u"brightness"_s, newBrightness);
++    if (!m_helperDevice.isEmpty()) {
++        action.addArgument(u"device"_s, m_helperDevice);
++    }
+     action.addArgument(u"animationDuration"_s, willAnimate ? m_brightnessAnimationDurationMsec : 0);
+     auto *job = action.execute();
+ 
+@@ -276,4 +378,9 @@ bool BacklightBrightness::isInternal() const
+     return true;
+ }
+ 
++std::optional<QByteArray> BacklightBrightness::edidData() const
++{
++    return m_edid;
++}
++
+ #include "moc_backlightbrightness.cpp"
+diff --git a/daemon/controllers/backlightbrightness.h b/daemon/controllers/backlightbrightness.h
+index 5396f45..03f4919 100644
+--- a/daemon/controllers/backlightbrightness.h
++++ b/daemon/controllers/backlightbrightness.h
+@@ -11,6 +11,7 @@
+ #include <QString>
+ 
+ #include <memory> // std::unique_ptr
++#include <vector>
+ 
+ #include "displaybrightness.h"
+ 
+@@ -32,7 +33,12 @@ public:
+     QList<DisplayBrightness *> displays() const override;
+ 
+ private:
+-    std::unique_ptr<BacklightBrightness> m_display;
++    using DisplayList = std::vector<std::unique_ptr<BacklightBrightness>>;
++    void detectSeparateDisplays(QStringList syspaths, std::shared_ptr<DisplayList> deleteOld);
++
++    DisplayList m_displays;
++    // incremented on detect() so that results of an outdated detection are dropped
++    quint64 m_detectionSerial = 0;
+ };
+ 
+ class BacklightBrightness : public DisplayBrightness
+@@ -47,18 +53,34 @@ public:
+     int brightness() const override;
+     void setBrightness(int brightness, bool allowAnimations) override;
+     bool isInternal() const override;
++    std::optional<QByteArray> edidData() const override;
+ 
+ private Q_SLOTS:
+     void onDeviceChanged(const UdevQt::Device &device);
+ 
+ private:
+     friend class BacklightDetector;
+-    explicit BacklightBrightness(int cachedBrightness, int maxBrightness, QString syspath, QObject *parent = nullptr);
++    /**
++     * @param helperDevice backlight helper device for the per-device "device" argument, or empty
++     *                     if this object controls all devices of the helper together
++     */
++    explicit BacklightBrightness(int cachedBrightness,
++                                 int maxBrightness,
++                                 QString syspath,
++                                 QString helperDevice = QString(),
++                                 QString id = QStringLiteral("display"),
++                                 QString label = QString(),
++                                 std::optional<QByteArray> edid = std::nullopt,
++                                 QObject *parent = nullptr);
+ 
+     bool isSupported() const;
+ 
+ private:
+     QString m_syspath; // device path within sysfs
++    QString m_helperDevice;
++    QString m_id;
++    QString m_label;
++    std::optional<QByteArray> m_edid;
+ 
+     const int m_brightnessAnimationThreshold = 100;
+     const int m_brightnessAnimationDurationMsec = 250;
+diff --git a/daemon/controllers/backlighthelper_linux.cpp b/daemon/controllers/backlighthelper_linux.cpp
+index 847439f..3638cda 100644
+--- a/daemon/controllers/backlighthelper_linux.cpp
++++ b/daemon/controllers/backlighthelper_linux.cpp
+@@ -46,6 +46,19 @@ void BacklightHelper::init()
+         }
+     });
+ 
++    if (m_devicesOnSeparateDisplays) {
++        for (qsizetype i = 0; i < m_devices.size(); ++i) {
++            auto *anim = new QVariantAnimation(this);
++            anim->setEasingCurve(QEasingCurve::InOutQuad);
++            connect(anim, &QVariantAnimation::valueChanged, this, [this, anim, i](const QVariant &value) {
++                if (anim->state() == QAbstractAnimation::Running) {
++                    writeBrightness(value.toInt(), i);
++                }
++            });
++            m_deviceAnims.append(anim);
++        }
++    }
++
+     m_isSupported = true;
+ }
+ 
+@@ -83,8 +96,12 @@ bool BacklightHelper::writeToDevice(const QString &device, int brightness) const
+     return true;
+ }
+ 
+-QStringList BacklightHelper::getBacklightTypeDevices() const
++QStringList BacklightHelper::getBacklightTypeDevices(bool *onSeparateDisplays) const
+ {
++    if (onSeparateDisplays) {
++        *onSeparateDisplays = false;
++    }
++
+     QDir ledsDir(LED_SYSFS_PATH);
+     ledsDir.setFilter(QDir::Dirs | QDir::NoDot | QDir::NoDotDot | QDir::NoDotAndDotDot | QDir::Readable);
+     ledsDir.setNameFilters({QStringLiteral("*lcd*"), QStringLiteral("*wled*")});
+@@ -141,8 +158,13 @@ QStringList BacklightHelper::getBacklightTypeDevices() const
+     if (!platform.isEmpty())
+         return platform;
+ 
+-    if (!rawEnabled.isEmpty())
++    if (!rawEnabled.isEmpty()) {
++        // each of these belongs to its own enabled DRM connector, i.e. a separate built-in panel
++        if (onSeparateDisplays) {
++            *onSeparateDisplays = rawEnabled.size() > 1;
++        }
+         return rawEnabled;
++    }
+ 
+     if (!rawAll.isEmpty())
+         return rawAll;
+@@ -153,7 +175,7 @@ QStringList BacklightHelper::getBacklightTypeDevices() const
+ void BacklightHelper::initUsingBacklightType()
+ {
+     m_devices.clear();
+-    QStringList devices = getBacklightTypeDevices();
++    QStringList devices = getBacklightTypeDevices(&m_devicesOnSeparateDisplays);
+ 
+     for (const QString &interface : devices) {
+         int max_brightness = readFromDevice(interface, u"max_brightness"_s);
+@@ -163,10 +185,30 @@ void BacklightHelper::initUsingBacklightType()
+     return;
+ }
+ 
++std::optional<qsizetype> BacklightHelper::selectedDevice(const QVariantMap &args) const
++{
++    const QString device = args.value(u"device"_s).toString();
++    if (device.isEmpty()) {
++        return std::nullopt;
++    }
++    if (m_devicesOnSeparateDisplays) {
++        for (qsizetype i = 0; i < m_devices.size(); ++i) {
++            if (m_devices[i].first == device) {
++                return i;
++            }
++        }
++    }
++    qCWarning(POWERDEVIL) << "unknown backlight device" << device;
++    return -1;
++}
++
+ ActionReply BacklightHelper::brightness(const QVariantMap &args)
+ {
+-    Q_UNUSED(args);
+-    const int brightness = readBrightness();
++    const auto device = selectedDevice(args);
++    if (device == -1) {
++        return ActionReply::HelperErrorReply();
++    }
++    const int brightness = readBrightness(device.value_or(0));
+ 
+     if (brightness == -1) {
+         return ActionReply::HelperErrorReply();
+@@ -177,13 +219,13 @@ ActionReply BacklightHelper::brightness(const QVariantMap &args)
+     return reply;
+ }
+ 
+-int BacklightHelper::readBrightness() const
++int BacklightHelper::readBrightness(qsizetype device) const
+ {
+     if (!m_isSupported) {
+         return -1;
+     }
+ 
+-    return readFromDevice(m_devices.constFirst().first, QLatin1String("brightness"));
++    return readFromDevice(m_devices.at(device).first, QLatin1String("brightness"));
+ }
+ 
+ ActionReply BacklightHelper::setbrightness(const QVariantMap &args)
+@@ -192,26 +234,42 @@ ActionReply BacklightHelper::setbrightness(const QVariantMap &args)
+         return ActionReply::HelperErrorReply();
+     }
+ 
++    const auto device = selectedDevice(args);
++    if (device == -1) {
++        return ActionReply::HelperErrorReply();
++    }
+     const int brightness = args.value(QStringLiteral("brightness")).toInt();
+     const int animationDuration = args.value(QStringLiteral("animationDuration")).toInt();
+ 
++    // an animation for all devices and one for a single device must not fight each other
+     m_anim.stop();
++    if (device) {
++        m_deviceAnims.at(*device)->stop();
++    } else {
++        for (QVariantAnimation *anim : std::as_const(m_deviceAnims)) {
++            anim->stop();
++        }
++    }
+ 
+     if (animationDuration <= 0) {
+-        writeBrightness(brightness);
++        writeBrightness(brightness, device);
+         return ActionReply::SuccessReply();
+     }
+ 
+-    m_anim.setDuration(animationDuration);
+-    m_anim.setStartValue(readBrightness());
+-    m_anim.setEndValue(brightness);
+-    m_anim.start();
++    QVariantAnimation &anim = device ? *m_deviceAnims.at(*device) : m_anim;
++    anim.setDuration(animationDuration);
++    anim.setStartValue(readBrightness(device.value_or(0)));
++    anim.setEndValue(brightness);
++    anim.start();
+ 
+     return ActionReply::SuccessReply();
+ }
+ 
+-bool BacklightHelper::writeBrightness(int brightness) const
++bool BacklightHelper::writeBrightness(int brightness, std::optional<qsizetype> device) const
+ {
++    if (device) {
++        return writeToDevice(m_devices.at(*device).first, brightness);
++    }
+     if (!m_devices.isEmpty()) {
+         const int first_maxbrightness = std::max(1, m_devices.constFirst().second);
+         for (const auto &device : m_devices) {
+@@ -228,8 +286,6 @@ bool BacklightHelper::writeBrightness(int brightness) const
+ 
+ ActionReply BacklightHelper::syspath(const QVariantMap &args)
+ {
+-    Q_UNUSED(args);
+-
+     ActionReply reply;
+ 
+     if (!m_isSupported || m_devices.isEmpty()) {
+@@ -237,15 +293,26 @@ ActionReply BacklightHelper::syspath(const QVariantMap &args)
+         return reply;
+     }
+ 
+-    reply.addData(QStringLiteral("syspath"), m_devices.constFirst().first);
++    const auto device = selectedDevice(args);
++    if (device == -1) {
++        return ActionReply::HelperErrorReply();
++    }
++    reply.addData(QStringLiteral("syspath"), m_devices.at(device.value_or(0)).first);
++
++    // devices that can be controlled separately with the "device" argument
++    if (m_devicesOnSeparateDisplays) {
++        QStringList syspaths;
++        for (const auto &[path, maxBrightness] : std::as_const(m_devices)) {
++            syspaths.append(path);
++        }
++        reply.addData(QStringLiteral("syspaths"), syspaths);
++    }
+ 
+     return reply;
+ }
+ 
+ ActionReply BacklightHelper::brightnessmax(const QVariantMap &args)
+ {
+-    Q_UNUSED(args);
+-
+     ActionReply reply;
+ 
+     if (!m_isSupported) {
+@@ -253,8 +320,13 @@ ActionReply BacklightHelper::brightnessmax(const QVariantMap &args)
+         return -1;
+     }
+ 
++    const auto device = selectedDevice(args);
++    if (device == -1) {
++        return ActionReply::HelperErrorReply();
++    }
++
+     // maximum brightness
+-    int max_brightness = readFromDevice(m_devices.constFirst().first, QLatin1String("max_brightness"));
++    int max_brightness = readFromDevice(m_devices.at(device.value_or(0)).first, QLatin1String("max_brightness"));
+ 
+     if (max_brightness <= 0) {
+         reply = ActionReply::HelperErrorReply();
+diff --git a/daemon/controllers/backlighthelper_linux.h b/daemon/controllers/backlighthelper_linux.h
+index 324deef..301c4f5 100644
+--- a/daemon/controllers/backlighthelper_linux.h
++++ b/daemon/controllers/backlighthelper_linux.h
+@@ -14,6 +14,8 @@
+ #include <KAuth/HelperSupport>
+ #include <kauth_version.h>
+ 
++#include <optional>
++
+ using namespace KAuth;
+ 
+ class BacklightHelper : public QObject
+@@ -31,8 +33,15 @@ public Q_SLOTS:
+ private:
+     void init();
+ 
+-    int readBrightness() const;
+-    bool writeBrightness(int brightness) const;
++    /**
++     * Index into m_devices selected by the optional "device" argument of an action,
++     * std::nullopt if the action applies to the default device(s), or -1 for an unknown device.
++     */
++    std::optional<qsizetype> selectedDevice(const QVariantMap &args) const;
++
++    int readBrightness(qsizetype device = 0) const;
++    /** Write to one device, or to all of them (scaled to the first device's range) by default. */
++    bool writeBrightness(int brightness, std::optional<qsizetype> device = std::nullopt) const;
+ 
+     int readFromDevice(const QString &device, const QString &property) const;
+     bool writeToDevice(const QString &device, int brightness) const;
+@@ -43,12 +52,16 @@ private:
+      * firmware-platform-raw
+      */
+     void initUsingBacklightType();
+-    QStringList getBacklightTypeDevices() const;
++    QStringList getBacklightTypeDevices(bool *onSeparateDisplays = nullptr) const;
+ 
+     bool m_isSupported = false;
+     QString m_sysctlDevice;
+     QList<int> m_sysctlBrightnessLevels;
+     QList<QPair<QString /*device path*/, int /*max brightness*/>> m_devices;
++    // m_devices drive separate displays (e.g. both panels of a dual-screen laptop) and can be
++    // addressed individually with the "device" argument
++    bool m_devicesOnSeparateDisplays = false;
+ 
+-    QVariantAnimation m_anim;
++    QVariantAnimation m_anim; // all devices
++    QList<QVariantAnimation *> m_deviceAnims; // one per device, if m_devicesOnSeparateDisplays
+ };

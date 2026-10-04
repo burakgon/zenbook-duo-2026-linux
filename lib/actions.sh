@@ -116,6 +116,18 @@ duo_pkg_install() {
 	for p in "${missing[@]}"; do _record pkg "$p"; done
 }
 
+# duo_pkg_patched_install PKGFILE... : install locally rebuilt (patched) builds of
+# repository packages; revert reinstalls the repository version.
+duo_pkg_patched_install() {
+	local f name
+	pacman -U --noconfirm "$@" || die "pacman -U failed"
+	for f in "$@"; do
+		name="$(pacman -Qqp "$f")"
+		_record pkg-patched "$name"
+		ok "installed patched $name"
+	done
+}
+
 # duo_cmdline_add PARAM... : kernel parameters, applied through the bootloader backend.
 duo_cmdline_add() {
 	local p
@@ -238,6 +250,10 @@ duo_revert_manifest() {
 			;;
 		pkg)
 			info "package $a was installed by this module (left installed; remove with: pacman -Rns $a)"
+			;;
+		pkg-patched)
+			pacman -S --noconfirm "$a" >/dev/null && ok "reinstalled repository $a" || err "could not reinstall $a (run: pacman -S $a)"
+			DUO_NEED_REBOOT=1
 			;;
 		cmdline)
 			DUO_NEED_BOOTLOADER=1

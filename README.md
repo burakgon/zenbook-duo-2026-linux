@@ -52,6 +52,8 @@ hardware-scan/          ACPI tabloları (DSDT/SSDT .dat + .dsl), DTT veri kasas�
 | `power-dtt` | thermald --adaptive: BIOS'taki Windows DTT tablolarını uygular (PL1/PL2/TCC profil başına) | hepsi |
 | `keyboard-hid-asus` | Yamalı hid-asus (DKMS): klavye ışığı, Fn tuşları, USB+BT | 7.2.x, 7.3.x |
 | `sensors-accel-mount` | İvmeölçere panellerin 180° ters takılı olduğunu bildirir (hwdb ACCEL_MOUNT_MATRIX): otomatik döndürme doğru çalışır | hepsi |
+| `display-dpcd-backlight` | OLED panellerin parlaklığını DPCD (AUX) üzerinden sürer (`xe.enable_dpcd_backlight=1`) | hepsi |
+| `display-brightness-per-panel` | Yamalı PowerDevil + KWin: her panel kendi donanım parlaklığını alır, yazılımsal karartma yok | hepsi |
 
 ## Yeni modül eklemek
 

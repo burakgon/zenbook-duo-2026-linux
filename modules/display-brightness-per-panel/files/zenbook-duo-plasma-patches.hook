@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = kwin
+Target = powerdevil
+
+[Action]
+Description = Checking zenbook-duo per-panel brightness patches...
+When = PostTransaction
+Exec = /usr/lib/zenbook-duo/plasma-patch-check

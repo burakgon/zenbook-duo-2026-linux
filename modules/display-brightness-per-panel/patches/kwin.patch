@@ -1,0 +1,15 @@
+diff --git a/src/workspace.cpp b/src/workspace.cpp
+index be2aada..f19b8ee 100644
+--- a/src/workspace.cpp
++++ b/src/workspace.cpp
+@@ -1524,7 +1524,9 @@ void Workspace::assignBrightnessDevices(OutputConfiguration &outputConfig)
+                 return false;
+             }
+             if (output->isInternal()) {
+-                return true;
++                // with several built-in panels (e.g. dual-screen laptops) the device's EDID
++                // tells which one it belongs to; a device without EDID fits any of them
++                return device->edidBeginning().isEmpty() || (output->edid().isValid() && output->edid().raw().startsWith(device->edidBeginning()));
+             } else {
+                 return output->edid().isValid() && !device->edidBeginning().isEmpty() && output->edid().raw().startsWith(device->edidBeginning());
+             }
