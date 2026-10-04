@@ -155,6 +155,10 @@ struct asus_touchpad_info {
 };
 
 struct asus_drvdata {
+	struct delayed_work duo_init_work;
+	struct led_classdev duo_micmute_led;
+	int duo_init_runs;
+	bool duo_init_ready;
 	unsigned long quirks;
 	struct hid_device *hdev;
 	struct input_dev *input;
@@ -173,6 +177,7 @@ struct asus_drvdata {
 };
 
 static int asus_report_battery(struct asus_drvdata *, u8 *, int);
+static void asus_duo_schedule_reinit(struct asus_drvdata *drvdata);
 
 static const struct asus_touchpad_info asus_i2c_tp = {
 	.max_x = 2794,
@@ -1372,6 +1377,7 @@ static int __maybe_unused asus_resume(struct hid_device *hdev)
 	if (drvdata->listener.brightness_set)
 		asus_kbd_backlight_set(&drvdata->listener, drvdata->kbd_backlight_brightness);
 
+	asus_duo_schedule_reinit(drvdata);
 	return 0;
 }
 
@@ -1383,6 +1389,40 @@ static int __maybe_unused asus_reset_resume(struct hid_device *hdev)
 		return asus_start_multitouch(hdev);
 
 	return 0;
+}
+
+/*
+ * The Zenbook Duo keyboard falls back to plain F-key reports once the touchpad
+ * on its sibling interface is set up (or after a reconnect/resume). Re-send the
+ * ASUS handshake a little later so the 0x5a hotkey reports come back.
+ */
+static void asus_duo_reinit(struct work_struct *work)
+{
+	struct asus_drvdata *drvdata = container_of(to_delayed_work(work),
+						    struct asus_drvdata, duo_init_work);
+
+	asus_kbd_init(drvdata->hdev, FEATURE_KBD_REPORT_ID);
+	/* Fn-lock 0 = ASUS hotkeys on the top row (USB defaults to F-keys) */
+	asus_kbd_set_fn_lock(drvdata->hdev, false);
+	if (++drvdata->duo_init_runs < 2)
+		schedule_delayed_work(&drvdata->duo_init_work, msecs_to_jiffies(3000));
+}
+
+/* F10 mic-mute LED on the Duo keyboard: 5a d0 7c 00/01 (same group as Fn-lock). */
+static int asus_duo_micmute_set(struct led_classdev *led, enum led_brightness b)
+{
+	struct asus_drvdata *drvdata = container_of(led, struct asus_drvdata, duo_micmute_led);
+	const u8 buf[FEATURE_KBD_REPORT_SIZE] = { FEATURE_KBD_REPORT_ID, 0xd0, 0x7c, b ? 1 : 0 };
+
+	return asus_kbd_set_report(drvdata->hdev, buf, sizeof(buf)) < 0 ? -EIO : 0;
+}
+
+static void asus_duo_schedule_reinit(struct asus_drvdata *drvdata)
+{
+	if (!drvdata->duo_init_ready)
+		return;
+	drvdata->duo_init_runs = 0;
+	mod_delayed_work(system_wq, &drvdata->duo_init_work, msecs_to_jiffies(2000));
 }
 
 static int asus_probe(struct hid_device *hdev, const struct hid_device_id *id)
@@ -1488,7 +1528,14 @@ static int asus_probe(struct hid_device *hdev, const struct hid_device_id *id)
 		return ret;
 	}
 
-	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
+	/*
+	 * Over USB the Duo keyboard's 0xff31 hotkey collection sits alone on its
+	 * interface; without HIDINPUT_FORCE no input device is created for it and
+	 * the hotkeys (backlight, brightness, mic mute, ...) are dropped.
+	 */
+	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT |
+			   (((drvdata->quirks & QUIRK_ZENBOOK_DUO_KBD) && is_vendor) ?
+			    HID_CONNECT_HIDINPUT_FORCE : 0));
 	if (ret) {
 		asus_worker_stop(drvdata->worker);
 		hid_err(hdev, "Asus hw start failed: %d\n", ret);
@@ -1509,6 +1556,20 @@ static int asus_probe(struct hid_device *hdev, const struct hid_device_id *id)
 	    (asus_has_report_id(hdev, FEATURE_KBD_REPORT_ID)) &&
 		(asus_kbd_register_leds(hdev)))
 		hid_warn(hdev, "Failed to initialize backlight.\n");
+
+	if ((drvdata->quirks & QUIRK_ZENBOOK_DUO_KBD) && is_vendor) {
+		INIT_DELAYED_WORK(&drvdata->duo_init_work, asus_duo_reinit);
+		drvdata->duo_init_ready = true;
+		asus_duo_schedule_reinit(drvdata);
+
+		drvdata->duo_micmute_led.name = "asus::micmute";
+		drvdata->duo_micmute_led.max_brightness = 1;
+		drvdata->duo_micmute_led.default_trigger = "audio-micmute";
+		drvdata->duo_micmute_led.brightness_set_blocking = asus_duo_micmute_set;
+		/* only one keyboard link (USB or BT) owns the name at a time */
+		if (devm_led_classdev_register(&hdev->dev, &drvdata->duo_micmute_led))
+			hid_info(hdev, "mic-mute LED already registered by the other link\n");
+	}
 
 	/*
 	 * For ROG keyboards, skip rename for consistency and ->input check as
@@ -1549,6 +1610,9 @@ err_stop_hw:
 static void asus_remove(struct hid_device *hdev)
 {
 	struct asus_drvdata *drvdata = hid_get_drvdata(hdev);
+
+	if (drvdata->duo_init_ready)
+		cancel_delayed_work_sync(&drvdata->duo_init_work);
 
 	if (drvdata->listener.brightness_set)
 		asus_hid_unregister_listener(&drvdata->listener);
