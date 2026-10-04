@@ -186,6 +186,14 @@ private:
         if (b)
             set(b, bottom);
 
+        // One brightness for both panels: KDE's backlight helper already writes the
+        // top panel's value to both backlights, the bottom panel's own setting is
+        // only an extra software dim. Keep that at 100% so both panels match.
+        if (b && b->brightness() < 0.999) {
+            b->setBrightness(1.0);
+            changed = true;
+        }
+
         // The keyboard covers the bottom panel when docked. Only act on dock
         // transitions so a manual choice in System Settings sticks until then.
         if (b && m_dockChanged) {
