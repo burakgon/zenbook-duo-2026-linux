@@ -123,7 +123,7 @@ apply_one() {
 		source "$dir/apply.sh"
 		# export deferred flags from the subshell
 		declare -p DUO_NEED_UDEV_RELOAD DUO_NEED_SYSTEMD_RELOAD DUO_NEED_INITRAMFS DUO_NEED_BOOTLOADER DUO_NEED_REBOOT \
-			>"$DUO_STATE_DIR/.pending.$MOD_ID"
+			| sed "s/^declare -[^ ]* /declare -g /" >"$DUO_STATE_DIR/.pending.$MOD_ID"
 	) || {
 		err "apply of $MOD_ID failed; reverting partial changes"
 		duo_revert_manifest
