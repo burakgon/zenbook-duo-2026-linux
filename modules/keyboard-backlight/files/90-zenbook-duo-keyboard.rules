@@ -1,4 +1,0 @@
-# zenbook-duo-linux: keyboard-backlight
-# When hid-generic grabs an interface of the Duo keyboard (USB 0b05:1cd7, BT 0b05:1cd8),
-# hand the one carrying the ASUS vendor collection (usage page 0xff31) to hid-asus.
-ACTION=="bind", SUBSYSTEM=="hid", DRIVER=="hid-generic", ENV{HID_ID}=="0003:00000B05:00001CD7|0005:00000B05:00001CD8", RUN+="/usr/lib/zenbook-duo/kbd-bind-asus %k"
