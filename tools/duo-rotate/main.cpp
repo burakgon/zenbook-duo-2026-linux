@@ -33,6 +33,7 @@
 #include <QFile>
 #include <QGuiApplication>
 #include <QTimer>
+#include <cmath>
 #include <iostream>
 
 using Rotation = KScreen::Output::Rotation;
@@ -104,6 +105,12 @@ public:
         m_touch.setInterval(TOUCH_DELAY_MS);
         connect(&m_touch, &QTimer::timeout, this, [this] { applyTouch(); });
 
+        // The bottom panel follows the top panel's brightness (keys, slider and the
+        // ambient light sensor all drive the top one).
+        m_brightness.setSingleShot(true);
+        m_brightness.setInterval(150);
+        connect(&m_brightness, &QTimer::timeout, this, [this] { syncBrightness(); });
+
         m_dockPoll.setInterval(500);
         connect(&m_dockPoll, &QTimer::timeout, this, [this] {
             const bool d = keyboardDocked();
@@ -136,9 +143,10 @@ public:
             m_config = static_cast<KScreen::GetConfigOperation *>(o)->config();
             KScreen::ConfigMonitor::instance()->addConfig(m_config);
             connect(KScreen::ConfigMonitor::instance(), &KScreen::ConfigMonitor::configurationChanged, this,
-                    [this] { m_touch.start(); });
+                    [this] { m_touch.start(); m_brightness.start(); });
             m_dockChanged = true; // enforce the panel state once at startup
             applyRotation();
+            m_brightness.start();
         });
     }
 
@@ -233,6 +241,25 @@ private:
         connect(op, &KScreen::SetConfigOperation::finished, this, [this] { m_touch.start(); });
     }
 
+    void syncBrightness()
+    {
+        if (!m_config)
+            return;
+        KScreen::OutputPtr t, b;
+        for (const auto &o : m_config->outputs()) {
+            if (o->name() == TOP)
+                t = o;
+            else if (o->name() == BOTTOM)
+                b = o;
+        }
+        if (!t || !b || !t->isEnabled() || !b->isEnabled())
+            return;
+        if (std::abs(t->brightness() - b->brightness()) < 0.005)
+            return;
+        b->setBrightness(t->brightness());
+        new KScreen::SetConfigOperation(m_config);
+    }
+
     // Map each touchscreen/pen to its panel. The top digitizer reports upright
     // coordinates while its output is rotated 180 degrees more than the content,
     // so it needs a constant 180 degree compensation; the bottom one needs none.
@@ -268,7 +295,7 @@ private:
     QString m_orientation;
     bool m_docked = false;
     bool m_dockChanged = false;
-    QTimer m_stable, m_touch, m_dockPoll;
+    QTimer m_stable, m_touch, m_dockPoll, m_brightness;
 };
 
 int main(int argc, char **argv)

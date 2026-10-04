@@ -1,0 +1,28 @@
+23:50:46.193 start psr=PSR mode: Panel Replay Selective Update enabled (Early Transport) cur=177/504
+23:50:46.204 write 250 (phase PR-on)
+23:50:46.213   done actual=250
+23:50:47.723 write 120 (phase PR-on)
+23:50:47.757   done actual=120
+23:50:49.270 write 350 (phase PR-on)
+23:50:49.298   done actual=350
+23:50:50.807 write 60 (phase PR-on)
+23:50:50.838   done actual=60
+23:50:52.347 write 400 (phase PR-on)
+23:50:52.376   done actual=400
+23:50:53.886 write 177 (phase PR-on)
+23:50:53.919   done actual=177
+23:50:55.429 disable PR via psr_debug
+23:50:56.489 psr=PSR mode: disabled
+23:50:56.516 write 250 (phase PR-off)
+23:50:56.526   done actual=250
+23:50:58.035 write 120 (phase PR-off)
+23:50:58.067   done actual=120
+23:50:59.578 write 350 (phase PR-off)
+23:50:59.608   done actual=350
+23:51:01.118 write 60 (phase PR-off)
+23:51:01.150   done actual=60
+23:51:02.659 write 400 (phase PR-off)
+23:51:02.690   done actual=400
+23:51:04.200 write 177 (phase PR-off)
+23:51:04.224   done actual=177
+23:51:05.763 PR restored; finished OK
