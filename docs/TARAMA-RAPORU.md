@@ -179,3 +179,12 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 - Çözüm: her iki çıkışta otomatik döndürme "InTabletMode" (cihazda tablet modu anahtarı yok, fiilen kapalı). Üst panel (eDP-1) ters takılı → sabit 180°; alt panel (eDP-2) düz takılı → 0° (kullanıcı doğruladı, ilk varsayım yanlıştı). Dokunmatik yönü: üst 8, alt 0. `kscreen-doctor` bu ayarı yapamadığı için `tools/duo-kscreen` (libkscreen) yazıldı: `duo-kscreen eDP-1 autorotate intabletmode rotation inverted`.
 - Dokunmatik yön ayarı (Orientation=8) her oturum açılışında `~/.config/autostart/zenbook-duo-touch.desktop` ile yeniden uygulanıyor.
 - Tablet/kitap kullanımı için ileride menteşe sensörüne dayalı kendi döndürme mantığımız (duo-screen) gerekecek.
+
+## 9. duo-rotate (döndürme + çift ekran düzeni + dokunmatik)
+- KWin'in otomatik döndürmesi bu cihaza uygun değil: paneller birbirine göre 180° farklı takılı, KWin her çıkışı aynı yöne çeviriyor, panelleri yeniden yerleştirmiyor, her dönüşte dokunmatik yönünü sıfırlıyor ve sensörün her okumasına anında tepki veriyor.
+- `tools/duo-rotate` (Qt/libkscreen kullanıcı servisi, `~/.config/systemd/user/duo-rotate.service`):
+  - klavye USB'den takılıyken (0b05:1cd7) laptop pozisyonu sabit; ayrıyken iio-sensor-proxy yönü ≥1 sn sabit kalınca uygulanır;
+  - üst = sensör yönü (inverted/none/left/right), alt = üst + 180°; menteşeye göre alt alta veya yan yana yerleşim;
+  - her ekran düzeni değişiminden sonra dokunmatik eşlemesini (üst yön 8, alt 0) yeniden uygular;
+  - KWin'in otomatik döndürmesini kapatır (policy Never).
+- Kullanıcı tarafından doğrulandı: laptop pozisyonu, dik (book) mod ve dokunmatik.
