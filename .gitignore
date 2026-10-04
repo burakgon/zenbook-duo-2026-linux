@@ -1,0 +1,6 @@
+# local scan snapshots may contain machine-specific data; commit deliberately
+hardware-scan/snapshots/
+# never commit the Windows license table (MSDM) if a scan re-dumps it
+**/msdm.dat
+# iasl leftovers
+*.aml

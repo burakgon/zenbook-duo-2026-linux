@@ -1,0 +1,83 @@
+From 6dbb4239c9a184849791733434fc605bf4778fb3 Mon Sep 17 00:00:00 2001
+From: burakgon <burakgon12@gmail.com>
+Date: Sun, 4 Oct 2026 21:41:01 +0300
+Subject: [PATCH] Input: raydium_i2c_ts - leave HID-over-I2C devices to i2c-hid
+
+The ASUS Zenbook Duo UX8407AA describes its top touchscreen as
+
+    Device (TPL0) {
+        _HID "RAYD0001"           (alternative: "FTCS1000")
+        _CID "PNP0C50"            HID Protocol Device (I2C bus)
+        _DSM 3cdff6f7-...         HID descriptor at register 0x0001
+    }
+
+i.e. a standard HID-over-I2C device that happens to reuse the RAYD0001
+hardware ID. raydium_i2c_ts matches on the _HID, wins the probe race
+against i2c_hid_acpi and then misparses the HID input reports:
+libinput rejects the resulting device ("device has min == max on
+ABS_X") so touch and pen are unusable, and the threaded IRQ handler
+eventually crashes:
+
+  Oops: general protection fault, kernel NULL pointer dereference 0x10e
+  RIP: 0010:raydium_i2c_irq+0x138/0x370 [raydium_i2c_ts]
+
+The bottom panel (RAYD0002, same _CID) is correctly driven by
+i2c_hid_acpi + hid-multitouch and works, including its stylus.
+
+Refuse devices that advertise the HID-over-I2C compatible ID so the
+driver core binds i2c_hid_acpi instead. Devices that only expose
+RAYD0001 keep using this driver.
+
+---
+ drivers/input/touchscreen/raydium_i2c_ts.c | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/drivers/input/touchscreen/raydium_i2c_ts.c b/drivers/input/touchscreen/raydium_i2c_ts.c
+index 0256055abc..875127be08 100644
+--- a/drivers/input/touchscreen/raydium_i2c_ts.c
++++ b/drivers/input/touchscreen/raydium_i2c_ts.c
+@@ -1054,12 +1054,41 @@ static void raydium_i2c_power_off(void *_data)
+ 	}
+ }
+ 
++#ifdef CONFIG_ACPI
++/*
++ * Some firmware reuses the RAYD0001 _HID for touchscreens that implement
++ * HID-over-I2C and advertise it through _CID PNP0C50 (for example the ASUS
++ * Zenbook Duo UX8407AA). Those must be handled by i2c-hid: this driver
++ * would misinterpret their input reports.
++ */
++static const struct acpi_device_id raydium_i2c_hid_over_i2c_ids[] = {
++	{ "PNP0C50" },
++	{ "ACPI0C50" },
++	{ /* sentinel */ }
++};
++
++static bool raydium_i2c_is_hid_over_i2c(struct device *dev)
++{
++	struct acpi_device *adev = ACPI_COMPANION(dev);
++
++	return adev && !acpi_match_device_ids(adev, raydium_i2c_hid_over_i2c_ids);
++}
++#else
++static bool raydium_i2c_is_hid_over_i2c(struct device *dev)
++{
++	return false;
++}
++#endif
++
+ static int raydium_i2c_probe(struct i2c_client *client)
+ {
+ 	union i2c_smbus_data dummy;
+ 	struct raydium_data *ts;
+ 	int error;
+ 
++	if (raydium_i2c_is_hid_over_i2c(&client->dev))
++		return -ENODEV;
++
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
+ 		dev_err(&client->dev,
+ 			"i2c check functionality error (need I2C_FUNC_I2C)\n");
+-- 
+2.56.0
+

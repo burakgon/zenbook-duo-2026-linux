@@ -1,0 +1,6 @@
+# soundwire-intel from Linux 7.2.9 + "soundwire: dmi-quirks: Disable ghost Realtek
+# on Asus Zenbook Duo" (upstream ca02ffd4975c, merged for 7.3).
+obj-m := soundwire-intel.o
+soundwire-intel-y := intel.o intel_ace2x.o intel_ace2x_debugfs.o \
+		     intel_auxdevice.o intel_init.o dmi-quirks.o \
+		     intel_bus_common.o

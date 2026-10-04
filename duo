@@ -1,0 +1,200 @@
+#!/usr/bin/env bash
+# duo - modular hardware patch manager for the ASUS Zenbook Duo (UX8407AA) on Linux.
+#
+#   duo list                      list modules and whether they are needed/applied
+#   duo status [MODULE...]        run module health checks
+#   duo info MODULE               show a module's documentation
+#   duo apply MODULE...|--recommended   apply modules (root)
+#   duo revert MODULE...|--all    revert modules using their recorded manifest (root)
+#   duo doctor                    quick health summary of the whole machine
+#   duo scan [--acpi]             full hardware scan snapshot (tools/hw-scan.sh)
+
+set -euo pipefail
+
+DUO_ROOT="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+# shellcheck source=lib/common.sh
+source "$DUO_ROOT/lib/common.sh"
+# shellcheck source=lib/actions.sh
+source "$DUO_ROOT/lib/actions.sh"
+
+MODULES_DIR="$DUO_ROOT/modules"
+
+module_dirs() {
+	local d
+	for d in "$MODULES_DIR"/*/; do
+		[[ -f $d/module.conf ]] && echo "${d%/}"
+	done
+}
+
+find_module() {
+	local d="$MODULES_DIR/$1"
+	[[ -f $d/module.conf ]] || die "unknown module: $1 (see: duo list)"
+	echo "$d"
+}
+
+is_applied() { [[ -f $DUO_STATE_DIR/modules/$1/applied ]]; }
+
+# Run a module's status script. Exit codes: 0 healthy/fixed, 1 needs fix, 2 not applicable, 3 unknown.
+module_status() {
+	local dir="$1" rc=0
+	[[ -f $dir/status.sh ]] || return 3
+	(
+		module_load "$dir"
+		# shellcheck disable=SC1091
+		source "$dir/status.sh"
+	) >/dev/null 2>&1 || rc=$?
+	return "$rc"
+}
+
+# status_label RC WIDTH: padded first, colored second, so columns line up with or without a tty
+status_label() {
+	local text color
+	case "$1" in
+	0) text="ok" color="$C_GREEN" ;;
+	1) text="NEEDS FIX" color="$C_RED" ;;
+	2) text="n/a" color="$C_DIM" ;;
+	*) text="?" color="$C_YELLOW" ;;
+	esac
+	printf '%s%-*s%s' "$color" "$2" "$text" "$C_RESET"
+}
+
+cmd_list() {
+	local dir rc applied krel
+	krel="$(uname -r)"
+	printf '%s%-28s %-9s %-9s %-6s %-9s %-10s %s%s\n' "$C_BOLD" MODULE CATEGORY SEVERITY RISK APPLIED STATE SUMMARY "$C_RESET"
+	while read -r dir; do
+		module_load "$dir"
+		rc=0
+		if ! module_applies_to_kernel "$krel"; then
+			rc=2
+		else
+			module_status "$dir" || rc=$?
+		fi
+		is_applied "$MOD_ID" && applied="yes" || applied="-"
+		printf '%-28s %-9s %-9s %-6s %-9s %s %s\n' "$MOD_ID" "$CATEGORY" "$SEVERITY" "$RISK" "$applied" "$(status_label $rc 10)" "$SUMMARY"
+	done < <(module_dirs)
+}
+
+cmd_status() {
+	local dir ids=("$@")
+	((${#ids[@]})) || mapfile -t ids < <(module_dirs | xargs -n1 basename)
+	for id in "${ids[@]}"; do
+		dir="$(find_module "$id")"
+		module_load "$dir"
+		log "$MOD_ID - $NAME"
+		if ! module_applies_to_kernel "$(uname -r)"; then
+			info "not applicable to kernel $(uname -r) (range: ${KERNEL_MIN:-any} .. <${KERNEL_MAX:-any})"
+			continue
+		fi
+		[[ -f $dir/status.sh ]] || { info "no status check"; continue; }
+		(
+			module_load "$dir"
+			# shellcheck disable=SC1091
+			source "$dir/status.sh"
+		) || true
+	done
+}
+
+cmd_info() {
+	local dir
+	dir="$(find_module "${1:?module name required}")"
+	module_load "$dir"
+	printf '%s%s%s - %s\n' "$C_BOLD" "$MOD_ID" "$C_RESET" "$NAME"
+	printf 'category=%s severity=%s risk=%s reboot=%s kernel=[%s, %s) upstream=%s\n\n' \
+		"$CATEGORY" "$SEVERITY" "$RISK" "$REBOOT" "${KERNEL_MIN:-any}" "${KERNEL_MAX:-any}" "${UPSTREAM:--}"
+	[[ -f $dir/README.md ]] && cat "$dir/README.md"
+}
+
+apply_one() {
+	local dir="$1"
+	module_load "$dir"
+	log "applying $MOD_ID - $NAME"
+	if ! is_supported_machine; then
+		warn "this machine is $(dmi sys_vendor) $(dmi board_name), modules target UX8407AA"
+		[[ ${DUO_FORCE:-0} == 1 ]] || die "refusing (set DUO_FORCE=1 to override)"
+	fi
+	if [[ -n $KERNEL_MAX || -n $KERNEL_MIN ]] && ! module_applies_to_kernel "$(uname -r)"; then
+		info "running kernel $(uname -r) does not need this module; installing for other kernels anyway"
+	fi
+	mkdir -p "$DUO_STATE_DIR/modules/$MOD_ID"
+	(
+		set -e
+		# shellcheck disable=SC1091
+		source "$dir/apply.sh"
+		# export deferred flags from the subshell
+		declare -p DUO_NEED_UDEV_RELOAD DUO_NEED_SYSTEMD_RELOAD DUO_NEED_INITRAMFS DUO_NEED_BOOTLOADER DUO_NEED_REBOOT \
+			>"$DUO_STATE_DIR/.pending.$MOD_ID"
+	) || {
+		err "apply of $MOD_ID failed; reverting partial changes"
+		duo_revert_manifest
+		return 1
+	}
+	# shellcheck disable=SC1090
+	source "$DUO_STATE_DIR/.pending.$MOD_ID" && rm -f "$DUO_STATE_DIR/.pending.$MOD_ID"
+	date -Is >"$DUO_STATE_DIR/modules/$MOD_ID/applied"
+	ok "$MOD_ID applied"
+}
+
+snapshot() {
+	have snapper || return 0
+	snapper -c root create -t single -c number -d "zenbook-duo: $*" >/dev/null 2>&1 &&
+		info "snapper snapshot created ($*)" || true
+}
+
+cmd_apply() {
+	require_root "$@"
+	local ids=() dir
+	if [[ ${1:-} == --recommended ]]; then
+		while read -r dir; do
+			module_load "$dir"
+			[[ $DEFAULT == on ]] && ids+=("$MOD_ID")
+		done < <(module_dirs)
+	else
+		ids=("$@")
+	fi
+	((${#ids[@]})) || die "nothing to apply"
+	snapshot "before apply ${ids[*]}"
+	for id in "${ids[@]}"; do
+		apply_one "$(find_module "$id")"
+	done
+	duo_finish_transaction
+}
+
+cmd_revert() {
+	require_root "$@"
+	local ids=()
+	if [[ ${1:-} == --all ]]; then
+		mapfile -t ids < <(ls "$DUO_STATE_DIR/modules" 2>/dev/null)
+	else
+		ids=("$@")
+	fi
+	((${#ids[@]})) || die "nothing to revert"
+	snapshot "before revert ${ids[*]}"
+	for id in "${ids[@]}"; do
+		MOD_ID="$id"
+		log "reverting $id"
+		duo_revert_manifest
+	done
+	duo_finish_transaction
+}
+
+cmd_doctor() { "$DUO_ROOT/tools/hw-scan.sh" --summary-only --out "${TMPDIR:-/tmp}/duo-doctor"; }
+cmd_scan() { "$DUO_ROOT/tools/hw-scan.sh" "$@"; }
+
+main() {
+	local cmd="${1:-list}"
+	shift || true
+	case "$cmd" in
+	list | ls) cmd_list ;;
+	status | st) cmd_status "$@" ;;
+	info | show) cmd_info "$@" ;;
+	apply) cmd_apply "$@" ;;
+	revert | undo) cmd_revert "$@" ;;
+	doctor) cmd_doctor ;;
+	scan) cmd_scan "$@" ;;
+	-h | --help | help) sed -n '2,11p' "$0" ;;
+	*) die "unknown command: $cmd (see: duo help)" ;;
+	esac
+}
+
+main "$@"

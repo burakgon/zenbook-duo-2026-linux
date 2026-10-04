@@ -1,0 +1,1691 @@
+[sudo] password for burakgon: [1791138258][DEBUG]RAPL sysfs present
+[1791138258][DEBUG]RAPL base path /sys/class/powercap/intel-rapl/
+[1791138258][DEBUG]RAPL domain dir uevent
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/uevent/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir intel-rapl:1
+[1791138258][DEBUG]name psys
+[1791138258][DEBUG]RAPL domain dir enabled
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/enabled/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir power
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/power/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir intel-rapl:0
+[1791138258][DEBUG]name package-0
+[1791138258][DEBUG]RAPL base path /sys/class/powercap/intel-rapl/intel-rapl:0/
+[1791138258][DEBUG]RAPL domain dir uevent
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/uevent/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir energy_uj
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir intel-rapl:0:2
+[1791138258][DEBUG]name dram
+[1791138258][DEBUG]RAPL domain dir intel-rapl:0:0
+[1791138258][DEBUG]name core
+[1791138258][DEBUG]RAPL domain dir enabled
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/enabled/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir constraint_1_max_power_uw
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_1_max_power_uw/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir constraint_2_time_window_us
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_2_time_window_us/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir power
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/power/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir device
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/device/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir constraint_2_power_limit_uw
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_2_power_limit_uw/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir constraint_1_time_window_us
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_1_time_window_us/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir constraint_2_max_power_uw
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_2_max_power_uw/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir constraint_2_name
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_2_name/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir constraint_1_power_limit_uw
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_1_power_limit_uw/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir intel-rapl:0:1
+[1791138258][DEBUG]name uncore
+[1791138258][DEBUG]RAPL domain dir constraint_0_time_window_us
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_0_time_window_us/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir subsystem
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/subsystem/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir constraint_1_name
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_1_name/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir constraint_0_power_limit_uw
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_0_power_limit_uw/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir constraint_0_name
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_0_name/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir name
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/name/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir constraint_0_max_power_uw
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/constraint_0_max_power_uw/name doesn't exist
+[1791138258][DEBUG]RAPL domain dir max_energy_range_uj
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/intel-rapl:0/max_energy_range_uj/name doesn't exist
+[1791138258][INFO]RAPL domain count 1
+[1791138258][DEBUG]RAPL domain dir subsystem
+[1791138258][DEBUG] /sys/class/powercap/intel-rapl/subsystem/name doesn't exist
+[1791138258][INFO]RAPL domain count 1
+[1791138258][INFO]PM profile is 2
+[1791138258][DEBUG]node type: Element, name: DbusControl value: " 0 " 
+[1791138258][DEBUG]node type: Element, name: XMLThermalConfig value: " 1 " 
+[1791138258][DEBUG]node type: Element, name: DataVaultFromFileSystem value: " 1 " 
+[1791138258][DEBUG]node type: Element, name: KobjectUeventSupport value: " 1 " 
+[1791138258][DEBUG]Parsed features from XML config file
+[1791138258][DEBUG]node type: Element, name: DbusControl value: " 0 " 
+[1791138258][DEBUG]node type: Element, name: XMLThermalConfig value: " 1 " 
+[1791138258][DEBUG]node type: Element, name: DataVaultFromFileSystem value: " 1 " 
+[1791138258][DEBUG]node type: Element, name: KobjectUeventSupport value: " 1 " 
+[1791138258][DEBUG]Features parsed successfully from XML config file
+[1791138258][DEBUG]Discovered int3400 path:/sys/bus/platform/devices/INTC10D4:00/
+[1791138258][INFO]Look for File name:/lib/firmware/intel/dtt/dtt_data_vault_2029782766_2582252515_3378206731_0.bin
+[1791138258][INFO]Could not open file /lib/firmware/intel/dtt/dtt_data_vault_2029782766_2582252515_3378206731_0.bin: No such file or directory
+[1791138258][DEBUG]header version[2] size[3131] header_size[148] flags[40000000]
+[1791138258][DEBUG]Uncompress GDDV payload
+[1791138258][DEBUG]output size =68922
+[1791138258][DEBUG]header version[2] size[68922] header_size[148] flags[00000000]
+[1791138258][DEBUG]DV name: gddv
+[1791138258][DEBUG]DV comment: OEM Exported DataVault
+[1791138258][DEBUG]Got payload of size 68922 (data length: 68774)
+[1791138258][INFO]Got subobject in buf 0x557242af36f0 at 148
+[1791138258][DEBUG]header version[2] size[68774] header_size[148] flags[00000000]
+[1791138258][DEBUG]DV name: dptf
+[1791138258][DEBUG]DV comment: DPTF Policy Configuration
+[1791138258][DEBUG]Got payload of size 68774 (data length: 68340)
+[1791138258][INFO]Processing ppcc limit 2, length 300
+[1791138258][INFO]Got subobject in buf 0x557242af3784 at 68488
+[1791138258][DEBUG]header version[2] size[286] header_size[148] flags[00000000]
+[1791138258][DEBUG]DV name: platform
+[1791138258][DEBUG]DV comment: Platform Configuration
+[1791138258][DEBUG]Got payload of size 286 (data length: 138)
+[1791138258][INFO]Subobject ended at 68636 of 68774
+[1791138258][INFO]Subobject ended at 68784 of 68922
+[1791138258][INFO]..ppcc dump begin..
+[1791138258][INFO]Name:TCPU.D0 Limit:0 power_limit_max:30000 power_limit_min:15000 step_size:500 time_win_max:32000 time_win_min:28000
+[1791138258][INFO]Name:TCPU.D0 Limit:1 power_limit_max:64000 power_limit_min:15000 step_size:500 time_win_max:0 time_win_min:0
+[1791138258][INFO]ppcc dump end
+[1791138258][INFO]..psvt dump begin..
+[1791138258][INFO]Name :IETM.D0
+[1791138258][INFO]	 source:\_SB_.PC00.TCPU target:\_SB_.IETM.SEN1 priority:10 sample_period:100 temp:52 domain:9 control_knob:65536 psv.limit:MAX
+[1791138258][INFO]Name :20250324
+[1791138258][INFO]	 source:\_SB_.PC00.TCPU target:\_SB_.IETM.SEN1 priority:10 sample_period:50 temp:10 domain:9 control_knob:65536 psv.limit:MAX
+[1791138258][INFO]Name :s1_ts0_50
+[1791138258][INFO]	 source:\_SB_.PC00.TCPU target:\_SB_.IETM.SEN1 priority:10 sample_period:100 temp:50 domain:9 control_knob:65536 psv.limit:MAX
+[1791138258][INFO]Name :s1_ts0_52
+[1791138258][INFO]	 source:\_SB_.PC00.TCPU target:\_SB_.IETM.SEN1 priority:10 sample_period:100 temp:52 domain:9 control_knob:65536 psv.limit:MAX
+[1791138258][INFO]Name :s1_ts0_54
+[1791138258][INFO]	 source:\_SB_.PC00.TCPU target:\_SB_.IETM.SEN1 priority:10 sample_period:100 temp:54 domain:9 control_knob:65536 psv.limit:MAX
+[1791138258][INFO]psvt dump end
+[1791138258][INFO]..itmt dump begin..
+[1791138258][INFO]itmt dump end
+[1791138258][INFO]..apat dump begin..
+[1791138258][INFO]target_id:2 name:Check participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:20000
+[1791138258][INFO]target_id:2 name:Check participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:20000
+[1791138258][INFO]target_id:2 name:Check participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:15000
+[1791138258][INFO]target_id:2 name:Check participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:20
+[1791138258][INFO]target_id:2 name:Check participant:\_SB_.IETM domain:14 code:PSVT argument:20250324
+[1791138258][INFO]target_id:31 name:Default participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:55000
+[1791138258][INFO]target_id:31 name:Default participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:42000
+[1791138258][INFO]target_id:31 name:Default participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:28000
+[1791138258][INFO]target_id:31 name:Default participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:8
+[1791138258][INFO]target_id:31 name:Default participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_50
+[1791138258][INFO]target_id:4 name:HOT participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:18000
+[1791138258][INFO]target_id:4 name:HOT participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:18000
+[1791138258][INFO]target_id:4 name:HOT participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:15000
+[1791138258][INFO]target_id:4 name:HOT participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:30
+[1791138258][INFO]target_id:4 name:HOT participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_50
+[1791138258][INFO]target_id:5 name:MS participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:35000
+[1791138258][INFO]target_id:5 name:MS participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:30000
+[1791138258][INFO]target_id:5 name:MS participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:20000
+[1791138258][INFO]target_id:5 name:MS participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:11
+[1791138258][INFO]target_id:5 name:MS participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_50
+[1791138258][INFO]target_id:11 name:Whisper participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:35000
+[1791138258][INFO]target_id:11 name:Whisper participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:30000
+[1791138258][INFO]target_id:11 name:Whisper participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:20000
+[1791138258][INFO]target_id:11 name:Whisper participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:11
+[1791138258][INFO]target_id:11 name:Whisper participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_50
+[1791138258][INFO]target_id:20 name:Standard participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:55000
+[1791138258][INFO]target_id:20 name:Standard participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:42000
+[1791138258][INFO]target_id:20 name:Standard participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:28000
+[1791138258][INFO]target_id:20 name:Standard participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:8
+[1791138258][INFO]target_id:20 name:Standard participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_50
+[1791138258][INFO]target_id:32 name:Performance participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:64000
+[1791138258][INFO]target_id:32 name:Performance participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:55000
+[1791138258][INFO]target_id:32 name:Performance participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:45000
+[1791138258][INFO]target_id:32 name:Performance participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:3
+[1791138258][INFO]target_id:32 name:Performance participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_54
+[1791138258][INFO]target_id:34 name:Stand_Performance participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:64000
+[1791138258][INFO]target_id:34 name:Stand_Performance participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:55000
+[1791138258][INFO]target_id:34 name:Stand_Performance participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:45000
+[1791138258][INFO]target_id:34 name:Stand_Performance participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:5
+[1791138258][INFO]target_id:34 name:Stand_Performance participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_50
+[1791138258][INFO]target_id:35 name:Stand_Standard participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:55000
+[1791138258][INFO]target_id:35 name:Stand_Standard participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:42000
+[1791138258][INFO]target_id:35 name:Stand_Standard participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:28000
+[1791138258][INFO]target_id:35 name:Stand_Standard participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:8
+[1791138258][INFO]target_id:35 name:Stand_Standard participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_50
+[1791138258][INFO]target_id:36 name:Stand_Whisper participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:35000
+[1791138258][INFO]target_id:36 name:Stand_Whisper participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:30000
+[1791138258][INFO]target_id:36 name:Stand_Whisper participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:20000
+[1791138258][INFO]target_id:36 name:Stand_Whisper participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:11
+[1791138258][INFO]target_id:36 name:Stand_Whisper participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_50
+[1791138258][INFO]target_id:37 name:Book2_Standard participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:33000
+[1791138258][INFO]target_id:37 name:Book2_Standard participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:30000
+[1791138258][INFO]target_id:37 name:Book2_Standard participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:25000
+[1791138258][INFO]target_id:37 name:Book2_Standard participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:8
+[1791138258][INFO]target_id:37 name:Book2_Standard participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_54
+[1791138258][INFO]target_id:38 name:Book2_Whisper participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:23000
+[1791138258][INFO]target_id:38 name:Book2_Whisper participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:20000
+[1791138258][INFO]target_id:38 name:Book2_Whisper participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:15000
+[1791138258][INFO]target_id:38 name:Book2_Whisper participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:11
+[1791138258][INFO]target_id:38 name:Book2_Whisper participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_52
+[1791138258][INFO]target_id:41 name:Book1_Standard participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:33000
+[1791138258][INFO]target_id:41 name:Book1_Standard participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:30000
+[1791138258][INFO]target_id:41 name:Book1_Standard participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:25000
+[1791138258][INFO]target_id:41 name:Book1_Standard participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:8
+[1791138258][INFO]target_id:41 name:Book1_Standard participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_54
+[1791138258][INFO]target_id:42 name:Book1_Whisper participant:\_SB_.PC00.TCPU domain:9 code:PL2PowerLimit argument:23000
+[1791138258][INFO]target_id:42 name:Book1_Whisper participant:\_SB_.PC00.TCPU domain:9 code:PL1MAX argument:20000
+[1791138258][INFO]target_id:42 name:Book1_Whisper participant:\_SB_.PC00.TCPU domain:9 code:PL1MIN argument:15000
+[1791138258][INFO]target_id:42 name:Book1_Whisper participant:\_SB_.PC00.TCPU domain:9 code:TccOffset argument:11
+[1791138258][INFO]target_id:42 name:Book1_Whisper participant:\_SB_.IETM domain:14 code:PSVT argument:s1_ts0_52
+[1791138258][INFO]apat dump end
+[1791138258][INFO]..apct dump begin..
+[1791138258][INFO]condition_set 0
+[1791138258][INFO]	target:2 device:\_SB_.IETM condition:Oem5 comparison:ADAPTIVE_EQUAL argument:255 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:2 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:2 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:2 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:2 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:2 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:2 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:2 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:2 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:2 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 1
+[1791138258][INFO]	target:4 device:\_SB_.IETM.SEN1 condition:Temperature_without_hysteresis comparison:ADAPTIVE_GREATER_OR_EQUAL argument:3472 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:4 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:4 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:4 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:4 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:4 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:4 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:4 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:4 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:4 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 2
+[1791138258][INFO]	target:5 device:\_SB_.IETM condition:Screen_state comparison:ADAPTIVE_EQUAL argument:0 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:5 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:5 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:5 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:5 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:5 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:5 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:5 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:5 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:5 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 3
+[1791138258][INFO]	target:32 device:\_SB_.IETM condition:Oem0 comparison:ADAPTIVE_EQUAL argument:2 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:32 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:32 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:32 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:32 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:32 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:32 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:32 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:32 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:32 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 4
+[1791138258][INFO]	target:34 device:\_SB_.IETM condition:Oem0 comparison:ADAPTIVE_EQUAL argument:2 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:34 device:\_SB_.IETM condition:Oem3 comparison:ADAPTIVE_EQUAL argument:7 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:34 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:34 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:34 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:34 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:34 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:34 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:34 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:34 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 5
+[1791138258][INFO]	target:35 device:\_SB_.IETM condition:Oem0 comparison:ADAPTIVE_EQUAL argument:0 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:35 device:\_SB_.IETM condition:Oem3 comparison:ADAPTIVE_EQUAL argument:7 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:35 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:35 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:35 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:35 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:35 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:35 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:35 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:35 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 6
+[1791138258][INFO]	target:36 device:\_SB_.IETM condition:Oem0 comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:36 device:\_SB_.IETM condition:Oem3 comparison:ADAPTIVE_EQUAL argument:7 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:36 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:36 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:36 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:36 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:36 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:36 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:36 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:36 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 7
+[1791138258][INFO]	target:37 device:\_SB_.IETM condition:Oem0 comparison:ADAPTIVE_EQUAL argument:0 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:37 device:\_SB_.IETM condition:Oem3 comparison:ADAPTIVE_EQUAL argument:8 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:37 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:37 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:37 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:37 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:37 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:37 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:37 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:37 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 8
+[1791138258][INFO]	target:38 device:\_SB_.IETM condition:Oem0 comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:38 device:\_SB_.IETM condition:Oem3 comparison:ADAPTIVE_EQUAL argument:8 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:38 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:38 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:38 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:38 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:38 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:38 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:38 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:38 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 9
+[1791138258][INFO]	target:41 device:\_SB_.IETM condition:Oem0 comparison:ADAPTIVE_EQUAL argument:0 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:41 device:\_SB_.IETM condition:Oem3 comparison:ADAPTIVE_EQUAL argument:9 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:41 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:41 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:41 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:41 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:41 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:41 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:41 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:41 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 10
+[1791138258][INFO]	target:42 device:\_SB_.IETM condition:Oem0 comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:42 device:\_SB_.IETM condition:Oem3 comparison:ADAPTIVE_EQUAL argument:9 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:42 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:42 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:42 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:42 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:42 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:42 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:42 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:42 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 11
+[1791138258][INFO]	target:11 device:\_SB_.IETM condition:Oem0 comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:11 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:11 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:11 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:11 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:11 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:11 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:11 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:11 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:11 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 12
+[1791138258][INFO]	target:20 device:\_SB_.IETM.SEN1 condition:Temperature_without_hysteresis comparison:ADAPTIVE_GREATER_OR_EQUAL argument:2732 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:20 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:20 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:20 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:20 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:20 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:20 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:20 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:20 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:20 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]condition_set 13
+[1791138258][INFO]	target:31 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:31 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:31 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:31 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:31 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:31 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:31 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:31 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:31 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:AND time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]	target:31 device:1 condition:Default comparison:ADAPTIVE_EQUAL argument:1 operation:INVALID time_comparison:0 time:0 stare:0 state_entry_time:0
+[1791138258][INFO]..apct dump end..
+[1791138258][INFO]..idsp dump begin..
+[1791138258][INFO]idsp :63BE270F-1C11-48FD-A6F7-3AF253FF3E2D
+
+[1791138258][INFO]idsp :1939D73B-E7B7-CB4A-BA23-72C39B9BC3BD
+
+[1791138258][INFO]idsp :4E26BA64-DEAE-44E2-8796-95E7D0584890
+
+[1791138258][INFO]idsp :9E04115A-AE87-4D1C-9500-0F3E340BFE75
+
+[1791138258][INFO]idsp dump end
+[1791138258][INFO]..trippoint dump begin..
+[1791138258][INFO]name:SEN1.D0 type_str:_ac0 type:4 temp:-273
+[1791138258][INFO]name:SEN1.D0 type_str:_ac1 type:4 temp:-273
+[1791138258][INFO]name:SEN1.D0 type_str:_ac2 type:4 temp:-273
+[1791138258][INFO]name:SEN1.D0 type_str:_ac3 type:4 temp:-273
+[1791138258][INFO]name:SEN1.D0 type_str:_ac4 type:4 temp:-273
+[1791138258][INFO]name:SEN1.D0 type_str:_ac5 type:4 temp:-273
+[1791138258][INFO]name:SEN1.D0 type_str:_ac6 type:4 temp:-273
+[1791138258][INFO]name:SEN1.D0 type_str:_ac7 type:4 temp:-273
+[1791138258][INFO]name:SEN1.D0 type_str:_ac8 type:4 temp:-273
+[1791138258][INFO]name:SEN1.D0 type_str:_ac9 type:4 temp:-273
+[1791138258][INFO]name:SEN1.D0 type_str:_cr3 type:0 temp:0
+[1791138258][INFO]name:SEN1.D0 type_str:_crt type:0 temp:-273
+[1791138258][INFO]name:SEN1.D0 type_str:_hot type:1 temp:-273
+[1791138258][INFO]name:SEN1.D0 type_str:_psv type:3 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_ac0 type:4 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_ac1 type:4 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_ac2 type:4 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_ac3 type:4 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_ac4 type:4 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_ac5 type:4 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_ac6 type:4 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_ac7 type:4 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_ac8 type:4 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_ac9 type:4 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_cr3 type:0 temp:0
+[1791138258][INFO]name:SEN2.D0 type_str:_crt type:0 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_hot type:1 temp:-273
+[1791138258][INFO]name:SEN2.D0 type_str:_psv type:3 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_ac0 type:4 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_ac1 type:4 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_ac2 type:4 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_ac3 type:4 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_ac4 type:4 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_ac5 type:4 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_ac6 type:4 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_ac7 type:4 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_ac8 type:4 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_ac9 type:4 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_cr3 type:0 temp:0
+[1791138258][INFO]name:SEN3.D0 type_str:_crt type:0 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_hot type:1 temp:-273
+[1791138258][INFO]name:SEN3.D0 type_str:_psv type:3 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_ac0 type:4 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_ac1 type:4 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_ac2 type:4 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_ac3 type:4 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_ac4 type:4 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_ac5 type:4 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_ac6 type:4 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_ac7 type:4 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_ac8 type:4 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_ac9 type:4 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_cr3 type:0 temp:0
+[1791138258][INFO]name:SEN4.D0 type_str:_crt type:0 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_hot type:1 temp:-273
+[1791138258][INFO]name:SEN4.D0 type_str:_psv type:3 temp:-273
+[1791138258][INFO]name:SEN5.D0 type_str:_ac0 type:4 temp:60
+[1791138258][INFO]name:SEN5.D0 type_str:_ac1 type:4 temp:50
+[1791138258][INFO]name:SEN5.D0 type_str:_ac2 type:4 temp:40
+[1791138258][INFO]name:SEN5.D0 type_str:_ac3 type:4 temp:-273
+[1791138258][INFO]name:SEN5.D0 type_str:_ac4 type:4 temp:-273
+[1791138258][INFO]name:SEN5.D0 type_str:_ac5 type:4 temp:-273
+[1791138258][INFO]name:SEN5.D0 type_str:_ac6 type:4 temp:-273
+[1791138258][INFO]name:SEN5.D0 type_str:_ac7 type:4 temp:-273
+[1791138258][INFO]name:SEN5.D0 type_str:_ac8 type:4 temp:-273
+[1791138258][INFO]name:SEN5.D0 type_str:_ac9 type:4 temp:-273
+[1791138258][INFO]name:SEN5.D0 type_str:_cr3 type:0 temp:70
+[1791138258][INFO]name:SEN5.D0 type_str:_crt type:0 temp:80
+[1791138258][INFO]name:SEN5.D0 type_str:_hot type:1 temp:75
+[1791138258][INFO]name:SEN5.D0 type_str:_psv type:3 temp:65
+[1791138258][INFO]name:SEN6.D0 type_str:_ac0 type:4 temp:60
+[1791138258][INFO]name:SEN6.D0 type_str:_ac1 type:4 temp:50
+[1791138258][INFO]name:SEN6.D0 type_str:_ac2 type:4 temp:40
+[1791138258][INFO]name:SEN6.D0 type_str:_ac3 type:4 temp:-273
+[1791138258][INFO]name:SEN6.D0 type_str:_ac4 type:4 temp:-273
+[1791138258][INFO]name:SEN6.D0 type_str:_ac5 type:4 temp:-273
+[1791138258][INFO]name:SEN6.D0 type_str:_ac6 type:4 temp:-273
+[1791138258][INFO]name:SEN6.D0 type_str:_ac7 type:4 temp:-273
+[1791138258][INFO]name:SEN6.D0 type_str:_ac8 type:4 temp:-273
+[1791138258][INFO]name:SEN6.D0 type_str:_ac9 type:4 temp:-273
+[1791138258][INFO]name:SEN6.D0 type_str:_cr3 type:0 temp:70
+[1791138258][INFO]name:SEN6.D0 type_str:_crt type:0 temp:80
+[1791138258][INFO]name:SEN6.D0 type_str:_hot type:1 temp:75
+[1791138258][INFO]name:SEN6.D0 type_str:_psv type:3 temp:65
+[1791138258][INFO]name:SEN7.D0 type_str:_ac0 type:4 temp:60
+[1791138258][INFO]name:SEN7.D0 type_str:_ac1 type:4 temp:50
+[1791138258][INFO]name:SEN7.D0 type_str:_ac2 type:4 temp:40
+[1791138258][INFO]name:SEN7.D0 type_str:_ac3 type:4 temp:-273
+[1791138258][INFO]name:SEN7.D0 type_str:_ac4 type:4 temp:-273
+[1791138258][INFO]name:SEN7.D0 type_str:_ac5 type:4 temp:-273
+[1791138258][INFO]name:SEN7.D0 type_str:_ac6 type:4 temp:-273
+[1791138258][INFO]name:SEN7.D0 type_str:_ac7 type:4 temp:-273
+[1791138258][INFO]name:SEN7.D0 type_str:_ac8 type:4 temp:-273
+[1791138258][INFO]name:SEN7.D0 type_str:_ac9 type:4 temp:-273
+[1791138258][INFO]name:SEN7.D0 type_str:_cr3 type:0 temp:70
+[1791138258][INFO]name:SEN7.D0 type_str:_crt type:0 temp:80
+[1791138258][INFO]name:SEN7.D0 type_str:_hot type:1 temp:75
+[1791138258][INFO]name:SEN7.D0 type_str:_psv type:3 temp:65
+[1791138258][INFO]name:SEN8.D0 type_str:_ac0 type:4 temp:60
+[1791138258][INFO]name:SEN8.D0 type_str:_ac1 type:4 temp:50
+[1791138258][INFO]name:SEN8.D0 type_str:_ac2 type:4 temp:40
+[1791138258][INFO]name:SEN8.D0 type_str:_ac3 type:4 temp:-273
+[1791138258][INFO]name:SEN8.D0 type_str:_ac4 type:4 temp:-273
+[1791138258][INFO]name:SEN8.D0 type_str:_ac5 type:4 temp:-273
+[1791138258][INFO]name:SEN8.D0 type_str:_ac6 type:4 temp:-273
+[1791138258][INFO]name:SEN8.D0 type_str:_ac7 type:4 temp:-273
+[1791138258][INFO]name:SEN8.D0 type_str:_ac8 type:4 temp:-273
+[1791138258][INFO]name:SEN8.D0 type_str:_ac9 type:4 temp:-273
+[1791138258][INFO]name:SEN8.D0 type_str:_cr3 type:0 temp:70
+[1791138258][INFO]name:SEN8.D0 type_str:_crt type:0 temp:80
+[1791138258][INFO]name:SEN8.D0 type_str:_hot type:1 temp:75
+[1791138258][INFO]name:SEN8.D0 type_str:_psv type:3 temp:65
+[1791138258][INFO]name:STG0.D0 type_str:_ac0 type:4 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_ac1 type:4 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_ac2 type:4 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_ac3 type:4 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_ac4 type:4 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_ac5 type:4 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_ac6 type:4 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_ac7 type:4 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_ac8 type:4 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_ac9 type:4 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_cr3 type:0 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_crt type:0 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_hot type:1 temp:-273
+[1791138258][INFO]name:STG0.D0 type_str:_psv type:3 temp:-273
+[1791138258][INFO]name:TCPU.D0 type_str:_ac0 type:4 temp:109
+[1791138258][INFO]name:TCPU.D0 type_str:_ac1 type:4 temp:107
+[1791138258][INFO]name:TCPU.D0 type_str:_ac2 type:4 temp:106
+[1791138258][INFO]name:TCPU.D0 type_str:_ac3 type:4 temp:105
+[1791138258][INFO]name:TCPU.D0 type_str:_ac4 type:4 temp:103
+[1791138258][INFO]name:TCPU.D0 type_str:_ac5 type:4 temp:-273
+[1791138258][INFO]name:TCPU.D0 type_str:_ac6 type:4 temp:-273
+[1791138258][INFO]name:TCPU.D0 type_str:_ac7 type:4 temp:-273
+[1791138258][INFO]name:TCPU.D0 type_str:_ac8 type:4 temp:-273
+[1791138258][INFO]name:TCPU.D0 type_str:_ac9 type:4 temp:-273
+[1791138258][INFO]name:TCPU.D0 type_str:_cr3 type:0 temp:110
+[1791138258][INFO]name:TCPU.D0 type_str:_crt type:0 temp:110
+[1791138258][INFO]name:TCPU.D0 type_str:_hot type:1 temp:110
+[1791138258][INFO]name:TCPU.D0 type_str:_psv type:3 temp:110
+[1791138258][INFO]trippoint dump end
+[1791138258][INFO]..vsct dump begin []
+[1791138258][INFO]vsct dump end
+[1791138258][INFO]..vspt dump begin
+[1791138258][INFO]vspt dump end
+[1791138258][INFO]Power slider is now set to 75
+[1791138258][DEBUG]Ignore CPU ID check for MSRs
+[1791138258][DEBUG]thd_read_default_thermal_sensors
+[1791138258][INFO]sensor_update: type INT3400
+[1791138258][INFO]sensor_update: type acpitz
+[1791138258][INFO]sensor_update: type SEN8
+[1791138258][INFO]sensor_update: type x86_pkg_temp
+[1791138258][INFO]sensor_update: type SEN6
+[1791138258][INFO]sensor_update: type TCPU
+[1791138258][INFO]sensor_update: type SEN3
+[1791138258][INFO]sensor_update: type SEN1
+[1791138258][INFO]sensor_update: type acpitz
+[1791138258][INFO]sensor_update: type iwlwifi_1
+[1791138258][INFO]sensor_update: type SEN7
+[1791138258][INFO]sensor_update: type TCPU_PCI
+[1791138258][INFO]sensor_update: type SEN4
+[1791138258][INFO]sensor_update: type SEN2
+[1791138258][INFO]thd_read_default_thermal_sensors loaded 14 sensors
+[1791138258][INFO]dts /sys/devices/platform/coretemp.0/name doesn't exist
+[1791138258][INFO]sensor index:2 INT3400 /sys/class/thermal/thermal_zone2/ Async:0
+[1791138258][INFO]sensor index:0 acpitz /sys/class/thermal/thermal_zone0/ Async:0
+[1791138258][INFO]sensor index:9 SEN8 /sys/class/thermal/thermal_zone9/ Async:0
+[1791138258][INFO]sensor index:12 x86_pkg_temp /sys/class/thermal/thermal_zone12/ Async:1
+[1791138258][INFO]sensor index:7 SEN6 /sys/class/thermal/thermal_zone7/ Async:0
+[1791138258][INFO]sensor index:10 TCPU /sys/class/thermal/thermal_zone10/ Async:0
+[1791138258][INFO]sensor index:5 SEN3 /sys/class/thermal/thermal_zone5/ Async:0
+[1791138258][INFO]sensor index:3 SEN1 /sys/class/thermal/thermal_zone3/ Async:0
+[1791138258][INFO]sensor index:1 acpitz /sys/class/thermal/thermal_zone1/ Async:0
+[1791138258][INFO]sensor index:13 iwlwifi_1 /sys/class/thermal/thermal_zone13/ Async:0
+[1791138258][INFO]sensor index:8 SEN7 /sys/class/thermal/thermal_zone8/ Async:0
+[1791138258][INFO]sensor index:11 TCPU_PCI /sys/class/thermal/thermal_zone11/ Async:0
+[1791138258][INFO]sensor index:6 SEN4 /sys/class/thermal/thermal_zone6/ Async:0
+[1791138258][INFO]sensor index:4 SEN2 /sys/class/thermal/thermal_zone4/ Async:0
+[1791138258][INFO]sensor index:14 hwmon /sys/class/hwmon/hwmon5/temp36_input Async:0
+[1791138258][INFO]sensor index:15 hwmon /sys/class/hwmon/hwmon5/temp6_input Async:0
+[1791138258][INFO]sensor index:16 hwmon /sys/class/hwmon/hwmon5/temp23_input Async:0
+[1791138258][INFO]sensor index:17 hwmon /sys/class/hwmon/hwmon5/temp10_input Async:0
+[1791138258][INFO]sensor index:18 hwmon /sys/class/hwmon/hwmon5/temp37_input Async:0
+[1791138258][INFO]sensor index:19 hwmon /sys/class/hwmon/hwmon5/temp20_input Async:0
+[1791138258][INFO]sensor index:20 hwmon /sys/class/hwmon/hwmon5/temp14_input Async:0
+[1791138258][INFO]sensor index:21 hwmon /sys/class/hwmon/hwmon5/temp24_input Async:0
+[1791138258][INFO]sensor index:22 hwmon /sys/class/hwmon/hwmon5/temp34_input Async:0
+[1791138258][INFO]sensor index:23 hwmon /sys/class/hwmon/hwmon5/temp18_input Async:0
+[1791138258][INFO]sensor index:24 hwmon /sys/class/hwmon/hwmon5/temp21_input Async:0
+[1791138258][INFO]sensor index:25 hwmon /sys/class/hwmon/hwmon5/temp1_input Async:0
+[1791138258][INFO]sensor index:26 hwmon /sys/class/hwmon/hwmon5/temp25_input Async:0
+[1791138258][INFO]sensor index:27 hwmon /sys/class/hwmon/hwmon5/temp35_input Async:0
+[1791138258][INFO]sensor index:28 hwmon /sys/class/hwmon/hwmon5/temp19_input Async:0
+[1791138258][INFO]sensor index:29 hwmon /sys/class/hwmon/hwmon5/temp22_input Async:0
+[1791138258][INFO]sensor index:30 hwmon /sys/class/hwmon/hwmon5/temp2_input Async:0
+[1791138258][DEBUG]thd_read_default_cooling devices
+[1791138258][DEBUG]cooling dev 13:0:3:Processor
+[1791138258][DEBUG]cooling dev 1:0:3:Processor
+[1791138258][DEBUG]cooling dev 11:0:3:Processor
+[1791138258][DEBUG]cooling dev 8:0:3:Processor
+[1791138258][DEBUG]cooling dev 18:8:127:TCC
+[1791138258][DEBUG]cooling dev 6:0:3:Processor
+[1791138258][DEBUG]cooling dev 16:0:3:Processor
+[1791138258][DEBUG]cooling dev 4:0:3:Processor
+[1791138258][DEBUG]cooling dev 14:0:3:Processor
+[1791138258][DEBUG]cooling dev 2:0:3:Processor
+[1791138258][DEBUG]cooling dev 12:0:3:Processor
+[1791138258][DEBUG]cooling dev 0:1:1:Fan
+[1791138258][DEBUG]cooling dev 10:0:3:Processor
+[1791138258][DEBUG]cooling dev 9:0:3:Processor
+[1791138258][DEBUG]cooling dev 19:0:19:iwlwifi
+[1791138258][DEBUG]cooling dev 7:0:3:Processor
+[1791138258][DEBUG]cooling dev 17:0:100:intel_powerclamp
+[1791138258][DEBUG]cooling dev 5:0:3:Processor
+[1791138258][DEBUG]cooling dev 15:0:3:Processor
+[1791138258][DEBUG]cooling dev 3:0:3:Processor
+[1791138258][INFO]thd_read_default_cooling devices loaded 20 cdevs
+[1791138258][INFO]Registered RAPL power limit restoration handler
+[1791138258][INFO]Registered RAPL /sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/: PL1=64000000 uW, window=27983872 us, enable=1
+[1791138258][INFO]Reading PPCC from the thermal-conf.xml
+[1791138258][INFO]ppcc limits max:30000000 min:15000000  min_win:28000000 step:500000
+[1791138258][INFO]IDSP policy matched, so trusting PPCC limits
+[1791138258][DEBUG]power_on_enable_status: 1
+[1791138258][DEBUG]power_on_constraint_0_time_window: 31981568
+[1791138258][DEBUG]RAPL max limit 15000000 increment: 1
+[1791138258][INFO]set_pid_param 20 [-1000.100,10]
+[1791138258][INFO]Registered RAPL /sys/devices/virtual/powercap/intel-rapl-mmio/intel-rapl-mmio:0/: PL1=20000000 uW, window=27983872 us, enable=1
+[1791138258][INFO]Reading PPCC from the thermal-conf.xml
+[1791138258][INFO]ppcc limits max:30000000 min:15000000  min_win:28000000 step:500000
+[1791138258][INFO]IDSP policy matched, so trusting PPCC limits
+[1791138258][DEBUG]power_on_enable_status: 1
+[1791138258][DEBUG]power_on_constraint_0_time_window: 31981568
+[1791138258][DEBUG]RAPL max limit 15000000 increment: 1
+[1791138258][INFO]set_pid_param 21 [-1000.100,10]
+[1791138258][INFO]Disable rapl-msr interface and use rapl-mmio
+[1791138258][INFO]Use Default pstate drv settings
+[1791138258][DEBUG]cooling dev index:22, curr_state:0, max_state:10, unit:10,000000, min_com:0, type:intel_pstate
+[1791138258][INFO]cthd_gen_sysfs_cdev::update: sysfs path does not exist 
+[1791138258][DEBUG]pstate CPU present 0-15
+[1791138258][INFO]name = package-0
+[1791138258][INFO]name = dram
+[1791138258][INFO]Registered RAPL /sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:2/: PL1=0 uW, window=976 us, enable=0
+[1791138258][INFO]sysfs read failed /sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:2/constraint_0_max_power_uw
+[1791138258][INFO]dram:powercap RAPL invalid max power limit range
+[1791138258][INFO]Calculate dynamically phy_max
+[1791138258][DEBUG]power_on_constraint_0_pwr 0
+[1791138258][DEBUG]power_on_constraint_0_time_window 976
+[1791138258][INFO]13: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]1: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]11: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]8: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]18: TCC, C:8 MN: 0 MX:127 ST:1 pt:/sys/class/thermal/ rd_bk 1
+[1791138258][INFO]6: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]16: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]4: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]14: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]2: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]12: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]0: Fan, C:1 MN: 0 MX:1 ST:1 pt:/sys/class/thermal/ rd_bk 1
+[1791138258][INFO]10: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]9: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]19: iwlwifi, C:0 MN: 0 MX:19 ST:1 pt:/sys/class/thermal/ rd_bk 1
+[1791138258][INFO]7: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]17: intel_powerclamp, C:0 MN: 0 MX:100 ST:5 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]5: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]15: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]3: Processor, C:0 MN: 0 MX:3 ST:1 pt:/sys/class/thermal/ rd_bk 0
+[1791138258][INFO]20: rapl_controller, C:30000000 MN: 200000000 MX:15000000 Inc ST:-1000000 Dec ST:-500000 pt:/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/ rd_bk 1
+[1791138258][INFO]21: rapl_controller_mmio, C:30000000 MN: 30000000 MX:15000000 Inc ST:-1000000 Dec ST:-500000 pt:/sys/devices/virtual/powercap/intel-rapl-mmio/intel-rapl-mmio:0/ rd_bk 1
+[1791138258][INFO]22: intel_pstate, C:0 MN: 0 MX:10 ST:1 pt:/sys/devices/system/cpu/intel_pstate/ rd_bk 1
+[1791138258][INFO]23: rapl_controller_dram, C:1000000000 MN: 1000000000 MX:0 ST:-500000 pt:/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:2/ rd_bk 1
+[1791138258][INFO]24: LCD, C:0 MN: 0 MX:38400 ST:3840 pt:/sys/class/backlight/intel_backlight/ rd_bk 1
+[1791138258][DEBUG]thd_read_default_thermal_zones
+[1791138258][DEBUG]Added zone index:2
+[1791138258][DEBUG]Thermal Zone look for 2/type
+[1791138258][DEBUG]Thermal Zone 2:INT3400
+[1791138258][DEBUG]read_trip_points Added from sysfs 0 trips
+[1791138258][DEBUG]Add trip pt 3:2:0x2:2147483647:0
+[1791138258][DEBUG]Added one default trip
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =1
+[1791138258][DEBUG]Add trip pt 5:2:0x2:2104533975:0
+[1791138258][DEBUG]Added zone index:0
+[1791138258][DEBUG]Thermal Zone look for 0/type
+[1791138258][DEBUG]Thermal Zone 0:acpitz
+[1791138258][DEBUG]read_trip_points 0/trip_point_0_type:hot
+[1791138258][DEBUG]read_trip_points 0/trip_point_0_temp:103000
+[1791138258][DEBUG]read_trip_points 0/trip_point_0_hyst:1000
+[1791138258][DEBUG]Add trip pt 2:0:0x0:103000:1000
+[1791138258][DEBUG]read_trip_points Added from sysfs 1 trips
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =1
+[1791138258][DEBUG]Add trip pt 5:0:0x0:92700:0
+[1791138258][DEBUG]Added zone index:9
+[1791138258][DEBUG]Thermal Zone look for 9/type
+[1791138258][DEBUG]Thermal Zone 9:SEN8
+[1791138258][DEBUG]read_trip_points 9/trip_point_0_type:passive
+[1791138258][DEBUG]read_trip_points 9/trip_point_0_temp:-274000
+[1791138258][DEBUG]read_trip_points 9/trip_point_0_hyst:2000
+[1791138258][DEBUG]read_trip_points 9/trip_point_1_type:passive
+[1791138258][DEBUG]read_trip_points 9/trip_point_1_temp:-274000
+[1791138258][DEBUG]read_trip_points 9/trip_point_1_hyst:2000
+[1791138258][DEBUG]read_trip_points 9/trip_point_2_type:critical
+[1791138258][DEBUG]read_trip_points 9/trip_point_2_temp:80050
+[1791138258][DEBUG]read_trip_points 9/trip_point_2_hyst:2000
+[1791138258][DEBUG]Add trip pt 0:9:0x9:80050:2000
+[1791138258][DEBUG]read_trip_points 9/trip_point_3_type:hot
+[1791138258][DEBUG]read_trip_points 9/trip_point_3_temp:75050
+[1791138258][DEBUG]read_trip_points 9/trip_point_3_hyst:2000
+[1791138258][DEBUG]Add trip pt 2:9:0x9:75050:2000
+[1791138258][DEBUG]read_trip_points 9/trip_point_4_type:passive
+[1791138258][DEBUG]read_trip_points 9/trip_point_4_temp:65050
+[1791138258][DEBUG]read_trip_points 9/trip_point_4_hyst:2000
+[1791138258][DEBUG]Add trip pt 3:9:0x9:65050:2000
+[1791138258][DEBUG]read_trip_points 9/trip_point_5_type:active
+[1791138258][DEBUG]read_trip_points 9/trip_point_5_temp:60050
+[1791138258][DEBUG]read_trip_points 9/trip_point_5_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:9:0x9:60050:2000
+[1791138258][DEBUG]read_trip_points 9/trip_point_6_type:active
+[1791138258][DEBUG]read_trip_points 9/trip_point_6_temp:50050
+[1791138258][DEBUG]read_trip_points 9/trip_point_6_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:9:0x9:50050:2000
+[1791138258][DEBUG]read_trip_points 9/trip_point_7_type:active
+[1791138258][DEBUG]read_trip_points 9/trip_point_7_temp:40050
+[1791138258][DEBUG]read_trip_points 9/trip_point_7_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:9:0x9:40050:2000
+[1791138258][DEBUG]read_trip_points Added from sysfs 6 trips
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =6
+[1791138258][DEBUG]Add trip pt 5:9:0x9:35050:0
+[1791138258][DEBUG]Added zone index:12
+[1791138258][DEBUG]Thermal Zone look for 12/type
+[1791138258][DEBUG]Thermal Zone 12:x86_pkg_temp
+[1791138258][DEBUG]read_trip_points 12/trip_point_0_type:passive
+[1791138258][DEBUG]read_trip_points 12/trip_point_0_temp:-274000
+[1791138258][DEBUG]read_trip_points 12/trip_point_0_hyst:1000
+[1791138258][DEBUG]read_trip_points 12/trip_point_1_type:passive
+[1791138258][DEBUG]read_trip_points 12/trip_point_1_temp:-274000
+[1791138258][DEBUG]read_trip_points 12/trip_point_1_hyst:1000
+[1791138258][DEBUG]read_trip_points Added from sysfs 0 trips
+[1791138258][DEBUG]Add trip pt 3:12:0xc:2147483647:0
+[1791138258][DEBUG]Added one default trip
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =1
+[1791138258][DEBUG]Add trip pt 5:12:0xc:2104533975:0
+[1791138258][DEBUG]Added zone index:7
+[1791138258][DEBUG]Thermal Zone look for 7/type
+[1791138258][DEBUG]Thermal Zone 7:SEN6
+[1791138258][DEBUG]read_trip_points 7/trip_point_0_type:passive
+[1791138258][DEBUG]read_trip_points 7/trip_point_0_temp:-274000
+[1791138258][DEBUG]read_trip_points 7/trip_point_0_hyst:2000
+[1791138258][DEBUG]read_trip_points 7/trip_point_1_type:passive
+[1791138258][DEBUG]read_trip_points 7/trip_point_1_temp:-274000
+[1791138258][DEBUG]read_trip_points 7/trip_point_1_hyst:2000
+[1791138258][DEBUG]read_trip_points 7/trip_point_2_type:critical
+[1791138258][DEBUG]read_trip_points 7/trip_point_2_temp:80050
+[1791138258][DEBUG]read_trip_points 7/trip_point_2_hyst:2000
+[1791138258][DEBUG]Add trip pt 0:7:0x7:80050:2000
+[1791138258][DEBUG]read_trip_points 7/trip_point_3_type:hot
+[1791138258][DEBUG]read_trip_points 7/trip_point_3_temp:75050
+[1791138258][DEBUG]read_trip_points 7/trip_point_3_hyst:2000
+[1791138258][DEBUG]Add trip pt 2:7:0x7:75050:2000
+[1791138258][DEBUG]read_trip_points 7/trip_point_4_type:passive
+[1791138258][DEBUG]read_trip_points 7/trip_point_4_temp:65050
+[1791138258][DEBUG]read_trip_points 7/trip_point_4_hyst:2000
+[1791138258][DEBUG]Add trip pt 3:7:0x7:65050:2000
+[1791138258][DEBUG]read_trip_points 7/trip_point_5_type:active
+[1791138258][DEBUG]read_trip_points 7/trip_point_5_temp:60050
+[1791138258][DEBUG]read_trip_points 7/trip_point_5_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:7:0x7:60050:2000
+[1791138258][DEBUG]read_trip_points 7/trip_point_6_type:active
+[1791138258][DEBUG]read_trip_points 7/trip_point_6_temp:50050
+[1791138258][DEBUG]read_trip_points 7/trip_point_6_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:7:0x7:50050:2000
+[1791138258][DEBUG]read_trip_points 7/trip_point_7_type:active
+[1791138258][DEBUG]read_trip_points 7/trip_point_7_temp:40050
+[1791138258][DEBUG]read_trip_points 7/trip_point_7_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:7:0x7:40050:2000
+[1791138258][DEBUG]read_trip_points Added from sysfs 6 trips
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =6
+[1791138258][DEBUG]Add trip pt 5:7:0x7:35050:0
+[1791138258][DEBUG]Added zone index:10
+[1791138258][DEBUG]Thermal Zone look for 10/type
+[1791138258][DEBUG]Thermal Zone 10:TCPU
+[1791138258][DEBUG]read_trip_points 10/trip_point_0_type:critical
+[1791138258][DEBUG]read_trip_points 10/trip_point_0_temp:110050
+[1791138258][DEBUG]read_trip_points 10/trip_point_0_hyst:1000
+[1791138258][DEBUG]Add trip pt 0:10:0xa:110050:1000
+[1791138258][DEBUG]read_trip_points 10/trip_point_1_type:hot
+[1791138258][DEBUG]read_trip_points 10/trip_point_1_temp:110050
+[1791138258][DEBUG]read_trip_points 10/trip_point_1_hyst:1000
+[1791138258][DEBUG]Add trip pt 2:10:0xa:110050:1000
+[1791138258][DEBUG]read_trip_points 10/trip_point_2_type:passive
+[1791138258][DEBUG]read_trip_points 10/trip_point_2_temp:110050
+[1791138258][DEBUG]read_trip_points 10/trip_point_2_hyst:1000
+[1791138258][DEBUG]Add trip pt 3:10:0xa:110050:1000
+[1791138258][DEBUG]read_trip_points 10/trip_point_3_type:active
+[1791138258][DEBUG]read_trip_points 10/trip_point_3_temp:109050
+[1791138258][DEBUG]read_trip_points 10/trip_point_3_hyst:1000
+[1791138258][DEBUG]Add trip pt 4:10:0xa:109050:1000
+[1791138258][DEBUG]read_trip_points 10/trip_point_4_type:active
+[1791138258][DEBUG]read_trip_points 10/trip_point_4_temp:107050
+[1791138258][DEBUG]read_trip_points 10/trip_point_4_hyst:1000
+[1791138258][DEBUG]Add trip pt 4:10:0xa:107050:1000
+[1791138258][DEBUG]read_trip_points 10/trip_point_5_type:active
+[1791138258][DEBUG]read_trip_points 10/trip_point_5_temp:106050
+[1791138258][DEBUG]read_trip_points 10/trip_point_5_hyst:1000
+[1791138258][DEBUG]Add trip pt 4:10:0xa:106050:1000
+[1791138258][DEBUG]read_trip_points 10/trip_point_6_type:active
+[1791138258][DEBUG]read_trip_points 10/trip_point_6_temp:104550
+[1791138258][DEBUG]read_trip_points 10/trip_point_6_hyst:1000
+[1791138258][DEBUG]Add trip pt 4:10:0xa:104550:1000
+[1791138258][DEBUG]read_trip_points 10/trip_point_7_type:active
+[1791138258][DEBUG]read_trip_points 10/trip_point_7_temp:103050
+[1791138258][DEBUG]read_trip_points 10/trip_point_7_hyst:1000
+[1791138258][DEBUG]Add trip pt 4:10:0xa:103050:1000
+[1791138258][DEBUG]read_trip_points Added from sysfs 8 trips
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =8
+[1791138258][DEBUG]Add trip pt 5:10:0xa:92745:0
+[1791138258][DEBUG]Added zone index:5
+[1791138258][DEBUG]Thermal Zone look for 5/type
+[1791138258][DEBUG]Thermal Zone 5:SEN3
+[1791138258][DEBUG]read_trip_points 5/trip_point_0_type:passive
+[1791138258][DEBUG]read_trip_points 5/trip_point_0_temp:-274000
+[1791138258][DEBUG]read_trip_points 5/trip_point_0_hyst:2000
+[1791138258][DEBUG]read_trip_points 5/trip_point_1_type:passive
+[1791138258][DEBUG]read_trip_points 5/trip_point_1_temp:-274000
+[1791138258][DEBUG]read_trip_points 5/trip_point_1_hyst:2000
+[1791138258][DEBUG]read_trip_points 5/trip_point_2_type:critical
+[1791138258][DEBUG]read_trip_points 5/trip_point_2_temp:80050
+[1791138258][DEBUG]read_trip_points 5/trip_point_2_hyst:2000
+[1791138258][DEBUG]Add trip pt 0:5:0x5:80050:2000
+[1791138258][DEBUG]read_trip_points 5/trip_point_3_type:hot
+[1791138258][DEBUG]read_trip_points 5/trip_point_3_temp:75050
+[1791138258][DEBUG]read_trip_points 5/trip_point_3_hyst:2000
+[1791138258][DEBUG]Add trip pt 2:5:0x5:75050:2000
+[1791138258][DEBUG]read_trip_points 5/trip_point_4_type:passive
+[1791138258][DEBUG]read_trip_points 5/trip_point_4_temp:65050
+[1791138258][DEBUG]read_trip_points 5/trip_point_4_hyst:2000
+[1791138258][DEBUG]Add trip pt 3:5:0x5:65050:2000
+[1791138258][DEBUG]read_trip_points 5/trip_point_5_type:active
+[1791138258][DEBUG]read_trip_points 5/trip_point_5_temp:60050
+[1791138258][DEBUG]read_trip_points 5/trip_point_5_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:5:0x5:60050:2000
+[1791138258][DEBUG]read_trip_points 5/trip_point_6_type:active
+[1791138258][DEBUG]read_trip_points 5/trip_point_6_temp:50050
+[1791138258][DEBUG]read_trip_points 5/trip_point_6_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:5:0x5:50050:2000
+[1791138258][DEBUG]read_trip_points 5/trip_point_7_type:active
+[1791138258][DEBUG]read_trip_points 5/trip_point_7_temp:40050
+[1791138258][DEBUG]read_trip_points 5/trip_point_7_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:5:0x5:40050:2000
+[1791138258][DEBUG]read_trip_points Added from sysfs 6 trips
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =6
+[1791138258][DEBUG]Add trip pt 5:5:0x5:35050:0
+[1791138258][DEBUG]Added zone index:3
+[1791138258][DEBUG]Thermal Zone look for 3/type
+[1791138258][DEBUG]Thermal Zone 3:SEN1
+[1791138258][DEBUG]read_trip_points 3/trip_point_0_type:passive
+[1791138258][DEBUG]read_trip_points 3/trip_point_0_temp:-274000
+[1791138258][DEBUG]read_trip_points 3/trip_point_0_hyst:2000
+[1791138258][DEBUG]read_trip_points 3/trip_point_1_type:passive
+[1791138258][DEBUG]read_trip_points 3/trip_point_1_temp:-274000
+[1791138258][DEBUG]read_trip_points 3/trip_point_1_hyst:2000
+[1791138258][DEBUG]read_trip_points 3/trip_point_2_type:critical
+[1791138258][DEBUG]read_trip_points 3/trip_point_2_temp:80050
+[1791138258][DEBUG]read_trip_points 3/trip_point_2_hyst:2000
+[1791138258][DEBUG]Add trip pt 0:3:0x3:80050:2000
+[1791138258][DEBUG]read_trip_points 3/trip_point_3_type:hot
+[1791138258][DEBUG]read_trip_points 3/trip_point_3_temp:75050
+[1791138258][DEBUG]read_trip_points 3/trip_point_3_hyst:2000
+[1791138258][DEBUG]Add trip pt 2:3:0x3:75050:2000
+[1791138258][DEBUG]read_trip_points 3/trip_point_4_type:passive
+[1791138258][DEBUG]read_trip_points 3/trip_point_4_temp:65050
+[1791138258][DEBUG]read_trip_points 3/trip_point_4_hyst:2000
+[1791138258][DEBUG]Add trip pt 3:3:0x3:65050:2000
+[1791138258][DEBUG]read_trip_points 3/trip_point_5_type:active
+[1791138258][DEBUG]read_trip_points 3/trip_point_5_temp:60050
+[1791138258][DEBUG]read_trip_points 3/trip_point_5_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:3:0x3:60050:2000
+[1791138258][DEBUG]read_trip_points 3/trip_point_6_type:active
+[1791138258][DEBUG]read_trip_points 3/trip_point_6_temp:50050
+[1791138258][DEBUG]read_trip_points 3/trip_point_6_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:3:0x3:50050:2000
+[1791138258][DEBUG]read_trip_points 3/trip_point_7_type:active
+[1791138258][DEBUG]read_trip_points 3/trip_point_7_temp:40050
+[1791138258][DEBUG]read_trip_points 3/trip_point_7_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:3:0x3:40050:2000
+[1791138258][DEBUG]read_trip_points Added from sysfs 6 trips
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =6
+[1791138258][DEBUG]Add trip pt 5:3:0x3:35050:0
+[1791138258][DEBUG]Added zone index:1
+[1791138258][DEBUG]Thermal Zone look for 1/type
+[1791138258][DEBUG]Thermal Zone 1:acpitz
+[1791138258][DEBUG]read_trip_points 1/trip_point_0_type:critical
+[1791138258][DEBUG]read_trip_points 1/trip_point_0_temp:103000
+[1791138258][DEBUG]read_trip_points 1/trip_point_0_hyst:1000
+[1791138258][DEBUG]Add trip pt 0:1:0x0:103000:1000
+[1791138258][DEBUG]read_trip_points Added from sysfs 1 trips
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =1
+[1791138258][DEBUG]Add trip pt 5:1:0x0:92700:0
+[1791138258][DEBUG]Added zone index:13
+[1791138258][DEBUG]Thermal Zone look for 13/type
+[1791138258][DEBUG]Thermal Zone 13:iwlwifi_1
+[1791138258][DEBUG]read_trip_points 13/trip_point_0_type:passive
+[1791138258][DEBUG]read_trip_points 13/trip_point_0_temp:-274000
+[1791138258][DEBUG]read_trip_points 13/trip_point_0_hyst:1000
+[1791138258][DEBUG]read_trip_points 13/trip_point_1_type:passive
+[1791138258][DEBUG]read_trip_points 13/trip_point_1_temp:-274000
+[1791138258][DEBUG]read_trip_points 13/trip_point_1_hyst:1000
+[1791138258][DEBUG]read_trip_points 13/trip_point_2_type:passive
+[1791138258][DEBUG]read_trip_points 13/trip_point_2_temp:-274000
+[1791138258][DEBUG]read_trip_points 13/trip_point_2_hyst:1000
+[1791138258][DEBUG]read_trip_points 13/trip_point_3_type:passive
+[1791138258][DEBUG]read_trip_points 13/trip_point_3_temp:-274000
+[1791138258][DEBUG]read_trip_points 13/trip_point_3_hyst:1000
+[1791138258][DEBUG]read_trip_points 13/trip_point_4_type:passive
+[1791138258][DEBUG]read_trip_points 13/trip_point_4_temp:-274000
+[1791138258][DEBUG]read_trip_points 13/trip_point_4_hyst:1000
+[1791138258][DEBUG]read_trip_points 13/trip_point_5_type:passive
+[1791138258][DEBUG]read_trip_points 13/trip_point_5_temp:-274000
+[1791138258][DEBUG]read_trip_points 13/trip_point_5_hyst:1000
+[1791138258][DEBUG]read_trip_points 13/trip_point_6_type:passive
+[1791138258][DEBUG]read_trip_points 13/trip_point_6_temp:-274000
+[1791138258][DEBUG]read_trip_points 13/trip_point_6_hyst:1000
+[1791138258][DEBUG]read_trip_points 13/trip_point_7_type:passive
+[1791138258][DEBUG]read_trip_points 13/trip_point_7_temp:-274000
+[1791138258][DEBUG]read_trip_points 13/trip_point_7_hyst:1000
+[1791138258][DEBUG]read_trip_points Added from sysfs 0 trips
+[1791138258][DEBUG]Add trip pt 3:13:0xd:2147483647:0
+[1791138258][DEBUG]Added one default trip
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =1
+[1791138258][DEBUG]Add trip pt 5:13:0xd:2104533975:0
+[1791138258][DEBUG]Added zone index:8
+[1791138258][DEBUG]Thermal Zone look for 8/type
+[1791138258][DEBUG]Thermal Zone 8:SEN7
+[1791138258][DEBUG]read_trip_points 8/trip_point_0_type:passive
+[1791138258][DEBUG]read_trip_points 8/trip_point_0_temp:-274000
+[1791138258][DEBUG]read_trip_points 8/trip_point_0_hyst:2000
+[1791138258][DEBUG]read_trip_points 8/trip_point_1_type:passive
+[1791138258][DEBUG]read_trip_points 8/trip_point_1_temp:-274000
+[1791138258][DEBUG]read_trip_points 8/trip_point_1_hyst:2000
+[1791138258][DEBUG]read_trip_points 8/trip_point_2_type:critical
+[1791138258][DEBUG]read_trip_points 8/trip_point_2_temp:80050
+[1791138258][DEBUG]read_trip_points 8/trip_point_2_hyst:2000
+[1791138258][DEBUG]Add trip pt 0:8:0x8:80050:2000
+[1791138258][DEBUG]read_trip_points 8/trip_point_3_type:hot
+[1791138258][DEBUG]read_trip_points 8/trip_point_3_temp:75050
+[1791138258][DEBUG]read_trip_points 8/trip_point_3_hyst:2000
+[1791138258][DEBUG]Add trip pt 2:8:0x8:75050:2000
+[1791138258][DEBUG]read_trip_points 8/trip_point_4_type:passive
+[1791138258][DEBUG]read_trip_points 8/trip_point_4_temp:65050
+[1791138258][DEBUG]read_trip_points 8/trip_point_4_hyst:2000
+[1791138258][DEBUG]Add trip pt 3:8:0x8:65050:2000
+[1791138258][DEBUG]read_trip_points 8/trip_point_5_type:active
+[1791138258][DEBUG]read_trip_points 8/trip_point_5_temp:60050
+[1791138258][DEBUG]read_trip_points 8/trip_point_5_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:8:0x8:60050:2000
+[1791138258][DEBUG]read_trip_points 8/trip_point_6_type:active
+[1791138258][DEBUG]read_trip_points 8/trip_point_6_temp:50050
+[1791138258][DEBUG]read_trip_points 8/trip_point_6_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:8:0x8:50050:2000
+[1791138258][DEBUG]read_trip_points 8/trip_point_7_type:active
+[1791138258][DEBUG]read_trip_points 8/trip_point_7_temp:40050
+[1791138258][DEBUG]read_trip_points 8/trip_point_7_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:8:0x8:40050:2000
+[1791138258][DEBUG]read_trip_points Added from sysfs 6 trips
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =6
+[1791138258][DEBUG]Add trip pt 5:8:0x8:35050:0
+[1791138258][DEBUG]Added zone index:11
+[1791138258][DEBUG]Thermal Zone look for 11/type
+[1791138258][DEBUG]Thermal Zone 11:TCPU_PCI
+[1791138258][DEBUG]read_trip_points 11/trip_point_0_type:passive
+[1791138258][DEBUG]read_trip_points 11/trip_point_0_temp:-274000
+[1791138258][DEBUG]read_trip_points 11/trip_point_0_hyst:1000
+[1791138258][DEBUG]read_trip_points Added from sysfs 0 trips
+[1791138258][DEBUG]Add trip pt 3:11:0xb:2147483647:0
+[1791138258][DEBUG]Added one default trip
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =1
+[1791138258][DEBUG]Add trip pt 5:11:0xb:2104533975:0
+[1791138258][DEBUG]Added zone index:6
+[1791138258][DEBUG]Thermal Zone look for 6/type
+[1791138258][DEBUG]Thermal Zone 6:SEN4
+[1791138258][DEBUG]read_trip_points 6/trip_point_0_type:passive
+[1791138258][DEBUG]read_trip_points 6/trip_point_0_temp:-274000
+[1791138258][DEBUG]read_trip_points 6/trip_point_0_hyst:2000
+[1791138258][DEBUG]read_trip_points 6/trip_point_1_type:passive
+[1791138258][DEBUG]read_trip_points 6/trip_point_1_temp:-274000
+[1791138258][DEBUG]read_trip_points 6/trip_point_1_hyst:2000
+[1791138258][DEBUG]read_trip_points 6/trip_point_2_type:critical
+[1791138258][DEBUG]read_trip_points 6/trip_point_2_temp:80050
+[1791138258][DEBUG]read_trip_points 6/trip_point_2_hyst:2000
+[1791138258][DEBUG]Add trip pt 0:6:0x6:80050:2000
+[1791138258][DEBUG]read_trip_points 6/trip_point_3_type:hot
+[1791138258][DEBUG]read_trip_points 6/trip_point_3_temp:75050
+[1791138258][DEBUG]read_trip_points 6/trip_point_3_hyst:2000
+[1791138258][DEBUG]Add trip pt 2:6:0x6:75050:2000
+[1791138258][DEBUG]read_trip_points 6/trip_point_4_type:passive
+[1791138258][DEBUG]read_trip_points 6/trip_point_4_temp:65050
+[1791138258][DEBUG]read_trip_points 6/trip_point_4_hyst:2000
+[1791138258][DEBUG]Add trip pt 3:6:0x6:65050:2000
+[1791138258][DEBUG]read_trip_points 6/trip_point_5_type:active
+[1791138258][DEBUG]read_trip_points 6/trip_point_5_temp:60050
+[1791138258][DEBUG]read_trip_points 6/trip_point_5_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:6:0x6:60050:2000
+[1791138258][DEBUG]read_trip_points 6/trip_point_6_type:active
+[1791138258][DEBUG]read_trip_points 6/trip_point_6_temp:50050
+[1791138258][DEBUG]read_trip_points 6/trip_point_6_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:6:0x6:50050:2000
+[1791138258][DEBUG]read_trip_points 6/trip_point_7_type:active
+[1791138258][DEBUG]read_trip_points 6/trip_point_7_temp:40050
+[1791138258][DEBUG]read_trip_points 6/trip_point_7_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:6:0x6:40050:2000
+[1791138258][DEBUG]read_trip_points Added from sysfs 6 trips
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =6
+[1791138258][DEBUG]Add trip pt 5:6:0x6:35050:0
+[1791138258][DEBUG]Added zone index:4
+[1791138258][DEBUG]Thermal Zone look for 4/type
+[1791138258][DEBUG]Thermal Zone 4:SEN2
+[1791138258][DEBUG]read_trip_points 4/trip_point_0_type:passive
+[1791138258][DEBUG]read_trip_points 4/trip_point_0_temp:-274000
+[1791138258][DEBUG]read_trip_points 4/trip_point_0_hyst:2000
+[1791138258][DEBUG]read_trip_points 4/trip_point_1_type:passive
+[1791138258][DEBUG]read_trip_points 4/trip_point_1_temp:-274000
+[1791138258][DEBUG]read_trip_points 4/trip_point_1_hyst:2000
+[1791138258][DEBUG]read_trip_points 4/trip_point_2_type:critical
+[1791138258][DEBUG]read_trip_points 4/trip_point_2_temp:80050
+[1791138258][DEBUG]read_trip_points 4/trip_point_2_hyst:2000
+[1791138258][DEBUG]Add trip pt 0:4:0x4:80050:2000
+[1791138258][DEBUG]read_trip_points 4/trip_point_3_type:hot
+[1791138258][DEBUG]read_trip_points 4/trip_point_3_temp:75050
+[1791138258][DEBUG]read_trip_points 4/trip_point_3_hyst:2000
+[1791138258][DEBUG]Add trip pt 2:4:0x4:75050:2000
+[1791138258][DEBUG]read_trip_points 4/trip_point_4_type:passive
+[1791138258][DEBUG]read_trip_points 4/trip_point_4_temp:65050
+[1791138258][DEBUG]read_trip_points 4/trip_point_4_hyst:2000
+[1791138258][DEBUG]Add trip pt 3:4:0x4:65050:2000
+[1791138258][DEBUG]read_trip_points 4/trip_point_5_type:active
+[1791138258][DEBUG]read_trip_points 4/trip_point_5_temp:60050
+[1791138258][DEBUG]read_trip_points 4/trip_point_5_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:4:0x4:60050:2000
+[1791138258][DEBUG]read_trip_points 4/trip_point_6_type:active
+[1791138258][DEBUG]read_trip_points 4/trip_point_6_temp:50050
+[1791138258][DEBUG]read_trip_points 4/trip_point_6_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:4:0x4:50050:2000
+[1791138258][DEBUG]read_trip_points 4/trip_point_7_type:active
+[1791138258][DEBUG]read_trip_points 4/trip_point_7_temp:40050
+[1791138258][DEBUG]read_trip_points 4/trip_point_7_hyst:2000
+[1791138258][DEBUG]Add trip pt 4:4:0x4:40050:2000
+[1791138258][DEBUG]read_trip_points Added from sysfs 6 trips
+[1791138258][DEBUG] >> read_cdev_trip_points for
+[1791138258][DEBUG]cthd_sysfs_zone::read_cdev_trip_points: ZONE bound to CDEV status 0
+[1791138258][DEBUG]sort_and_update_poll_trip: trip_points_size =6
+[1791138258][DEBUG]Add trip pt 5:4:0x4:35050:0
+[1791138258][INFO]thd_read_default_thermal_zones loaded 14 zones
+[1791138258][INFO]
+
+ ZONE DUMP BEGIN
+[1791138258][INFO]
+
+ ZONE DUMP END
+[1791138258][INFO]Unsupported condition 41 (Screen_state)
+[1791138258][INFO]Unsupported conditions are present
+[1791138258][INFO]Some conditions are not supported, so check if any condition set can be matched
+[1791138258][DEBUG]evaluate condition set 0
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 24
+[1791138258][DEBUG]evaluate condition set 1
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 48
+[1791138258][DEBUG]read_temperature sensor ID 3
+[1791138258][DEBUG]Sensor SEN1 :temp 50
+[1791138258][DEBUG]evaluate condition set 2
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 41
+[1791138258][DEBUG]evaluate condition set 3
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition set 4
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition set 5
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition.condition at index 1
+[1791138258][DEBUG]evaluate condition.condition 22
+[1791138258][DEBUG]evaluate condition set 6
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition set 7
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition.condition at index 1
+[1791138258][DEBUG]evaluate condition.condition 22
+[1791138258][DEBUG]evaluate condition set 8
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition set 9
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition.condition at index 1
+[1791138258][DEBUG]evaluate condition.condition 22
+[1791138258][DEBUG]evaluate condition set 10
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition set 11
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition set 12
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 48
+[1791138258][DEBUG]read_temperature sensor ID 3
+[1791138258][DEBUG]Sensor SEN1 :temp 50
+[1791138258][DEBUG]evaluate condition.condition at index 1
+[1791138258][DEBUG]evaluate condition.condition at index 2
+[1791138258][DEBUG]evaluate condition.condition at index 3
+[1791138258][DEBUG]evaluate condition.condition at index 4
+[1791138258][DEBUG]evaluate condition.condition at index 5
+[1791138258][DEBUG]evaluate condition.condition at index 6
+[1791138258][DEBUG]evaluate condition.condition at index 7
+[1791138258][DEBUG]evaluate condition.condition at index 8
+[1791138258][DEBUG]evaluate condition.condition at index 9
+[1791138258][DEBUG]Condition Set matched:12 target:20
+[1791138258][DEBUG]evaluate condition set 0
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 24
+[1791138258][DEBUG]evaluate condition set 1
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 48
+[1791138258][DEBUG]read_temperature sensor ID 3
+[1791138258][DEBUG]Sensor SEN1 :temp 50
+[1791138258][DEBUG]evaluate condition set 2
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 41
+[1791138258][DEBUG]evaluate condition set 3
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition set 4
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition set 5
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition.condition at index 1
+[1791138258][DEBUG]evaluate condition.condition 22
+[1791138258][DEBUG]evaluate condition set 6
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition set 7
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition.condition at index 1
+[1791138258][DEBUG]evaluate condition.condition 22
+[1791138258][DEBUG]evaluate condition set 8
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition set 9
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition.condition at index 1
+[1791138258][DEBUG]evaluate condition.condition 22
+[1791138258][DEBUG]evaluate condition set 10
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition set 11
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 19
+[1791138258][DEBUG]evaluate condition set 12
+[1791138258][DEBUG]evaluate condition.condition at index 0
+[1791138258][DEBUG]evaluate condition.condition 48
+[1791138258][DEBUG]read_temperature sensor ID 3
+[1791138258][DEBUG]Sensor SEN1 :temp 50
+[1791138258][DEBUG]evaluate condition.condition at index 1
+[1791138258][DEBUG]evaluate condition.condition at index 2
+[1791138258][DEBUG]evaluate condition.condition at index 3
+[1791138258][DEBUG]evaluate condition.condition at index 4
+[1791138258][DEBUG]evaluate condition.condition at index 5
+[1791138258][DEBUG]evaluate condition.condition at index 6
+[1791138258][DEBUG]evaluate condition.condition at index 7
+[1791138258][DEBUG]evaluate condition.condition at index 8
+[1791138258][DEBUG]evaluate condition.condition at index 9
+[1791138258][DEBUG]Condition Set matched:12 target:20
+[1791138258][INFO]adaptive engine reached end
+[1791138258][INFO]Running on a vanilla kernel
+[1791138258][MSG]Polling mode is enabled: 4
+[1791138258][INFO]Current user preference is 0
+[1791138258][INFO]Control is taken over from kernel
+[1791138258][INFO]INT3400 Base path is /sys/bus/platform/devices/INTC10D4:00/
+[1791138258][INFO]Taking over thermal control
+[1791138258][DEBUG]available uuids: UNKNOWN
+[1791138258][INFO]Set Default UUID: 42A441D6-AE6A-462b-A84B-4A8CE79027D3
+[1791138258][INFO]thd_engine_thread begin
+[1791138258][INFO]Thermal zone of type INT3400
+[1791138258][INFO]Thermal zone of type acpitz
+[1791138258][INFO]Thermal zone of type SEN8
+[1791138258][INFO]Thermal zone of type x86_pkg_temp
+[1791138258][INFO]Thermal zone of type SEN6
+[1791138258][INFO]Thermal zone of type TCPU
+[1791138258][INFO]Thermal zone of type SEN3
+[1791138258][INFO]Thermal zone of type SEN1
+[1791138258][INFO]Thermal zone of type acpitz
+[1791138258][INFO]Thermal zone of type iwlwifi_1
+[1791138258][INFO]Thermal zone of type SEN7
+[1791138258][INFO]Thermal zone of type TCPU_PCI
+[1791138258][INFO]Thermal zone of type SEN4
+[1791138258][INFO]Thermal zone of type SEN2
+[1791138258][DEBUG]Start main loop
+[1791138262][DEBUG]poll exit 0 polls_fd event 0 0
+[1791138262][DEBUG] energy 2:0:865027 mj: 0 mw
+[1791138262][DEBUG] energy 1:0:6438659 mj: 0 mw
+[1791138262][DEBUG]evaluate condition set 0
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 24
+[1791138262][DEBUG]evaluate condition set 1
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 48
+[1791138262][DEBUG]read_temperature sensor ID 3
+[1791138262][DEBUG]Sensor SEN1 :temp 50
+[1791138262][DEBUG]evaluate condition set 2
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 41
+[1791138262][DEBUG]evaluate condition set 3
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 19
+[1791138262][DEBUG]evaluate condition set 4
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 19
+[1791138262][DEBUG]evaluate condition set 5
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 19
+[1791138262][DEBUG]evaluate condition.condition at index 1
+[1791138262][DEBUG]evaluate condition.condition 22
+[1791138262][DEBUG]evaluate condition set 6
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 19
+[1791138262][DEBUG]evaluate condition set 7
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 19
+[1791138262][DEBUG]evaluate condition.condition at index 1
+[1791138262][DEBUG]evaluate condition.condition 22
+[1791138262][DEBUG]evaluate condition set 8
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 19
+[1791138262][DEBUG]evaluate condition set 9
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 19
+[1791138262][DEBUG]evaluate condition.condition at index 1
+[1791138262][DEBUG]evaluate condition.condition 22
+[1791138262][DEBUG]evaluate condition set 10
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 19
+[1791138262][DEBUG]evaluate condition set 11
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 19
+[1791138262][DEBUG]evaluate condition set 12
+[1791138262][DEBUG]evaluate condition.condition at index 0
+[1791138262][DEBUG]evaluate condition.condition 48
+[1791138262][DEBUG]read_temperature sensor ID 3
+[1791138262][DEBUG]Sensor SEN1 :temp 50
+[1791138262][DEBUG]evaluate condition.condition at index 1
+[1791138262][DEBUG]evaluate condition.condition at index 2
+[1791138262][DEBUG]evaluate condition.condition at index 3
+[1791138262][DEBUG]evaluate condition.condition at index 4
+[1791138262][DEBUG]evaluate condition.condition at index 5
+[1791138262][DEBUG]evaluate condition.condition at index 6
+[1791138262][DEBUG]evaluate condition.condition at index 7
+[1791138262][DEBUG]evaluate condition.condition at index 8
+[1791138262][DEBUG]evaluate condition.condition at index 9
+[1791138262][DEBUG]Condition Set matched:12 target:20
+[1791138262][INFO]Target Name:Standard
+[1791138262][INFO]looking for cdev B0D4
+[1791138262][INFO]target:PL2PowerLimit 55000
+[1791138262][INFO]Target Name:Standard
+[1791138262][INFO]looking for cdev B0D4
+[1791138262][INFO]target:PL1MAX 42000
+[1791138262][INFO]Target Name:Standard
+[1791138262][INFO]looking for cdev B0D4
+[1791138262][INFO]target:PL1MIN 28000
+[1791138262][INFO]Target Name:Standard
+[1791138262][INFO]looking for cdev B0D4
+[1791138262][INFO]target:TccOffset 8
+[1791138262][INFO]Target Name:Standard
+[1791138262][INFO]looking for cdev IETM
+[1791138262][INFO]cdev IETM not found
+[1791138262][INFO]set_int3400 target s1_ts0_50
+[1791138262][DEBUG]Add trip pt 3:3:0x3:50000:0
+[1791138262][INFO]min:0 max:0
+[1791138262][DEBUG]sort_and_update_poll_trip: trip_points_size =1
+[1791138262][DEBUG]Add trip pt 5:3:0x3:45000:0
+[1791138262][DEBUG]zone SEN1 bounded
+[1791138262][INFO]Single trip with a target state
+[1791138262][DEBUG]matched 2147483647
+[1791138262][DEBUG]Add trip pt 3:3:0x3:51000:0
+[1791138262][INFO]min:0 max:0
+[1791138262][DEBUG]sort_and_update_poll_trip: trip_points_size =3
+[1791138262][DEBUG]polling trip already present
+[1791138262][DEBUG]Add trip pt 5:3:0x3:45000:0
+[1791138262][INFO]
+
+ ZONE DUMP BEGIN
+[1791138262][INFO]
+[1791138262][INFO]Zone 3: SEN1, Active:1 Bind:1 Sensor_cnt:1
+[1791138262][INFO]..sensors..
+[1791138262][INFO]sensor index:3 SEN1 /sys/class/thermal/thermal_zone3/ Async:1
+[1791138262][INFO]..trips..
+[1791138262][INFO]index 0: type:passive temp:50000 hyst:0 zone id:3 sensor id:3 control_type:1 cdev size:1
+[1791138262][INFO]cdev[0] rapl_controller_mmio, Sampling period: 10
+[1791138262][INFO]	 target_state:2147483647
+[1791138262][INFO]min_max 0
+[1791138262][INFO]index 1: type:passive temp:51000 hyst:0 zone id:3 sensor id:3 control_type:1 cdev size:1
+[1791138262][INFO]cdev[0] rapl_controller_mmio, Sampling period: 0
+[1791138262][INFO]	 target_state:not defined
+[1791138262][INFO]min_max 0
+[1791138262][INFO]index 2: type:polling temp:45000 hyst:0 zone id:3 sensor id:3 control_type:0 cdev size:0
+[1791138262][INFO]
+[1791138262][INFO]
+
+ ZONE DUMP END
+[1791138266][DEBUG]poll exit 0 polls_fd event 0 0
+[1791138266][DEBUG] energy 2:0:866804 mj: 444 mw
+[1791138266][DEBUG] energy 1:0:6452448 mj: 3447 mw
+[1791138266][DEBUG]read_temperature sensor ID 3
+[1791138266][DEBUG]Sensor SEN1 :temp 50
+[1791138266][DEBUG]pref 0 type 3 temp 50 trip 50000
+[1791138266][DEBUG]Passive Trip point applicable
+[1791138266][DEBUG]Trip point applicable <  0:50000
+[1791138266][DEBUG]cdev size for this trippoint 1
+[1791138266][DEBUG]cdev at index 21:rapl_controller_mmio
+[1791138266][DEBUG]>>thd_cdev_set_state temperature 50000:50 index:21 state:0 :zone:3 trip_id:0 target_state_valid:1 target_value :42000000 force:0 min_state:0 max_state:0
+[1791138266][DEBUG]zone_trip_limits.size() 0
+[1791138266][DEBUG]def_max_state:42000000 curr_max_state:0 _state:30000000
+[1791138266][DEBUG]thd_cdev_set_21:curr state 30000000 max state 28000000
+[1791138266][DEBUG]def_max_state:28000000 curr_max_state:0 _state:30500000
+[1791138266][DEBUG]def_max_state:42000000 curr_max_state:0 _state:30500000
+[1791138266][INFO]op->device:rapl_controller_mmio 30500000
+[1791138266][INFO]set cdev state index 21 state 30500000 wr:30500000
+[1791138266][INFO]Set : threshold:50000, temperature:50, cdev:21(rapl_controller_mmio), curr_state:30500000, max_state:28000000
+[1791138266][DEBUG]<<thd_cdev_set_state 0
+[1791138266][DEBUG]pref 0 type 3 temp 50 trip 51000
+[1791138266][DEBUG]Passive Trip point applicable
+[1791138266][DEBUG]Trip point applicable <  1:51000
+[1791138266][DEBUG]cdev size for this trippoint 1
+[1791138266][DEBUG]cdev at index 21:rapl_controller_mmio
+[1791138266][DEBUG]>>thd_cdev_set_state temperature 51000:50 index:21 state:0 :zone:3 trip_id:1 target_state_valid:0 target_value :42000000 force:0 min_state:0 max_state:0
+[1791138266][DEBUG]zone_trip_limits.size() 0
+[1791138266][DEBUG]def_max_state:42000000 curr_max_state:0 _state:30500000
+[1791138266][DEBUG]thd_cdev_set_21:curr state 30500000 max state 28000000
+[1791138266][DEBUG]def_max_state:28000000 curr_max_state:0 _state:31000000
+[1791138266][DEBUG]def_max_state:42000000 curr_max_state:0 _state:31000000
+[1791138266][INFO]op->device:rapl_controller_mmio 31000000
+[1791138266][INFO]set cdev state index 21 state 31000000 wr:31000000
+[1791138266][INFO]Set : threshold:51000, temperature:50, cdev:21(rapl_controller_mmio), curr_state:31000000, max_state:28000000
+[1791138266][DEBUG]<<thd_cdev_set_state 0
+[1791138266][DEBUG]evaluate condition set 0
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 24
+[1791138266][DEBUG]evaluate condition set 1
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 48
+[1791138266][DEBUG]read_temperature sensor ID 3
+[1791138266][DEBUG]Sensor SEN1 :temp 50
+[1791138266][DEBUG]evaluate condition set 2
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 41
+[1791138266][DEBUG]evaluate condition set 3
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 19
+[1791138266][DEBUG]evaluate condition set 4
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 19
+[1791138266][DEBUG]evaluate condition set 5
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 19
+[1791138266][DEBUG]evaluate condition.condition at index 1
+[1791138266][DEBUG]evaluate condition.condition 22
+[1791138266][DEBUG]evaluate condition set 6
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 19
+[1791138266][DEBUG]evaluate condition set 7
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 19
+[1791138266][DEBUG]evaluate condition.condition at index 1
+[1791138266][DEBUG]evaluate condition.condition 22
+[1791138266][DEBUG]evaluate condition set 8
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 19
+[1791138266][DEBUG]evaluate condition set 9
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 19
+[1791138266][DEBUG]evaluate condition.condition at index 1
+[1791138266][DEBUG]evaluate condition.condition 22
+[1791138266][DEBUG]evaluate condition set 10
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 19
+[1791138266][DEBUG]evaluate condition set 11
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 19
+[1791138266][DEBUG]evaluate condition set 12
+[1791138266][DEBUG]evaluate condition.condition at index 0
+[1791138266][DEBUG]evaluate condition.condition 48
+[1791138266][DEBUG]read_temperature sensor ID 3
+[1791138266][DEBUG]Sensor SEN1 :temp 50
+[1791138266][DEBUG]evaluate condition.condition at index 1
+[1791138266][DEBUG]evaluate condition.condition at index 2
+[1791138266][DEBUG]evaluate condition.condition at index 3
+[1791138266][DEBUG]evaluate condition.condition at index 4
+[1791138266][DEBUG]evaluate condition.condition at index 5
+[1791138266][DEBUG]evaluate condition.condition at index 6
+[1791138266][DEBUG]evaluate condition.condition at index 7
+[1791138266][DEBUG]evaluate condition.condition at index 8
+[1791138266][DEBUG]evaluate condition.condition at index 9
+[1791138266][DEBUG]Condition Set matched:12 target:20
+[1791138266][DEBUG]No change in target
+[1791138270][DEBUG]poll exit 0 polls_fd event 0 0
+[1791138270][DEBUG] energy 2:0:868489 mj: 421 mw
+[1791138270][DEBUG] energy 1:0:6464496 mj: 3012 mw
+[1791138270][DEBUG]read_temperature sensor ID 3
+[1791138270][DEBUG]Sensor SEN1 :temp 50
+[1791138270][DEBUG]pref 0 type 3 temp 50 trip 50000
+[1791138270][DEBUG]Passive Trip point applicable
+[1791138270][DEBUG]Trip point applicable <  0:50000
+[1791138270][DEBUG]cdev size for this trippoint 1
+[1791138270][DEBUG]cdev at index 21:rapl_controller_mmio
+[1791138270][DEBUG]>>thd_cdev_set_state temperature 50000:50 index:21 state:0 :zone:3 trip_id:0 target_state_valid:1 target_value :42000000 force:0 min_state:0 max_state:0
+[1791138270][DEBUG]zone_trip_limits.size() 0
+[1791138270][DEBUG]def_max_state:42000000 curr_max_state:0 _state:31000000
+[1791138270][DEBUG]thd_cdev_set_21:curr state 31000000 max state 28000000
+[1791138270][DEBUG]def_max_state:28000000 curr_max_state:0 _state:31500000
+[1791138270][DEBUG]def_max_state:42000000 curr_max_state:0 _state:31500000
+[1791138270][INFO]op->device:rapl_controller_mmio 31500000
+[1791138270][INFO]set cdev state index 21 state 31500000 wr:31500000
+[1791138270][INFO]Set : threshold:50000, temperature:50, cdev:21(rapl_controller_mmio), curr_state:31500000, max_state:28000000
+[1791138270][DEBUG]<<thd_cdev_set_state 0
+[1791138270][DEBUG]pref 0 type 3 temp 50 trip 51000
+[1791138270][DEBUG]Passive Trip point applicable
+[1791138270][DEBUG]Trip point applicable <  1:51000
+[1791138270][DEBUG]cdev size for this trippoint 1
+[1791138270][DEBUG]cdev at index 21:rapl_controller_mmio
+[1791138270][DEBUG]>>thd_cdev_set_state temperature 51000:50 index:21 state:0 :zone:3 trip_id:1 target_state_valid:0 target_value :42000000 force:0 min_state:0 max_state:0
+[1791138270][DEBUG]zone_trip_limits.size() 0
+[1791138270][DEBUG]def_max_state:42000000 curr_max_state:0 _state:31500000
+[1791138270][DEBUG]thd_cdev_set_21:curr state 31500000 max state 28000000
+[1791138270][DEBUG]def_max_state:28000000 curr_max_state:0 _state:32000000
+[1791138270][DEBUG]def_max_state:42000000 curr_max_state:0 _state:32000000
+[1791138270][INFO]op->device:rapl_controller_mmio 32000000
+[1791138270][INFO]set cdev state index 21 state 32000000 wr:32000000
+[1791138270][INFO]Set : threshold:51000, temperature:50, cdev:21(rapl_controller_mmio), curr_state:32000000, max_state:28000000
+[1791138270][DEBUG]<<thd_cdev_set_state 0
+[1791138270][DEBUG]evaluate condition set 0
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 24
+[1791138270][DEBUG]evaluate condition set 1
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 48
+[1791138270][DEBUG]read_temperature sensor ID 3
+[1791138270][DEBUG]Sensor SEN1 :temp 50
+[1791138270][DEBUG]evaluate condition set 2
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 41
+[1791138270][DEBUG]evaluate condition set 3
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 19
+[1791138270][DEBUG]evaluate condition set 4
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 19
+[1791138270][DEBUG]evaluate condition set 5
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 19
+[1791138270][DEBUG]evaluate condition.condition at index 1
+[1791138270][DEBUG]evaluate condition.condition 22
+[1791138270][DEBUG]evaluate condition set 6
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 19
+[1791138270][DEBUG]evaluate condition set 7
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 19
+[1791138270][DEBUG]evaluate condition.condition at index 1
+[1791138270][DEBUG]evaluate condition.condition 22
+[1791138270][DEBUG]evaluate condition set 8
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 19
+[1791138270][DEBUG]evaluate condition set 9
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 19
+[1791138270][DEBUG]evaluate condition.condition at index 1
+[1791138270][DEBUG]evaluate condition.condition 22
+[1791138270][DEBUG]evaluate condition set 10
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 19
+[1791138270][DEBUG]evaluate condition set 11
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 19
+[1791138270][DEBUG]evaluate condition set 12
+[1791138270][DEBUG]evaluate condition.condition at index 0
+[1791138270][DEBUG]evaluate condition.condition 48
+[1791138270][DEBUG]read_temperature sensor ID 3
+[1791138270][DEBUG]Sensor SEN1 :temp 50
+[1791138270][DEBUG]evaluate condition.condition at index 1
+[1791138270][DEBUG]evaluate condition.condition at index 2
+[1791138270][DEBUG]evaluate condition.condition at index 3
+[1791138270][DEBUG]evaluate condition.condition at index 4
+[1791138270][DEBUG]evaluate condition.condition at index 5
+[1791138270][DEBUG]evaluate condition.condition at index 6
+[1791138270][DEBUG]evaluate condition.condition at index 7
+[1791138270][DEBUG]evaluate condition.condition at index 8
+[1791138270][DEBUG]evaluate condition.condition at index 9
+[1791138270][DEBUG]Condition Set matched:12 target:20
+[1791138270][DEBUG]No change in target
+[1791138274][DEBUG]poll exit 0 polls_fd event 0 0
+[1791138274][DEBUG] energy 2:0:870235 mj: 436 mw
+[1791138274][DEBUG] energy 1:0:6478033 mj: 3384 mw
+[1791138274][DEBUG]read_temperature sensor ID 3
+[1791138274][DEBUG]Sensor SEN1 :temp 50
+[1791138274][DEBUG]pref 0 type 3 temp 50 trip 50000
+[1791138274][DEBUG]Passive Trip point applicable
+[1791138274][DEBUG]Trip point applicable <  0:50000
+[1791138274][DEBUG]cdev size for this trippoint 1
+[1791138274][DEBUG]cdev at index 21:rapl_controller_mmio
+[1791138274][DEBUG]>>thd_cdev_set_state temperature 50000:50 index:21 state:0 :zone:3 trip_id:0 target_state_valid:1 target_value :42000000 force:0 min_state:0 max_state:0
+[1791138274][DEBUG]zone_trip_limits.size() 0
+[1791138274][DEBUG]def_max_state:42000000 curr_max_state:0 _state:32000000
+[1791138274][DEBUG]thd_cdev_set_21:curr state 32000000 max state 28000000
+[1791138274][DEBUG]def_max_state:28000000 curr_max_state:0 _state:32500000
+[1791138274][DEBUG]def_max_state:42000000 curr_max_state:0 _state:32500000
+[1791138274][INFO]op->device:rapl_controller_mmio 32500000
+[1791138274][INFO]set cdev state index 21 state 32500000 wr:32500000
+[1791138274][INFO]Set : threshold:50000, temperature:50, cdev:21(rapl_controller_mmio), curr_state:32500000, max_state:28000000
+[1791138274][DEBUG]<<thd_cdev_set_state 0
+[1791138274][DEBUG]pref 0 type 3 temp 50 trip 51000
+[1791138274][DEBUG]Passive Trip point applicable
+[1791138274][DEBUG]Trip point applicable <  1:51000
+[1791138274][DEBUG]cdev size for this trippoint 1
+[1791138274][DEBUG]cdev at index 21:rapl_controller_mmio
+[1791138274][DEBUG]>>thd_cdev_set_state temperature 51000:50 index:21 state:0 :zone:3 trip_id:1 target_state_valid:0 target_value :42000000 force:0 min_state:0 max_state:0
+[1791138274][DEBUG]zone_trip_limits.size() 0
+[1791138274][DEBUG]def_max_state:42000000 curr_max_state:0 _state:32500000
+[1791138274][DEBUG]thd_cdev_set_21:curr state 32500000 max state 28000000
+[1791138274][DEBUG]def_max_state:28000000 curr_max_state:0 _state:33000000
+[1791138274][DEBUG]def_max_state:42000000 curr_max_state:0 _state:33000000
+[1791138274][INFO]op->device:rapl_controller_mmio 33000000
+[1791138274][INFO]set cdev state index 21 state 33000000 wr:33000000
+[1791138274][INFO]Set : threshold:51000, temperature:50, cdev:21(rapl_controller_mmio), curr_state:33000000, max_state:28000000
+[1791138274][DEBUG]<<thd_cdev_set_state 0
+[1791138274][DEBUG]evaluate condition set 0
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 24
+[1791138274][DEBUG]evaluate condition set 1
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 48
+[1791138274][DEBUG]read_temperature sensor ID 3
+[1791138274][DEBUG]Sensor SEN1 :temp 50
+[1791138274][DEBUG]evaluate condition set 2
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 41
+[1791138274][DEBUG]evaluate condition set 3
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 19
+[1791138274][DEBUG]evaluate condition set 4
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 19
+[1791138274][DEBUG]evaluate condition set 5
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 19
+[1791138274][DEBUG]evaluate condition.condition at index 1
+[1791138274][DEBUG]evaluate condition.condition 22
+[1791138274][DEBUG]evaluate condition set 6
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 19
+[1791138274][DEBUG]evaluate condition set 7
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 19
+[1791138274][DEBUG]evaluate condition.condition at index 1
+[1791138274][DEBUG]evaluate condition.condition 22
+[1791138274][DEBUG]evaluate condition set 8
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 19
+[1791138274][DEBUG]evaluate condition set 9
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 19
+[1791138274][DEBUG]evaluate condition.condition at index 1
+[1791138274][DEBUG]evaluate condition.condition 22
+[1791138274][DEBUG]evaluate condition set 10
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 19
+[1791138274][DEBUG]evaluate condition set 11
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 19
+[1791138274][DEBUG]evaluate condition set 12
+[1791138274][DEBUG]evaluate condition.condition at index 0
+[1791138274][DEBUG]evaluate condition.condition 48
+[1791138274][DEBUG]read_temperature sensor ID 3
+[1791138274][DEBUG]Sensor SEN1 :temp 50
+[1791138274][DEBUG]evaluate condition.condition at index 1
+[1791138274][DEBUG]evaluate condition.condition at index 2
+[1791138274][DEBUG]evaluate condition.condition at index 3
+[1791138274][DEBUG]evaluate condition.condition at index 4
+[1791138274][DEBUG]evaluate condition.condition at index 5
+[1791138274][DEBUG]evaluate condition.condition at index 6
+[1791138274][DEBUG]evaluate condition.condition at index 7
+[1791138274][DEBUG]evaluate condition.condition at index 8
+[1791138274][DEBUG]evaluate condition.condition at index 9
+[1791138274][DEBUG]Condition Set matched:12 target:20
+[1791138274][DEBUG]No change in target
+[1791138278][DEBUG]poll exit 1 polls_fd event 1 0
+[1791138278][DEBUG] energy 2:0:871943 mj: 427 mw
+[1791138278][DEBUG] energy 1:0:6491087 mj: 3263 mw
+[1791138278][DEBUG]read_temperature sensor ID 3
+[1791138278][DEBUG]Sensor SEN1 :temp 50
+[1791138278][DEBUG]pref 0 type 3 temp 50 trip 50000
+[1791138278][DEBUG]Passive Trip point applicable
+[1791138278][DEBUG]Trip point applicable <  0:50000
+[1791138278][DEBUG]cdev size for this trippoint 1
+[1791138278][DEBUG]cdev at index 21:rapl_controller_mmio
+[1791138278][DEBUG]>>thd_cdev_set_state temperature 50000:50 index:21 state:0 :zone:3 trip_id:0 target_state_valid:1 target_value :42000000 force:0 min_state:0 max_state:0
+[1791138278][DEBUG]zone_trip_limits.size() 0
+[1791138278][DEBUG]def_max_state:42000000 curr_max_state:0 _state:33000000
+[1791138278][DEBUG]thd_cdev_set_21:curr state 33000000 max state 28000000
+[1791138278][DEBUG]def_max_state:28000000 curr_max_state:0 _state:33500000
+[1791138278][DEBUG]def_max_state:42000000 curr_max_state:0 _state:33500000
+[1791138278][INFO]op->device:rapl_controller_mmio 33500000
+[1791138278][INFO]set cdev state index 21 state 33500000 wr:33500000
+[1791138278][INFO]Set : threshold:50000, temperature:50, cdev:21(rapl_controller_mmio), curr_state:33500000, max_state:28000000
+[1791138278][DEBUG]<<thd_cdev_set_state 0
+[1791138278][DEBUG]pref 0 type 3 temp 50 trip 51000
+[1791138278][DEBUG]Passive Trip point applicable
+[1791138278][DEBUG]Trip point applicable <  1:51000
+[1791138278][DEBUG]cdev size for this trippoint 1
+[1791138278][DEBUG]cdev at index 21:rapl_controller_mmio
+[1791138278][DEBUG]>>thd_cdev_set_state temperature 51000:50 index:21 state:0 :zone:3 trip_id:1 target_state_valid:0 target_value :42000000 force:0 min_state:0 max_state:0
+[1791138278][DEBUG]zone_trip_limits.size() 0
+[1791138278][DEBUG]def_max_state:42000000 curr_max_state:0 _state:33500000
+[1791138278][DEBUG]thd_cdev_set_21:curr state 33500000 max state 28000000
+[1791138278][DEBUG]def_max_state:28000000 curr_max_state:0 _state:34000000
+[1791138278][DEBUG]def_max_state:42000000 curr_max_state:0 _state:34000000
+[1791138278][INFO]op->device:rapl_controller_mmio 34000000
+[1791138278][INFO]set cdev state index 21 state 34000000 wr:34000000
+[1791138278][INFO]Set : threshold:51000, temperature:50, cdev:21(rapl_controller_mmio), curr_state:34000000, max_state:28000000
+[1791138278][DEBUG]<<thd_cdev_set_state 0
+[1791138278][DEBUG]wakeup fd event
+[1791138278][DEBUG]Received message 1
+[1791138278][MSG]Terminating ...
+[1791138278][DEBUG]Terminating thread..
+[1791138278][DEBUG]evaluate condition set 0
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 24
+[1791138278][DEBUG]evaluate condition set 1
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 48
+[1791138278][DEBUG]read_temperature sensor ID 3
+[1791138278][DEBUG]Sensor SEN1 :temp 50
+[1791138278][DEBUG]evaluate condition set 2
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 41
+[1791138278][DEBUG]evaluate condition set 3
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 19
+[1791138278][DEBUG]evaluate condition set 4
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 19
+[1791138278][DEBUG]evaluate condition set 5
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 19
+[1791138278][DEBUG]evaluate condition.condition at index 1
+[1791138278][DEBUG]evaluate condition.condition 22
+[1791138278][DEBUG]evaluate condition set 6
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 19
+[1791138278][DEBUG]evaluate condition set 7
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 19
+[1791138278][DEBUG]evaluate condition.condition at index 1
+[1791138278][DEBUG]evaluate condition.condition 22
+[1791138278][DEBUG]evaluate condition set 8
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 19
+[1791138278][DEBUG]evaluate condition set 9
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 19
+[1791138278][DEBUG]evaluate condition.condition at index 1
+[1791138278][DEBUG]evaluate condition.condition 22
+[1791138278][DEBUG]evaluate condition set 10
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 19
+[1791138278][DEBUG]evaluate condition set 11
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 19
+[1791138278][DEBUG]evaluate condition set 12
+[1791138278][DEBUG]evaluate condition.condition at index 0
+[1791138278][DEBUG]evaluate condition.condition 48
+[1791138278][DEBUG]read_temperature sensor ID 3
+[1791138278][DEBUG]Sensor SEN1 :temp 50
+[1791138278][DEBUG]evaluate condition.condition at index 1
+[1791138278][DEBUG]evaluate condition.condition at index 2
+[1791138278][DEBUG]evaluate condition.condition at index 3
+[1791138278][DEBUG]evaluate condition.condition at index 4
+[1791138278][DEBUG]evaluate condition.condition at index 5
+[1791138278][DEBUG]evaluate condition.condition at index 6
+[1791138278][DEBUG]evaluate condition.condition at index 7
+[1791138278][DEBUG]evaluate condition.condition at index 8
+[1791138278][DEBUG]evaluate condition.condition at index 9
+[1791138278][DEBUG]Condition Set matched:12 target:20
+[1791138278][DEBUG]No change in target
+[1791138278][DEBUG]thd_engine_thread_end
+[1791138279][MSG]terminating on user request ..
+[1791138279][INFO]Giving up thermal control
+[1791138280][INFO]Restoring 3 RAPL power limits on exit
+[1791138280][INFO]  Restored PL1=64000000 uW for /sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/
+[1791138280][INFO]  Restored PL1 time window=27983872 for /sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/
+[1791138280][INFO]  Restored PL1 enabled=1 for /sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/
+[1791138280][INFO]  Restored PL1=20000000 uW for /sys/devices/virtual/powercap/intel-rapl-mmio/intel-rapl-mmio:0/
+[1791138280][INFO]  Restored PL1 time window=27983872 for /sys/devices/virtual/powercap/intel-rapl-mmio/intel-rapl-mmio:0/
+[1791138280][INFO]  Restored PL1 enabled=1 for /sys/devices/virtual/powercap/intel-rapl-mmio/intel-rapl-mmio:0/
+[1791138280][INFO]  Restored PL1=0 uW for /sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:2/
+[1791138280][INFO]  Restored PL1 time window=976 for /sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:2/
+[1791138280][INFO]  Restored PL1 enabled=0 for /sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:2/
