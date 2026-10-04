@@ -51,7 +51,7 @@ hardware-scan/          ACPI tabloları (DSDT/SSDT .dat + .dsl), DTT veri kasas�
 | `sensors-ish-firmware` | ASUS imzalı PTL ISH firmware'i (ASUS sürücü paketinden indirip doğrular) → ivmeölçer, ALS, menteşe | hepsi |
 | `power-dtt` | thermald --adaptive: BIOS'taki Windows DTT tablolarını uygular (PL1/PL2/TCC profil başına) | hepsi |
 | `keyboard-hid-asus` | Yamalı hid-asus (DKMS): klavye ışığı, Fn tuşları, USB+BT | 7.2.x, 7.3.x |
-| `display-panel-orientation` | Ters takılı panelleri kernel'e bildirir: elle döndürme gerekmez, otomatik döndürme doğru çalışır | hepsi |
+| `sensors-accel-mount` | İvmeölçere panellerin 180° ters takılı olduğunu bildirir (hwdb ACCEL_MOUNT_MATRIX): otomatik döndürme doğru çalışır | hepsi |
 
 ## Yeni modül eklemek
 

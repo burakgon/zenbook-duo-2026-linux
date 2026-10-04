@@ -1,0 +1,6 @@
+# zenbook-duo-linux: sensors-accel-mount
+# Both OLED panels scan out rotated 180 degrees relative to the ISH accelerometer
+# frame; without this, auto-rotate turns the picture upside down when the laptop
+# is upright. (KWin does not apply the DRM panel orientation property here.)
+sensor:modalias:platform:HID-SENSOR-200073:dmi:*:svnASUS:pnZenbookDuoUX8407AA:*
+ ACCEL_MOUNT_MATRIX=-1, 0, 0; 0, -1, 0; 0, 0, 1
