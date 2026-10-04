@@ -1,7 +1,0 @@
-cmake_minimum_required(VERSION 3.20)
-project(duo-kscreen CXX)
-set(CMAKE_CXX_STANDARD 20)
-find_package(Qt6 REQUIRED COMPONENTS Core Gui)
-find_package(KF6Screen REQUIRED)
-add_executable(duo-kscreen main.cpp)
-target_link_libraries(duo-kscreen Qt6::Core Qt6::Gui KF6::Screen)

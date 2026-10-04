@@ -88,6 +88,13 @@ duo_enable_unit() {
 	ok "enabled $unit"
 }
 
+# duo_enable_user_unit UNIT : enable a systemd user unit for every user (systemctl --global).
+duo_enable_user_unit() {
+	systemctl --global enable "$1" >/dev/null 2>&1 || die "failed to enable user unit $1"
+	_record user-unit-enable "$1"
+	ok "enabled user unit $1 (all users, from next login)"
+}
+
 # duo_disable_unit UNIT [--now]
 duo_disable_unit() {
 	local unit="$1" now="${2:-}" was
@@ -186,9 +193,39 @@ duo_sync_bootloader() {
 			ok "kernel cmdline extras: ${params:-<none>}"
 		fi
 		rm -f "$tmp"
+	elif [[ -f /etc/default/grub ]]; then
+		_sync_grub "$params"
 	else
 		warn "unsupported bootloader setup; add manually to your kernel cmdline: $params"
 	fi
+}
+
+# GRUB: same marked block at the end of /etc/default/grub (a shell file), then grub-mkconfig.
+_sync_grub() {
+	local params="$1" tmp cfg
+	tmp="$(mktemp)"
+	sed "/^$DUO_BLOCK_BEGIN\$/,/^$DUO_BLOCK_END\$/d" /etc/default/grub >"$tmp"
+	if [[ -n $params ]]; then
+		{
+			echo "$DUO_BLOCK_BEGIN"
+			echo "GRUB_CMDLINE_LINUX_DEFAULT=\"\${GRUB_CMDLINE_LINUX_DEFAULT} $params\""
+			echo "$DUO_BLOCK_END"
+		} >>"$tmp"
+	fi
+	if ! cmp -s "$tmp" /etc/default/grub; then
+		[[ -e $DUO_STATE_DIR/grub.default.orig ]] || cp -a /etc/default/grub "$DUO_STATE_DIR/grub.default.orig"
+		cat "$tmp" >/etc/default/grub
+		cfg=/boot/grub/grub.cfg
+		[[ -f /boot/grub2/grub.cfg ]] && cfg=/boot/grub2/grub.cfg
+		info "regenerating $cfg"
+		if have grub-mkconfig; then
+			grub-mkconfig -o "$cfg" >/dev/null 2>&1 || warn "grub-mkconfig failed; run it manually"
+		elif have grub2-mkconfig; then
+			grub2-mkconfig -o "$cfg" >/dev/null 2>&1 || warn "grub2-mkconfig failed; run it manually"
+		fi
+		ok "kernel cmdline extras: ${params:-<none>}"
+	fi
+	rm -f "$tmp"
 }
 
 duo_regen_initramfs() {
@@ -229,6 +266,9 @@ duo_revert_manifest() {
 			;;
 		unit-enable)
 			[[ $b == enabled ]] || { systemctl disable --now "$a" >/dev/null 2>&1; ok "disabled $a"; }
+			;;
+		user-unit-enable)
+			systemctl --global disable "$a" >/dev/null 2>&1; ok "disabled user unit $a"
 			;;
 		unit-disable)
 			[[ $b == enabled ]] && { systemctl enable --now "$a" >/dev/null 2>&1; ok "re-enabled $a"; }

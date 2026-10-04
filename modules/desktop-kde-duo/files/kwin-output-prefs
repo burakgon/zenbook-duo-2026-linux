@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+# zenbook-duo-linux (desktop-kde-duo): runs before KWin starts.
+#
+# The xe driver exposes a backlight per panel; stock PowerDevil writes the same value
+# to both, but KWin attaches that device to eDP-1 only and gives eDP-2 a software
+# dimming slider on top. KWin has no UI or API for its per-output
+# "allowSdrSoftwareBrightness" setting, so turn it off for eDP-2 in KWin's own config
+# file: eDP-2 then has no separate slider and simply follows eDP-1's hardware level.
+import json
+import os
+import sys
+
+path = os.path.join(os.environ.get("XDG_CONFIG_HOME") or os.path.expanduser("~/.config"), "kwinoutputconfig.json")
+try:
+    with open(path) as f:
+        config = json.load(f)
+except (OSError, ValueError):
+    sys.exit(0)  # first login: KWin creates the file, this applies from the next login
+
+changed = False
+for section in config:
+    if section.get("name") != "outputs":
+        continue
+    for output in section.get("data", []):
+        if output.get("connectorName") == "eDP-2" and output.get("allowSdrSoftwareBrightness", True):
+            output["allowSdrSoftwareBrightness"] = False
+            changed = True
+
+if changed:
+    tmp = path + ".zenbook-duo"
+    with open(tmp, "w") as f:
+        json.dump(config, f, indent=4)
+    os.replace(tmp, path)

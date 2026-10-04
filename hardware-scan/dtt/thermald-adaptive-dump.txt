@@ -1,4 +1,4 @@
-[sudo] password for burakgon: [1791138258][DEBUG]RAPL sysfs present
+[1791138258][DEBUG]RAPL sysfs present
 [1791138258][DEBUG]RAPL base path /sys/class/powercap/intel-rapl/
 [1791138258][DEBUG]RAPL domain dir uevent
 [1791138258][DEBUG] /sys/class/powercap/intel-rapl/uevent/name doesn't exist

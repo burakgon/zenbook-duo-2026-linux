@@ -1,0 +1,13 @@
+[Unit]
+Description=Zenbook Duo: rotation, dual-panel layout, touch mapping and keyboard dock
+PartOf=graphical-session.target
+After=graphical-session.target plasma-kwin_wayland.service
+ConditionEnvironment=XDG_SESSION_TYPE=wayland
+
+[Service]
+ExecStart=/usr/lib/zenbook-duo/duo-rotate
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target
