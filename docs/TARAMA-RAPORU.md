@@ -188,3 +188,8 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
   - her ekran düzeni değişiminden sonra dokunmatik eşlemesini (üst yön 8, alt 0) yeniden uygular;
   - KWin'in otomatik döndürmesini kapatır (policy Never).
 - Kullanıcı tarafından doğrulandı: laptop pozisyonu, dik (book) mod ve dokunmatik.
+
+## 10. Parlaklık
+- Paneller parlaklığı yalnız AUX/DPCD ile kabul ediyor (DPCD 0x701=0x99, 0x702=0x86). `display-dpcd-backlight` → `xe.enable_dpcd_backlight=1`, aralık 0–504. İki panel de sysfs düzeyinde bağımsız kontrol edilebiliyor; 22 hızlı değişiklikle (PR açık ve kapalı) donma yok.
+- KDE sınırlaması (bug 525717): PowerDevil backlighthelper, KDE'deki üst ekran değerini tüm panel parlaklık aygıtlarına yazıyor; alt ekranın kaydırıcısı ise yalnızca yazılım karartması. Sonuç: üst kaydırıcı = iki panelin donanım parlaklığı, alt kaydırıcı = alt panele ek karartma. Senkronizasyon denemesi bu iki katmanı çarptığı için kaldırıldı.
+- Parlaklık tuşlarıyla yaşanan bir donmanın nedeni bulunamadı; lockup detector + pstore ile yakalanmaya hazır (bkz. oturum notları).
