@@ -1,0 +1,2 @@
+# zenbook-duo-linux: wifi-powersave-ac
+SUBSYSTEM=="power_supply", ATTR{type}=="Mains", RUN+="/usr/lib/zenbook-duo/zenbook-duo-wifi-ps"

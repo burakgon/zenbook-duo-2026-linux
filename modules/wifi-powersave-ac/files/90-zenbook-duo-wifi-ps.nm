@@ -1,0 +1,4 @@
+#!/bin/sh
+# NetworkManager re-applies its power save setting on every (re)connect.
+case "$2" in up | dhcp4-change | connectivity-change) /usr/lib/zenbook-duo/zenbook-duo-wifi-ps ;; esac
+exit 0

@@ -1,0 +1,2 @@
+# zenbook-duo-linux: power-tpm-rng - do not feed the entropy pool from the fTPM.
+ACTION=="add|change", SUBSYSTEM=="misc", KERNEL=="hw_random", ATTR{rng_current}="none"

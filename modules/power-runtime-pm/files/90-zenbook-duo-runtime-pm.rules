@@ -1,0 +1,4 @@
+# zenbook-duo-linux: power-runtime-pm
+# Intel Panther Lake platform functions that default to power/control=on.
+# Excluded on purpose: ISH (sensor hub, 8086:e445), Wi-Fi (8086:e440), NVMe.
+ACTION=="add|bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x8086", ATTR{device}=="0xe476|0xe462|0xe45d|0xe470|0xb01d|0xb07d|0xe47f|0xe402|0xe423|0xb001", ATTR{power/control}="auto"
