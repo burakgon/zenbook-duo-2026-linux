@@ -32,8 +32,16 @@ STAMP="$(date +%Y%m%d-%H%M%S)"
 OUT="$OUT_BASE/${STAMP}_${KREL}"
 mkdir -p "$OUT"
 
-# Run privileged commands through sudo when not root (sudo may prompt once).
-if ((EUID == 0)); then SUDO=(); else SUDO=(sudo); fi
+# Privileged reads go through sudo when not root: it may prompt once on a terminal.
+# Without a terminal only cached credentials are used (sudo -n), so a non-interactive
+# run never counts failed password attempts (faillock) and just skips those reads.
+if ((EUID == 0)); then
+	SUDO=()
+elif [[ -t 0 ]] || sudo -n true 2>/dev/null; then
+	SUDO=(sudo)
+else
+	SUDO=(sudo -n)
+fi
 as_root() { "${SUDO[@]}" "$@"; }
 
 have() { command -v "$1" >/dev/null 2>&1; }
@@ -203,11 +211,13 @@ scan_acpi() {
 SUM="$OUT/summary.txt"
 pass() { printf '[PASS] %s\n' "$*" | tee -a "$SUM"; }
 warn() { printf '[WARN] %s\n' "$*" | tee -a "$SUM"; }
+info() { printf '[INFO] %s\n' "$*" | tee -a "$SUM"; }
 fail() { printf '[FAIL] %s\n' "$*" | tee -a "$SUM"; }
 
 health_summary() {
 	local k drv t mmio_pl1
-	k="$(as_root dmesg 2>/dev/null)"
+	# the kernel log: dmesg needs root on most systems, the journal usually does not
+	k="$(as_root dmesg 2>/dev/null || journalctl -k -b -o cat --no-pager 2>/dev/null)"
 	echo "Zenbook Duo health summary - kernel $KREL - $(date -Is)" >"$SUM"
 
 	grep -q "UX8407AA" /sys/class/dmi/id/product_name && pass "Model: $(cat /sys/class/dmi/id/product_name), BIOS $(cat /sys/class/dmi/id/bios_version)" ||
@@ -228,7 +238,7 @@ health_summary() {
 	# Keyboard: hid-asus gives backlight LED + ASUS hotkeys; hid-generic does not.
 	if ls /sys/bus/hid/devices/ | grep -q "0003:0B05:1CD7"; then
 		drv="$(for d in /sys/bus/hid/devices/0003:0B05:1CD7.*; do basename "$(readlink $d/driver)"; done | sort -u | tr '\n' ' ')"
-		[[ $drv == *hid-asus* ]] && pass "Keyboard 0b05:1cd7 drivers: $drv" || warn "Keyboard 0b05:1cd7 on [$drv] (no hid-asus: no backlight LED / ASUS Fn keys)"
+		[[ $drv == *asus* ]] && pass "Keyboard 0b05:1cd7 drivers: $drv" || warn "Keyboard 0b05:1cd7 on [$drv] (no hid-asus: no backlight LED / ASUS Fn keys)"
 	else
 		warn "Keyboard 0b05:1cd7 not attached over USB (detached/Bluetooth?)"
 	fi
@@ -262,10 +272,12 @@ health_summary() {
 	# bpp of every active pipe (inactive pipes report bpp=0, e.g. while the screen is blanked)
 	t="$(as_root awk '/^\[CRTC/{a=0} /uapi: enable=yes, active=yes/{a=1} a && /pipe src=/{match($0,/bpp=[0-9]+/); print substr($0,RSTART+4,RLENGTH-4)}' \
 		/sys/kernel/debug/dri/0000:00:02.0/i915_display_info 2>/dev/null | tr '\n' ' ')"
-	if [[ -z ${t// /} ]]; then
+	if ! as_root test -r /sys/kernel/debug/dri/0000:00:02.0/i915_display_info 2>/dev/null; then
+		info "Colour depth check needs root (sudo ./duo doctor)"
+	elif [[ -z ${t// /} ]]; then
 		warn "No active display pipe right now (screens blanked), bpc check skipped"
 	elif [[ $t == *18* || $t == *24* ]]; then
-		warn "Active pipe bpp: $t(below 10 bpc at 144 Hz; panels are 10-bit, DSC not used)"
+		warn "Active pipe bpp: $t(6/8 bpc + dithering; apply display-dsc-10bit for 10 bpc)"
 	else
 		pass "Active pipe bpp: $t"
 	fi
@@ -279,7 +291,7 @@ health_summary() {
 		warn "MMIO RAPL PL1=${mmio_pl1}W (Windows DTT 'Standard' uses 28-42W; thermald --adaptive not active?)"
 	systemctl is-active -q thermald && pass "thermald active" || warn "thermald inactive (DTT adaptive policies not applied)"
 	t="$(cat /sys/class/power_supply/BAT0/charge_control_end_threshold 2>/dev/null)"
-	[[ -n $t && $t -lt 100 ]] && pass "Battery charge limit ${t}%" || warn "Battery charge limit ${t:-?}% (no longevity limit)"
+	[[ -n $t && $t -lt 100 ]] && pass "Battery charge limit ${t}%" || warn "Battery charges to ${t:-?}% (for longevity set a limit: System Settings > Power Management)"
 	grep -q "asus_armoury: No matching power limits" <<<"$k" && warn "asus_armoury has no PPT table for this model"
 
 	# Bluetooth pairing of the detachable keyboard

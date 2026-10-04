@@ -12,6 +12,7 @@ DUO_NEED_SYSTEMD_RELOAD=0
 DUO_NEED_INITRAMFS=0
 DUO_NEED_BOOTLOADER=0
 DUO_NEED_REBOOT=0
+DUO_RESTART_UNITS=()
 
 _manifest() { echo "$DUO_STATE_DIR/modules/$MOD_ID/manifest"; }
 _backup_dir() { echo "$DUO_STATE_DIR/modules/$MOD_ID/backup"; }
@@ -240,6 +241,10 @@ duo_regen_initramfs() {
 # Run deferred work once.
 duo_finish_transaction() {
 	((DUO_NEED_SYSTEMD_RELOAD)) && systemctl daemon-reload
+	local u
+	for u in "${DUO_RESTART_UNITS[@]}"; do
+		systemctl try-restart "$u" && ok "restarted $u"
+	done
 	((DUO_NEED_UDEV_RELOAD)) && udevadm control --reload && udevadm trigger --action=change >/dev/null 2>&1
 	((DUO_NEED_BOOTLOADER)) && duo_sync_bootloader
 	((DUO_NEED_INITRAMFS)) && duo_regen_initramfs
@@ -263,6 +268,8 @@ duo_revert_manifest() {
 				rm -f "$a" && ok "removed $a"
 			fi
 			_mark_for_path "$a"
+			# a removed drop-in only takes effect once its service restarts
+			[[ $a =~ /([^/]+\.service)\.d/[^/]+$ ]] && DUO_RESTART_UNITS+=("${BASH_REMATCH[1]}")
 			;;
 		unit-enable)
 			[[ $b == enabled ]] || { systemctl disable --now "$a" >/dev/null 2>&1; ok "disabled $a"; }

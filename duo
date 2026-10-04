@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 # duo - modular hardware patch manager for the ASUS Zenbook Duo (UX8407AA) on Linux.
-#
-#   duo list                      list modules and whether they are needed/applied
-#   duo status [MODULE...]        run module health checks
-#   duo info MODULE               show a module's documentation
-#   duo apply MODULE...|--recommended   apply modules (root)
-#   duo revert MODULE...|--all    revert modules using their recorded manifest (root)
-#   duo doctor                    quick health summary of the whole machine
-#   duo scan [--acpi]             full hardware scan snapshot (tools/hw-scan.sh)
+# Run `duo help` for usage.
 
 set -euo pipefail
 
@@ -58,8 +51,27 @@ status_label() {
 	printf '%s%-*s%s' "$color" "$2" "$text" "$C_RESET"
 }
 
+usage() {
+	cat <<EOF
+${C_BOLD}duo${C_RESET} - Linux fixes for the ASUS Zenbook Duo UX8407AA, as revertible modules
+
+${C_BOLD}Usage${C_RESET}
+  ./duo list                         every module: needed on this kernel? applied? healthy?
+  ./duo info MODULE                  what a module fixes, what it changes, how to undo it
+  ./duo status [MODULE...]           run the health checks (all modules by default)
+  sudo ./duo apply --recommended     apply every default module
+  sudo ./duo apply MODULE...         apply the given modules
+  sudo ./duo revert MODULE...|--all  undo exactly what those modules changed
+  ./duo doctor                       whole-machine PASS / WARN / FAIL summary (sudo for all checks)
+  ./duo scan [--acpi]                full hardware snapshot into hardware-scan/snapshots/ (redacted)
+
+${C_BOLD}First time?${C_RESET}
+  ./duo list  ->  sudo ./duo apply --recommended  ->  reboot  ->  ./duo doctor
+EOF
+}
+
 cmd_list() {
-	local dir rc applied krel
+	local dir rc applied krel n=0 healthy=0 todo=()
 	krel="$(uname -r)"
 	printf '%s%-28s %-9s %-9s %-6s %-9s %-10s %s%s\n' "$C_BOLD" MODULE CATEGORY SEVERITY RISK APPLIED STATE SUMMARY "$C_RESET"
 	while read -r dir; do
@@ -72,7 +84,18 @@ cmd_list() {
 		fi
 		is_applied "$MOD_ID" && applied="yes" || applied="-"
 		printf '%-28s %-9s %-9s %-6s %-9s %s %s\n' "$MOD_ID" "$CATEGORY" "$SEVERITY" "$RISK" "$applied" "$(status_label $rc 10)" "$SUMMARY"
+		((rc == 2)) && continue
+		n=$((n + 1))
+		((rc == 0)) && healthy=$((healthy + 1))
+		((rc == 1)) && todo+=("$MOD_ID")
 	done < <(module_dirs)
+	echo
+	if ((${#todo[@]})); then
+		printf '%s%d of %d modules healthy.%s Fix the rest with:\n  sudo ./duo apply %s\n' "$C_BOLD" "$healthy" "$n" "$C_RESET" "${todo[*]}"
+		printf '  (./duo info MODULE explains each one)\n'
+	else
+		printf '%sAll %d modules healthy on %s.%s\n' "$C_GREEN" "$n" "$krel" "$C_RESET"
+	fi
 }
 
 cmd_status() {
@@ -100,9 +123,14 @@ cmd_info() {
 	dir="$(find_module "${1:?module name required}")"
 	module_load "$dir"
 	printf '%s%s%s - %s\n' "$C_BOLD" "$MOD_ID" "$C_RESET" "$NAME"
-	printf 'category=%s severity=%s risk=%s reboot=%s kernel=[%s, %s) upstream=%s\n\n' \
-		"$CATEGORY" "$SEVERITY" "$RISK" "$REBOOT" "${KERNEL_MIN:-any}" "${KERNEL_MAX:-any}" "${UPSTREAM:--}"
-	[[ -f $dir/README.md ]] && cat "$dir/README.md"
+	printf '  %-10s %s\n' category "$CATEGORY" severity "$SEVERITY" risk "$RISK" reboot "$REBOOT" \
+		kernels "${KERNEL_MIN:-any} .. <${KERNEL_MAX:-any}" applied "$(is_applied "$MOD_ID" && cat "$DUO_STATE_DIR/modules/$MOD_ID/applied" || echo no)"
+	echo
+	if [[ -f $dir/README.md ]]; then
+		cat "$dir/README.md"
+	else
+		printf '%s\n\nUpstream: %s\n' "$SUMMARY" "${UPSTREAM:--}"
+	fi
 }
 
 apply_one() {
@@ -152,7 +180,8 @@ cmd_apply() {
 	else
 		ids=("$@")
 	fi
-	((${#ids[@]})) || die "nothing to apply"
+	((${#ids[@]})) || die "nothing to apply (see: ./duo list)"
+	log "modules to apply: ${ids[*]}"
 	snapshot "before apply ${ids[*]}"
 	for id in "${ids[@]}"; do
 		apply_one "$(find_module "$id")"
@@ -192,7 +221,7 @@ main() {
 	revert | undo) cmd_revert "$@" ;;
 	doctor) cmd_doctor ;;
 	scan) cmd_scan "$@" ;;
-	-h | --help | help) sed -n '2,11p' "$0" ;;
+	-h | --help | help) usage ;;
 	*) die "unknown command: $cmd (see: duo help)" ;;
 	esac
 }
