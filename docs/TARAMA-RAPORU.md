@@ -115,13 +115,16 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 | P0 | DSB hataları: VRR → Automatic (KDE) | ✅ uygulandı; kalıcı düzeltme 7.3-rc6 / 7.2.y stable |
 | P0 | `display-xe-*`: 7.2 + harici 5K ekranda siyah ekran/uyku donması | 🔄 geçici: 7.2'de harici ekranı login sonrası tak; `KWIN_DRM_NO_DIRECT_SCANOUT=1` seçeneği; asıl çözüm 7.3 |
 | P1 | `keyboard-backlight`: arka ışık LED'i (udev → hid-asus) | ✅ uygulandı |
-| P1 | `keyboard-hotkeys`: Fn tuşları (descriptor düzeltmesi, HID-BPF), Fn-lock, BT 0x1cd8 | 🔜 Fn tuş yakalama testi gerekli |
-| P1 | `power-profile-sync`: power-saver → quiet + low-power | 🔜 |
-| P1 | `duo-screen`: klavye tak/çıkar → alt ekran, duruş (menteşe) ile yerleşim | 🔜 (xe #9196'ya dikkat) |
-| P1 | `keyboard-bluetooth`: eşleştirme yardımcısı | 🔜 |
+| P1 | `keyboard-hid-asus`: Fn tuşları, Fn-lock, mikrofon LED'i, USB + BT | ✅ (Copilot/MyASUS/F13/ekran değiştir tuşlarına iş atanmadı) |
+| P1 | `power-profile-sync`: power-saver → quiet + low-power | ✅ |
+| P1 | duo-rotate: klavye tak/çıkar → alt ekran, döndürme, yerleşim, dokunmatik | ✅ (menteşe sensörüyle duruş algılama yok) |
+| P1 | Bluetooth klavye | ✅ eşleşti, ışık ve tuşlar çalışıyor |
 | P2 | `display-10bit-dsc`: 144 Hz 10-bit | 🧪 deneysel |
 | P2 | `asus-screenpad`: sahte backlight'ı devre dışı bırak (+ upstream patch) | 🔜 |
-| P2 | `suspend`: s2idle doğrulama, S0i2.2 | 🔜 |
+| P2 | `suspend`: s2idle doğrulama, S0i2.x | 🔜 bu boot'ta hiç uyku yok; s2idle varsayılan, deep (S3) de listeleniyor |
+| P2 | Pil şarj sınırı | 🔜 `charge_control_end_threshold`=100 (KDE Güç ayarından %80 seçilebilir) |
+| P2 | Parlaklık: iki panel tek kaydırıcı | ✅ KWin ayarı (bölüm 10) |
+| P2 | `display-psr-et-off`: hayalet imleç | ✅ |
 | P3 | `camera-ir-howdy`: IR yüz tanıma, `presence`: uzaklaşınca kilitle | 🔜 |
 | P3 | `audio-speaker-eq`: hoparlör EQ (PipeWire filter-chain) | 🔜 |
 
@@ -158,7 +161,7 @@ BIOS'taki Intel DTT veri kasası (GDDV, 3131 bayt, LZMA) çözüldü (`hardware-
 ## 7. Dell XPS / Omarchy iddialarıyla karşılaştırma
 | Başlık | Bu makinede |
 |---|---|
-| Panel Replay / PSR | ✅ PR + SU + Early Transport aktif, panel RFB'den gösteriyor, hata yok. A/B ölçüm: paket 1,06 W (PR) / 1,29 W (kapalı) |
+| Panel Replay / PSR | ✅ PR + SU aktif; Early Transport hayalet imleç yaptığı için kapalı (`display-psr-et-off`). A/B ölçüm: paket 1,06 W (PR) / 1,29 W (kapalı) |
 | ALPM / LOBF | ✅ aux-less ALPM açık; LOBF kapalı (PR ile gerekmiyor) |
 | DC5/DC6 | ✅ sayaçlar sürekli artıyor; boşta yalnız PW_A açık |
 | FBC | ➖ SU etkinken devre dışı (beklenen, XPS'te de aynı) |
