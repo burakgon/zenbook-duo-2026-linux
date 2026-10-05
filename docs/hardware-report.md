@@ -1,4 +1,4 @@
-# ASUS Zenbook Duo UX8407AA on Linux — hardware report
+# ASUS Zenbook Duo 2026 (UX8407AA) on Linux — hardware report
 
 Initial scan: 2026-10-04 on `7.3.0-rc5-1-cachyos-rc`. Boot logs from `7.2.9-1-cachyos` (three boots) were also analysed. Later measurements (2026-10-04/05) were taken on 7.2.9.
 

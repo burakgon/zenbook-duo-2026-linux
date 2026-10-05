@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# common.sh - shared helpers for the zenbook-duo-linux patch system.
+# common.sh - shared helpers for the zenbook-duo-2026-linux patch system.
 
 DUO_STATE_DIR="${DUO_STATE_DIR:-/var/lib/zenbook-duo}"
 DUO_PREFIX="zenbook-duo"

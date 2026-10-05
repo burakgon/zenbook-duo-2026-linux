@@ -1,6 +1,6 @@
 <div align="center">
 
-# zenbook-duo-linux
+# zenbook-duo-2026-linux
 
 ### Make the 2026 ASUS Zenbook Duo (UX8407AA) work properly on Linux.
 
@@ -19,7 +19,7 @@ one command fixes them, one command undoes it.
 
 ## What it fixes
 
-| | Plain Linux | With zenbook-duo-linux |
+| | Plain Linux | With zenbook-duo-2026-linux |
 |---|:---:|:---:|
 | 👆 **Top touchscreen and pen** | ❌ dead | ✅ works |
 | 🔊 **Speakers, microphones, headphones** | ❌ no sound on kernel 7.2 | ✅ works, with ASUS speaker tuning |
@@ -41,7 +41,7 @@ Not yet: **HDR** (comes with a library update your distribution hasn't shipped y
 ## Install
 
 ```sh
-git clone https://github.com/burakgon/zenbook-duo-linux.git && cd zenbook-duo-linux
+git clone https://github.com/burakgon/zenbook-duo-2026-linux.git && cd zenbook-duo-2026-linux
 sudo ./duo apply --recommended
 sudo reboot
 ```
@@ -53,10 +53,11 @@ After the reboot, `./duo list` should say **All modules healthy**. Changed your 
 This check is read-only and needs no root:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/burakgon/zenbook-duo-linux/main/tools/check-hardware.sh | bash
+curl -fsSL https://raw.githubusercontent.com/burakgon/zenbook-duo-2026-linux/main/tools/check-hardware.sh | bash
 ```
 
-Made for the **ASUS Zenbook Duo UX8407AA** (Intel Core Ultra Series 3) on **Arch / CachyOS** with **KDE Plasma** (Wayland).
+Made for the **2026 ASUS Zenbook Duo, model UX8407AA** (Intel Core Ultra Series 3) on **Arch / CachyOS** with **KDE Plasma** (Wayland).
+**Not for the older Zenbook Duo models** (UX8406 from 2024/2025, UX481/UX482): they use different hardware, and the fixes refuse to install there.
 Most fixes also work on other distributions and desktops; see [compatibility](#kernel-and-distribution-compatibility).
 
 ## Details

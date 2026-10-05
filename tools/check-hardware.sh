@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# check-hardware.sh - is zenbook-duo-linux for this machine? Read-only, no root needed.
-#   curl -fsSL https://raw.githubusercontent.com/burakgon/zenbook-duo-linux/main/tools/check-hardware.sh | bash
+# check-hardware.sh - is zenbook-duo-2026-linux for this machine? Read-only, no root needed.
+#   curl -fsSL https://raw.githubusercontent.com/burakgon/zenbook-duo-2026-linux/main/tools/check-hardware.sh | bash
 set -u
 
 if [[ -t 1 ]]; then G=$'\e[32m' Y=$'\e[33m' R=$'\e[31m' B=$'\e[1m' N=$'\e[0m'; else G="" Y="" R="" B="" N=""; fi
@@ -11,7 +11,7 @@ bad() { printf '  %s✗%s %-22s %s\n' "$R" "$N" "$1" "$2"; fail=1; }
 dmi() { cat "/sys/class/dmi/id/$1" 2>/dev/null; }
 pci() { [[ -n "$(lspci -d "$1" 2>/dev/null)" ]] || grep -qi "${1/:/.*}" /sys/bus/pci/devices/*/uevent 2>/dev/null; }
 
-printf '%szenbook-duo-linux hardware check%s\n' "$B" "$N"
+printf '%szenbook-duo-2026-linux hardware check%s\n' "$B" "$N"
 
 board="$(dmi board_name)"
 if [[ "$(dmi sys_vendor)" == ASUS* && $board == UX8407* ]]; then
@@ -79,4 +79,4 @@ if ((fail)); then
 	printf '%sThis repository is not written for this machine.%s\n' "$R" "$N"
 	exit 1
 fi
-printf '%sThis repository is for you.%s Next: git clone https://github.com/burakgon/zenbook-duo-linux && cd zenbook-duo-linux && ./duo list\n' "$G" "$N"
+printf '%sThis repository is for you.%s Next: git clone https://github.com/burakgon/zenbook-duo-2026-linux && cd zenbook-duo-2026-linux && ./duo list\n' "$G" "$N"
