@@ -35,6 +35,7 @@ one command fixes them, one command undoes it.
 | 📶 **Wi-Fi responsiveness** | ⚠️ lag spikes up to 158 ms | ✅ 7 ms when plugged in |
 | 🔋 **Idle power** | ⚠️ several devices never power down | ✅ idle devices power down |
 | 🩺 **After kernel updates** | ⚠️ fixes can silently stop working | ✅ you get told |
+| 📊 **Power draw in the panel** | ❌ only a battery percentage | ✅ live watts, where they go, temperatures, power mode |
 
 Already fine on plain Linux: sleep (about 0.9% battery per hour with the lid closed), the bottom touchscreen and pen, Wi-Fi 7, Bluetooth, webcam, NPU and video acceleration.
 Not yet: **HDR** (comes with a library update your distribution hasn't shipped yet), **VRR** (broken in the kernel for now).
@@ -143,7 +144,7 @@ Run `sudo ./duo apply` from your desktop user's shell: `desktop-kde-duo` builds 
 </details>
 
 <details>
-<summary><b>📦 The 15 modules</b></summary>
+<summary><b>📦 The 16 modules</b></summary>
 
 | Module | What it changes | Kernels |
 |---|---|---|
@@ -161,6 +162,7 @@ Run `sudo ./duo apply` from your desktop user's shell: `desktop-kde-duo` builds 
 | `power-runtime-pm` | udev: runtime PM for PCI devices that ship without it | all |
 | `power-tpm-rng` | udev: fTPM not used as a hardware RNG | all |
 | `wifi-powersave-ac` | udev + NetworkManager dispatcher: Wi-Fi power save follows AC | all |
+| `desktop-power-widget` | KDE panel widget: live power draw, breakdown (RAPL), temperatures, fans, power mode | KDE Plasma |
 | `system-health` | pacman hook after kernel updates + one check per login; notifies only when a fix is not active | all |
 
 `./duo list` marks modules that your running kernel doesn't need as "n/a".

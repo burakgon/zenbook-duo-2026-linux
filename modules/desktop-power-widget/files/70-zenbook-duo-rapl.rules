@@ -1,0 +1,4 @@
+# zenbook-duo-2026-linux (desktop-power-widget): let administrators (group wheel) read the
+# processor's RAPL energy counters for the power widget's breakdown. They stay unreadable
+# for other users (power side-channel, CVE-2020-8694).
+ACTION=="add", SUBSYSTEM=="powercap", KERNEL=="intel-rapl:0*", RUN+="/usr/bin/chgrp wheel /sys%p/energy_uj", RUN+="/usr/bin/chmod 0440 /sys%p/energy_uj"

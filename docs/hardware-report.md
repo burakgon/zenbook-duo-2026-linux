@@ -230,6 +230,7 @@ Measured over 30 s idle on battery: `duo-rotate`, `zenbook-duo-profile-sync` and
 - duo-rotate: dock state from udev uevents (libudev monitor + 1 s debounce) instead of a 500 ms sysfs poll; the accelerometer is claimed from iio-sensor-proxy only while the keyboard is lifted.
 - profile sync: no 60 s re-check loop; it re-applies on PPD `ActiveProfile` changes and after `PrepareForSleep(false)`, and reads the profile with `busctl` (3 ms) instead of `powerprofilesctl` (Python, about 120 ms CPU).
 - system-health: no resident process (pacman hook + one oneshot per login).
+- desktop-power-widget: a QML plugin inside plasmashell reads sysfs every 2 s (1 s while its popup is open), no helper process. Its breakdown uses RAPL `package-0`, `core` and `dram` (made readable for `wheel` by a udev rule); `psys` reads about 2x the battery drain on this model (21.6 W vs 9.9 W) and is not used.
 - Testing resume handling needs `systemctl suspend` (with an RTC alarm from `rtcwake -m no`): `rtcwake -m freeze` writes `/sys/power/state` directly and logind never emits `PrepareForSleep`.
 
 ## 7. Suspend (s2idle, 2026-10-05)
