@@ -61,12 +61,11 @@ Measured on a UX8407AA with BIOS 310, `linux-cachyos` 7.2.9 and KDE Plasma 6.7.
 | **Wi-Fi latency** (BE201) | Power save always on: 16 ms average to the router, spikes to 158 ms. | On AC: 7 ms, no spikes. On battery: power save stays on. | `wifi-powersave-ac` |
 | **Idle power** | Several PCI devices ship with runtime PM disabled; the fTPM is polled as an entropy source. | Runtime PM on (sensor hub, Wi-Fi and NVMe excluded on purpose), fTPM left alone. Idle package power 0.66–0.79 W. | `power-runtime-pm`, `power-tpm-rng` |
 
-Works without this repo: the bottom touchscreen and pen, Wi-Fi 7 (6 GHz / 320 MHz, 2.9 Gbit/s link), Bluetooth, the webcam and IR camera, NPU, GPU compute and video decode/encode.
+Works without this repo: suspend (s2idle, ~0.9% battery per hour lid closed), the bottom touchscreen and pen, Wi-Fi 7 (6 GHz / 320 MHz, 2.9 Gbit/s link), Bluetooth, the webcam and IR camera, NPU, GPU compute and video decode/encode.
 
 Not there yet:
 - **HDR:** needs libdisplay-info ≥ 0.4, which Arch doesn't ship yet; the panel puts its HDR metadata inside DisplayID 2.0.
 - **VRR:** broken upstream on Panther Lake eDP; keep it at *Never*.
-- **Suspend:** not verified yet.
 
 Details, logs and upstream references for each line: [`docs/hardware-report.md`](docs/hardware-report.md), [`docs/research-notes.md`](docs/research-notes.md).
 

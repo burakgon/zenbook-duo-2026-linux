@@ -217,7 +217,15 @@ On battery, balanced profile, browser closed, a terminal open.
 - The docked keyboard drew ~3.5 W: its battery was at 91% and charging through the pogo pins (hardware/EC behaviour, same on Windows). To be re-measured docked once the keyboard is at 100%.
 - Package 1.11 W (cores 0.06, GPU 0.04, RAM 0.30), Busy 2.3%, PC10 only 10%, S0ix 3%: open terminal sessions kept redrawing the screen. True idle is lower (earlier measurement: 0.66–0.79 W package).
 
-## 6. Module status and roadmap
+## 6. Suspend (s2idle, 2026-10-05)
+
+- 6 h 2 min lid-closed sleep on 7.2.9, keyboard docked: clean entry and resume (Wi-Fi back after 6 s). Battery 88% → 82%, about 0.9%/h or 0.8–0.9 W, in line with Windows Modern Standby.
+- Residency (PMC counters): S0i2.1 for practically the whole sleep, package C10 throughout; **S0i2.2 never**. `/sys/power/suspend_stats/last_hw_sleep` read only 258 s because that 32-bit microsecond counter wraps every ~71.6 min; use `pmc_core/substate_residencies` instead.
+- With `pmc_core/lpm_latch_mode` set to `S0i2.1`, the S0i2.2-only requirements still unmet at S0i2.1 entry are `AON2_OFF`, `AON5_OFF`, `XTAL_AGGR_OFF` and `SOC_PLL_OFF`: the crystal and an always-on domain stay up.
+- 60 s `rtcwake -m freeze` tests, each still 0 s of S0i2.2: keyboard docked; keyboard detached; Wi-Fi + Bluetooth blocked (`rfkill`); sensor hub driver removed (`intel_ish_ipc`); MEI drivers removed (`mei_gsc_proxy`, `mei_me`, `mei`).
+- `pmc_core/s0ix_blocker` deltas over a sleep point at the CSE (Intel ME): `CSE_PGD0_PG_STS`, `CSE_VNN_REQ_STS` and `CSMERTC_VNN_REQ_STS` keep counting even with the MEI drivers unloaded. The CSE firmware keeps its domain powered by itself; nothing on the Linux side controls it. Whether Windows reaches S0i2.2 on this model is not known.
+
+## 7. Module status and roadmap
 
 | Priority | Module / item | Status |
 |---|---|---|
@@ -239,7 +247,7 @@ On battery, balanced profile, browser closed, a terminal open.
 | P2 | `display-dsc-10bit`: 10-bit via DSC | ✅ bpp 18 → 30, PR SU stays on, no power cost (4.95 / 4.78 W) |
 | P2 | HDR | 🔜 waits for libdisplay-info 0.4.0 in Arch (section 3.1.5) |
 | P2 | `asus-screenpad`: disable the bogus backlight (+ upstream patch) | 🔜 |
-| P2 | Suspend: s2idle validation, S0i2.x | 🔜 not yet tested; s2idle is the default, deep (S3) is also listed |
+| P2 | Suspend: s2idle validation, S0i2.x | ✅ works, ~0.9%/h; S0i2.1 only, S0i2.2 blocked by CSE firmware (section 6) |
 | P2 | Battery charge limit | 🔜 `charge_control_end_threshold`=100 (80% can be selected in KDE power settings) |
 | P3 | `camera-ir-howdy`: IR face recognition; `presence`: lock when walking away | 🔜 |
 | P3 | `audio-speaker-eq`: speaker EQ (PipeWire filter-chain) | 🔜 |
