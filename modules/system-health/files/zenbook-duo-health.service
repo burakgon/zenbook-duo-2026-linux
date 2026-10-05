@@ -1,0 +1,13 @@
+[Unit]
+Description=Zenbook Duo: health check after login (notifies only on problems)
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+# let the desktop settle first; a sleeping process costs nothing
+ExecStartPre=/usr/bin/sleep 20
+ExecStart=/usr/lib/zenbook-duo/duo-health --login
+
+[Install]
+WantedBy=graphical-session.target

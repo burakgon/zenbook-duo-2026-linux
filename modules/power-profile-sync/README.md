@@ -9,7 +9,7 @@ Makes the "Power Save" profile really save power (quiet fans, low-power SoC, GPU
 - power-profiles-daemon does not manage the Xe GPU's power profile at all.
 
 ## What it changes
-- Installs `/usr/lib/zenbook-duo/zenbook-duo-profile-sync` and `/etc/systemd/system/zenbook-duo-profile-sync.service`, then enables and starts the service. It watches the active profile over D-Bus (and re-checks once a minute) and writes:
+- Installs `/usr/lib/zenbook-duo/zenbook-duo-profile-sync` and `/etc/systemd/system/zenbook-duo-profile-sync.service`, then enables and starts the service. It watches the active profile over D-Bus and re-applies after every resume (no periodic wakeups), and writes:
   - power-saver: `asus-wmi` = `quiet`, SoC slider = `low-power`, Xe GPU `power_profile` = `power_saving`
   - balanced / performance: both handlers = the same name, Xe GPU = `base`
 - Installs the drop-in `/etc/systemd/system/power-profiles-daemon.service.d/50-zenbook-duo-block-platform-profile.conf`, which starts power-profiles-daemon with `--block-driver=platform_profile`. Apply stops with an error if another drop-in already sets `ExecStart`.

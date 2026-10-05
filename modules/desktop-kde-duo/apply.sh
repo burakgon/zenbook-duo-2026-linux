@@ -10,7 +10,7 @@ build="$(mktemp -d)"
 /usr/lib/qt6/moc "$MOD_DIR/src/duo-rotate.cpp" -o "$build/duo-rotate.moc"
 # shellcheck disable=SC2046
 g++ -std=c++20 -O2 -fPIC "$MOD_DIR/src/duo-rotate.cpp" -o "$build/duo-rotate" -I"$build" -I/usr/include/KF6/KScreen \
-	$(pkg-config --cflags --libs Qt6Gui Qt6DBus) -lKF6Screen || die "duo-rotate build failed"
+	$(pkg-config --cflags --libs Qt6Gui Qt6DBus libudev) -lKF6Screen || die "duo-rotate build failed"
 duo_install_file "$build/duo-rotate" /usr/lib/zenbook-duo/duo-rotate 0755
 rm -rf "$build"
 duo_install_file "$MOD_DIR/files/kwin-output-prefs" /usr/lib/zenbook-duo/kwin-output-prefs 0755

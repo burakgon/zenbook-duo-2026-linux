@@ -86,6 +86,13 @@ More generally, there are 279 display commits between 7.2 and 7.3-rc5, and sever
 - ALPM / LOBF: aux-less ALPM is enabled; LOBF is off (not needed with Panel Replay).
 - Known open bugs for this model: xe #7764 (booting with the keyboard docked → eDP-2 flip_done timeout, LOBF), #9196 (re-enabling eDP-2 can lock up PHY B, "PHY B failed to request refclk"; recovers only after a full power cut), #8392. Any Duo display manager must therefore handle eDP-2 carefully.
 
+#### 3.1.7 Bottom panel (eDP-2) lost after a docked boot
+
+Two other UX8407AA projects investigated xe #7764 / #9196 in depth (not reproduced on this machine yet; the journal of earlier boots was lost to the old 50 MB journald limit):
+- [zenbook-duo-omarchy](https://github.com/scrambletools/zenbook-duo-omarchy) (`reference/xe-bug-report/report.md`, 7.1.9): powering on with the keyboard docked fails the first eDP-2 enable in 9 of 9 boots with `PHY B failed to request refclk`, `Failed to bring PHY B to idle`, then `[CRTC pipe B] flip_done timed out`; every later commit touching pipe B stalls 10 s and shutdown takes about a minute. The state survives warm reboots; only a full power reset (charger out, hold power 15 s) clears it. A second trigger is an eDP-2 modeset interrupted by shutdown.
+- [zenbook-duo26-Ubuntu26.04](https://github.com/therealarnold666/zenbook-duo26-Ubuntu26.04) (`XE_EDP2_KEYBOARD_AB_REPORT.md`, `UX8407AA_KERNEL_AND_RUNTIME_FIXES_2026-07-27.md`): with all their userspace masked, docked boots give `AUX B/DDI B/PHY B: timeout (status 0x7c7c023f)` and `Failed to read DPCD register 0x60`; at the failure the PHY B clock control reads `0xa0008400` against `0xf0008400` on the healthy PHY A (requests set, PLL/refclk acknowledgements missing). Their kernel patch (`patches/kernel/0001-ux8407aa-port-b-tcss-power-and-diagnostics.patch`, 7.2-rc4 base) requests TCSS power before C20 PLL programming on Port B; validated over multiple cold boots. Turning off PSR/Panel Replay, DSB, power-well variants and link retrain did not fix it for them.
+- What this repo does (`desktop-kde-duo`): dock changes debounced for 1 s, no eDP-2 enable during shutdown (`PreparingForShutdown`), and a kernel-log check (`journalctl -k -b -g`) at start and 12 s after each enable; on a hit the panel stays off for the boot and the user gets a notification with the power-reset steps. `./duo doctor` reports the same patterns as a FAIL. The README asks to power on with the keyboard lifted.
+
 ### 3.2 Touchscreens and orientation
 
 #### 3.2.1 Top touchscreen bound to the wrong driver (`touchscreen-hid`)
@@ -217,7 +224,15 @@ On battery, balanced profile, browser closed, a terminal open.
 - The docked keyboard drew ~3.5 W: its battery was at 91% and charging through the pogo pins (hardware/EC behaviour, same on Windows). To be re-measured docked once the keyboard is at 100%.
 - Package 1.11 W (cores 0.06, GPU 0.04, RAM 0.30), Busy 2.3%, PC10 only 10%, S0ix 3%: open terminal sessions kept redrawing the screen. True idle is lower (earlier measurement: 0.66–0.79 W package).
 
-## 6. Suspend (s2idle, 2026-10-05)
+## 6. Background services and battery (2026-10-05)
+
+Measured over 30 s idle on battery: `duo-rotate`, `zenbook-duo-profile-sync` and its two `gdbus monitor` children all had 0 context switches and 0 CPU ticks.
+- duo-rotate: dock state from udev uevents (libudev monitor + 1 s debounce) instead of a 500 ms sysfs poll; the accelerometer is claimed from iio-sensor-proxy only while the keyboard is lifted.
+- profile sync: no 60 s re-check loop; it re-applies on PPD `ActiveProfile` changes and after `PrepareForSleep(false)`, and reads the profile with `busctl` (3 ms) instead of `powerprofilesctl` (Python, about 120 ms CPU).
+- system-health: no resident process (pacman hook + one oneshot per login).
+- Testing resume handling needs `systemctl suspend` (with an RTC alarm from `rtcwake -m no`): `rtcwake -m freeze` writes `/sys/power/state` directly and logind never emits `PrepareForSleep`.
+
+## 7. Suspend (s2idle, 2026-10-05)
 
 - 6 h 2 min lid-closed sleep on 7.2.9, keyboard docked: clean entry and resume (Wi-Fi back after 6 s). Battery 88% → 82%, about 0.9%/h or 0.8–0.9 W, in line with Windows Modern Standby.
 - Residency (PMC counters): S0i2.1 for practically the whole sleep, package C10 throughout; **S0i2.2 never**. `/sys/power/suspend_stats/last_hw_sleep` read only 258 s because that 32-bit microsecond counter wraps every ~71.6 min; use `pmc_core/substate_residencies` instead.
@@ -225,7 +240,7 @@ On battery, balanced profile, browser closed, a terminal open.
 - 60 s `rtcwake -m freeze` tests, each still 0 s of S0i2.2: keyboard docked; keyboard detached; Wi-Fi + Bluetooth blocked (`rfkill`); sensor hub driver removed (`intel_ish_ipc`); MEI drivers removed (`mei_gsc_proxy`, `mei_me`, `mei`).
 - `pmc_core/s0ix_blocker` deltas over a sleep point at the CSE (Intel ME): `CSE_PGD0_PG_STS`, `CSE_VNN_REQ_STS` and `CSMERTC_VNN_REQ_STS` keep counting even with the MEI drivers unloaded. The CSE firmware keeps its domain powered by itself; nothing on the Linux side controls it. Whether Windows reaches S0i2.2 on this model is not known.
 
-## 7. Module status and roadmap
+## 8. Module status and roadmap
 
 | Priority | Module / item | Status |
 |---|---|---|
@@ -247,7 +262,7 @@ On battery, balanced profile, browser closed, a terminal open.
 | P2 | `display-dsc-10bit`: 10-bit via DSC | ✅ bpp 18 → 30, PR SU stays on, no power cost (4.95 / 4.78 W) |
 | P2 | HDR | 🔜 waits for libdisplay-info 0.4.0 in Arch (section 3.1.5) |
 | P2 | `asus-screenpad`: disable the bogus backlight (+ upstream patch) | 🔜 |
-| P2 | Suspend: s2idle validation, S0i2.x | ✅ works, ~0.9%/h; S0i2.1 only, S0i2.2 blocked by CSE firmware (section 6) |
+| P2 | Suspend: s2idle validation, S0i2.x | ✅ works, ~0.9%/h; S0i2.1 only, S0i2.2 blocked by CSE firmware (section 7) |
 | P2 | Battery charge limit | 🔜 `charge_control_end_threshold`=100 (80% can be selected in KDE power settings) |
 | P3 | `camera-ir-howdy`: IR face recognition; `presence`: lock when walking away | 🔜 |
 | P3 | `audio-speaker-eq`: speaker EQ (PipeWire filter-chain) | 🔜 |

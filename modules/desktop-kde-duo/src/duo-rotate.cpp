@@ -11,10 +11,19 @@
 //
 // Behaviour:
 //  * keyboard docked over USB (0b05:1cd7), i.e. lying on the bottom panel: laptop
-//    posture, bottom panel disabled; lifted off: bottom panel enabled again;
+//    posture, bottom panel disabled; lifted off: bottom panel enabled again. Dock
+//    changes come from udev (no polling) and count once stable for DOCK_STABLE_MS;
 //  * otherwise follow iio-sensor-proxy, but only after an orientation has been
-//    stable for STABLE_MS;
-//  * after any output change (ours, KWin's or the user's) re-apply touch mapping.
+//    stable for STABLE_MS. The accelerometer is only claimed while undocked, so
+//    the sensor hub can stay idle when the posture is fixed anyway;
+//  * after any output change (ours, KWin's or the user's), a re-added input device
+//    or a resume, re-apply touch mapping;
+//  * eDP-2 wedge (xe #7764 / #9196): booting with the keyboard docked can leave the
+//    bottom panel's PHY without refclk; every later modeset of pipe B then stalls.
+//    The bottom panel is never re-enabled while the system shuts down, and after
+//    each enable (and at start) the kernel log is checked for the wedge; if found,
+//    the panel stays off for the rest of the boot and the user is told how to
+//    recover (full power reset).
 //
 // The accelerometer carries a mount matrix (modules/sensors-accel-mount) so its
 // orientation is expressed in the top panel's frame: laptop upright = bottom-up.
@@ -27,18 +36,26 @@
 #include <KScreen/SetConfigOperation>
 #include <QDBusConnection>
 #include <QDBusInterface>
+#include <QDBusMessage>
 #include <QDBusReply>
 #include <QDBusVariant>
 #include <QDir>
 #include <QFile>
 #include <QGuiApplication>
+#include <QProcess>
+#include <QSocketNotifier>
 #include <QTimer>
 #include <iostream>
+#include <libudev.h>
 
 using Rotation = KScreen::Output::Rotation;
 
 static constexpr int STABLE_MS = 1000;   // orientation must hold this long
 static constexpr int TOUCH_DELAY_MS = 400; // let KWin finish its own reset first
+static constexpr int DOCK_STABLE_MS = 1000; // dock state must hold this long (pogo pins bounce)
+static constexpr int WEDGE_CHECK_MS = 12000; // pipe B flip_done times out after 10 s
+static const QString WEDGE_PATTERN = QStringLiteral(
+    "PHY B failed|DDI BUF B|pipe B\\] flip_done timed out|AUX B/DDI B/PHY B: timeout|Failed to read DPCD register 0x60");
 static const QString TOP = QStringLiteral("eDP-1");
 static const QString BOTTOM = QStringLiteral("eDP-2");
 
@@ -104,27 +121,39 @@ public:
         m_touch.setInterval(TOUCH_DELAY_MS);
         connect(&m_touch, &QTimer::timeout, this, [this] { applyTouch(); });
 
-        m_dockPoll.setInterval(500);
-        connect(&m_dockPoll, &QTimer::timeout, this, [this] {
-            const bool d = keyboardDocked();
-            if (d != m_docked) {
-                m_docked = d;
-                log(QStringLiteral("keyboard %1").arg(d ? QStringLiteral("docked") : QStringLiteral("detached")));
-                m_dockChanged = true;
-                applyRotation();
-            }
-        });
+        // Dock changes: USB add/remove uevents restart a debounce timer; the state is
+        // read once it has been quiet for DOCK_STABLE_MS. No periodic wakeups.
+        m_dockStable.setSingleShot(true);
+        m_dockStable.setInterval(DOCK_STABLE_MS);
+        connect(&m_dockStable, &QTimer::timeout, this, [this] { dockCheck(); });
+        m_udev = udev_new();
+        m_udevMon = m_udev ? udev_monitor_new_from_netlink(m_udev, "udev") : nullptr;
+        if (m_udevMon && udev_monitor_filter_add_match_subsystem_devtype(m_udevMon, "usb", "usb_device") == 0
+            && udev_monitor_enable_receiving(m_udevMon) == 0) {
+            auto *sn = new QSocketNotifier(udev_monitor_get_fd(m_udevMon), QSocketNotifier::Read, this);
+            connect(sn, &QSocketNotifier::activated, this, [this] {
+                while (udev_device *dev = udev_monitor_receive_device(m_udevMon))
+                    udev_device_unref(dev);
+                m_dockStable.start();
+            });
+        } else {
+            log(QStringLiteral("udev monitor unavailable, checking the dock every 2 s"));
+            auto *poll = new QTimer(this);
+            connect(poll, &QTimer::timeout, this, [this] { dockCheck(); });
+            poll->start(2000);
+        }
         m_docked = keyboardDocked();
-        m_dockPoll.start();
 
         auto sys = QDBusConnection::systemBus();
         m_sensor = new QDBusInterface(QStringLiteral("net.hadess.SensorProxy"), QStringLiteral("/net/hadess/SensorProxy"),
                                       QStringLiteral("net.hadess.SensorProxy"), sys, this);
-        m_sensor->call(QStringLiteral("ClaimAccelerometer"));
         sys.connect(QStringLiteral("net.hadess.SensorProxy"), QStringLiteral("/net/hadess/SensorProxy"),
                     QStringLiteral("org.freedesktop.DBus.Properties"), QStringLiteral("PropertiesChanged"), this,
                     SLOT(sensorChanged(QString, QVariantMap, QStringList)));
-        m_orientation = m_sensor->property("AccelerometerOrientation").toString();
+        claimAccelerometer(!m_docked);
+        sys.connect(QStringLiteral("org.freedesktop.login1"), QStringLiteral("/org/freedesktop/login1"),
+                    QStringLiteral("org.freedesktop.login1.Manager"), QStringLiteral("PrepareForShutdown"), this,
+                    SLOT(prepareForShutdown(bool)));
 
         // KWin forgets a touchscreen's orientation whenever the device is re-added, e.g.
         // when i2c-hid re-probes on resume, without any output change: remap then too.
@@ -147,7 +176,16 @@ public:
                     [this] { m_touch.start(); });
             m_dockChanged = true; // enforce the panel state once at startup
             applyRotation();
+            checkWedge(); // the login screen may already have wedged pipe B
         });
+    }
+
+    ~Daemon() override
+    {
+        if (m_udevMon)
+            udev_monitor_unref(m_udevMon);
+        if (m_udev)
+            udev_unref(m_udev);
     }
 
 public Q_SLOTS:
@@ -158,8 +196,11 @@ public Q_SLOTS:
         if (!sleeping) {
             log(QStringLiteral("resumed"));
             m_touch.start();
+            m_dockStable.start(); // the keyboard may have been docked or lifted while asleep
         }
     }
+
+    void prepareForShutdown(bool stopping) { m_shuttingDown = stopping; }
 
     void sensorChanged(const QString &, const QVariantMap &changed, const QStringList &)
     {
@@ -171,6 +212,79 @@ public Q_SLOTS:
     }
 
 private:
+    void dockCheck()
+    {
+        const bool d = keyboardDocked();
+        if (d == m_docked)
+            return;
+        m_docked = d;
+        log(QStringLiteral("keyboard %1").arg(d ? QStringLiteral("docked") : QStringLiteral("detached")));
+        claimAccelerometer(!d);
+        m_dockChanged = true;
+        applyRotation();
+    }
+
+    // iio-sensor-proxy only polls the accelerometer while a client holds a claim.
+    void claimAccelerometer(bool claim)
+    {
+        if (claim == m_claimed)
+            return;
+        m_claimed = claim;
+        m_sensor->call(claim ? QStringLiteral("ClaimAccelerometer") : QStringLiteral("ReleaseAccelerometer"));
+        if (claim)
+            m_orientation = m_sensor->property("AccelerometerOrientation").toString();
+    }
+
+    bool shuttingDown()
+    {
+        if (m_shuttingDown)
+            return true;
+        QDBusInterface login(QStringLiteral("org.freedesktop.login1"), QStringLiteral("/org/freedesktop/login1"),
+                             QStringLiteral("org.freedesktop.login1.Manager"), QDBusConnection::systemBus());
+        return login.property("PreparingForShutdown").toBool();
+    }
+
+    // Look for the eDP-2 wedge in this boot's kernel log (async, cheap: runs only at
+    // start and after the bottom panel is enabled).
+    void checkWedge()
+    {
+        if (m_wedged)
+            return;
+        auto *p = new QProcess(this);
+        connect(p, &QProcess::finished, this, [this, p] {
+            const QString hit = QString::fromUtf8(p->readAllStandardOutput()).trimmed();
+            p->deleteLater();
+            if (hit.isEmpty() || m_wedged)
+                return;
+            m_wedged = true;
+            log(QStringLiteral("eDP-2 wedge in the kernel log: ") + hit);
+            for (const auto &o : m_config ? m_config->outputs() : KScreen::OutputList()) {
+                if (o->name() == BOTTOM && o->isEnabled()) {
+                    o->setEnabled(false);
+                    new KScreen::SetConfigOperation(m_config);
+                    log(QStringLiteral("bottom panel off for the rest of this boot"));
+                }
+            }
+            notify(QStringLiteral("Bottom screen stopped responding"),
+                   QStringLiteral("The display driver lost the bottom panel (known kernel bug, usually after powering on with the "
+                                  "keyboard lying on it). It stays off until a full power reset: shut down, unplug the charger, "
+                                  "hold the power button for 15 s, wait a minute, then power on with the keyboard lifted off."));
+        });
+        p->start(QStringLiteral("journalctl"), {QStringLiteral("-k"), QStringLiteral("-b"), QStringLiteral("-o"), QStringLiteral("cat"),
+                                                QStringLiteral("--no-pager"), QStringLiteral("-n"), QStringLiteral("1"),
+                                                QStringLiteral("-g"), qEnvironmentVariable("DUO_ROTATE_WEDGE_PATTERN", WEDGE_PATTERN)});
+    }
+
+    void notify(const QString &summary, const QString &body)
+    {
+        QDBusMessage m = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.Notifications"),
+                                                        QStringLiteral("/org/freedesktop/Notifications"),
+                                                        QStringLiteral("org.freedesktop.Notifications"), QStringLiteral("Notify"));
+        QVariantMap hints{{QStringLiteral("urgency"), QVariant::fromValue<uchar>(2)}};
+        m << QStringLiteral("Zenbook Duo") << 0u << QStringLiteral("video-display") << summary << body << QStringList() << hints << 0;
+        QDBusConnection::sessionBus().call(m, QDBus::NoBlock);
+    }
+
     void applyRotation()
     {
         if (!m_config)
@@ -205,12 +319,20 @@ private:
 
         // The keyboard covers the bottom panel when docked. Only act on dock
         // transitions so a manual choice in System Settings sticks until then.
+        bool enabledBottom = false;
         if (b && m_dockChanged) {
             m_dockChanged = false;
             if (b->isEnabled() == m_docked) {
-                b->setEnabled(!m_docked);
-                changed = true;
-                log(QStringLiteral("bottom panel %1").arg(m_docked ? QStringLiteral("off") : QStringLiteral("on")));
+                if (!m_docked && m_wedged) {
+                    log(QStringLiteral("bottom panel stays off: eDP-2 wedged this boot"));
+                } else if (!m_docked && shuttingDown()) {
+                    log(QStringLiteral("bottom panel stays off: system is shutting down"));
+                } else {
+                    b->setEnabled(!m_docked);
+                    enabledBottom = !m_docked;
+                    changed = true;
+                    log(QStringLiteral("bottom panel %1").arg(m_docked ? QStringLiteral("off") : QStringLiteral("on")));
+                }
             }
         }
 
@@ -249,6 +371,8 @@ private:
                 .arg(TOP, QString::fromLatin1(name(top)), BOTTOM, QString::fromLatin1(name(bottom))));
         auto *op = new KScreen::SetConfigOperation(m_config);
         connect(op, &KScreen::SetConfigOperation::finished, this, [this] { m_touch.start(); });
+        if (enabledBottom)
+            QTimer::singleShot(WEDGE_CHECK_MS, this, [this] { checkWedge(); });
     }
 
     // Map each touchscreen/pen to its panel. The top digitizer reports upright
@@ -293,7 +417,12 @@ private:
     QString m_orientation;
     bool m_docked = false;
     bool m_dockChanged = false;
-    QTimer m_stable, m_touch, m_dockPoll;
+    bool m_claimed = false;
+    bool m_shuttingDown = false;
+    bool m_wedged = false;
+    udev *m_udev = nullptr;
+    udev_monitor *m_udevMon = nullptr;
+    QTimer m_stable, m_touch, m_dockStable;
 };
 
 int main(int argc, char **argv)

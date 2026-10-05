@@ -1,0 +1,69 @@
+#!/bin/bash
+# duo-health (zenbook-duo-2026-linux, module system-health)
+#   --kernels  after a kernel install/upgrade (pacman hook): are the DKMS fixes built for
+#              every installed kernel? Prints to the pacman output.
+#   --login    once per login (user service): are sound, sensors and the keyboard fix
+#              actually working? Sends a desktop notification for each problem, else silent.
+set -u
+STATE=/var/lib/zenbook-duo/modules
+applied() { [[ -f $STATE/$1/applied ]]; }
+say() { printf 'zenbook-duo: %s\n' "$*"; }
+
+kernels() {
+	local k ver all73=1
+	for k in /usr/lib/modules/*/vmlinuz; do
+		[[ -e $k ]] || continue
+		ver="$(basename "$(dirname "$k")")"
+		[[ $ver =~ ^7\.([3-9]|[1-9][0-9])\. || $ver =~ ^([89]|[1-9][0-9])\. ]] || all73=0
+		if applied keyboard-hid-asus; then
+			if [[ $ver =~ ^7\.[23]\. ]]; then
+				dkms status -m zenbook-duo-hid-asus -k "$ver" 2>/dev/null | grep -q installed ||
+					say "$ver: keyboard fix (hid-asus) did not build; see: dkms status, sudo ./duo apply keyboard-hid-asus"
+			else
+				say "$ver: no keyboard fix for this kernel series (sources for 7.2/7.3 only): backlight and some Fn keys fall back to stock hid-asus"
+			fi
+		fi
+		if applied audio-ghost-rt722 && [[ $ver =~ ^7\.2\. ]]; then
+			dkms status -m zenbook-duo-soundwire-intel -k "$ver" 2>/dev/null | grep -q installed ||
+				say "$ver: audio fix (soundwire-intel) did not build: no sound on this kernel; see: dkms status"
+		fi
+	done
+	if applied audio-ghost-rt722 && ((all73)); then
+		say "every installed kernel has the upstream audio fix now: 'sudo ./duo revert audio-ghost-rt722' is safe"
+	fi
+	return 0
+}
+
+notify() {
+	notify-send --app-name="Zenbook Duo" --urgency=critical --icon=dialog-warning "$1" "$2" 2>/dev/null || say "$1: $2"
+}
+
+login() {
+	local i ver problems=0
+	ver="$(uname -r)"
+	# give drivers that load late (sound card, sensor hub) time to come up
+	for i in $(seq 30); do grep -q sofsoundwire /proc/asound/cards 2>/dev/null && break; sleep 1; done
+	if ! grep -q sofsoundwire /proc/asound/cards 2>/dev/null; then
+		notify "No sound card" "The internal speakers and microphones did not come up on kernel $ver. Run ./duo doctor in the zenbook-duo-2026-linux folder."
+		problems=1
+	fi
+	if applied sensors-ish-firmware && ! grep -qx accel_3d /sys/bus/iio/devices/iio:device*/name 2>/dev/null; then
+		notify "Sensors missing" "No accelerometer: auto-rotation will not work. Run ./duo doctor."
+		problems=1
+	fi
+	if applied keyboard-hid-asus && ls -d /sys/bus/hid/devices/0003:0B05:1CD7.* >/dev/null 2>&1; then
+		local d bound=0
+		for d in /sys/bus/hid/devices/0003:0B05:1CD7.*; do
+			[[ "$(basename "$(readlink "$d/driver" 2>/dev/null)")" == asus ]] && bound=1
+		done
+		((bound)) || { notify "Keyboard fix not active" "The docked keyboard is not on the patched hid-asus driver (kernel $ver): backlight and Fn keys may not work."; problems=1; }
+	fi
+	((problems)) || say "login health check: all fine"
+	return 0
+}
+
+case "${1:-}" in
+--kernels) kernels ;;
+--login) login ;;
+*) echo "usage: duo-health --kernels|--login" >&2; exit 2 ;;
+esac

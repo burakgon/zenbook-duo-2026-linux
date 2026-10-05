@@ -34,6 +34,7 @@ one command fixes them, one command undoes it.
 | 🤫 **Quiet / battery-saver mode** | ⚠️ does nothing | ✅ quiet fans, lower power |
 | 📶 **Wi-Fi responsiveness** | ⚠️ lag spikes up to 158 ms | ✅ 7 ms when plugged in |
 | 🔋 **Idle power** | ⚠️ several devices never power down | ✅ idle devices power down |
+| 🩺 **After kernel updates** | ⚠️ fixes can silently stop working | ✅ you get told |
 
 Already fine on plain Linux: sleep (about 0.9% battery per hour with the lid closed), the bottom touchscreen and pen, Wi-Fi 7, Bluetooth, webcam, NPU and video acceleration.
 Not yet: **HDR** (comes with a library update your distribution hasn't shipped yet), **VRR** (broken in the kernel for now).
@@ -47,6 +48,21 @@ sudo reboot
 ```
 
 After the reboot, `./duo list` should say **All modules healthy**. Changed your mind? `sudo ./duo revert --all` puts everything back.
+
+> [!IMPORTANT]
+> **Power the laptop on with the keyboard lifted off the bottom screen.** Booting with the keyboard lying on it can trigger a kernel bug that loses the bottom screen until a full power reset ([details](#if-the-bottom-screen-stays-black)). Docking it after the desktop is up is fine.
+
+## If the bottom screen stays black
+
+A known kernel bug (xe #7764 / #9196): when the laptop powers on with the keyboard on the bottom screen, the display driver can lose that panel. It stays black, windows can freeze for a few seconds, shutdown takes a minute, and a normal reboot does not bring it back.
+
+`desktop-kde-duo` notices this, keeps the bottom screen off for the rest of that boot and shows a notification. To recover:
+
+1. Shut down, unplug the charger.
+2. Hold the power button for 15 seconds, wait a minute.
+3. Power on **with the keyboard lifted off**.
+
+`./duo doctor` reports it as a FAIL line. A kernel-side fix exists as a proposal ([TCSS power request before PHY B setup](https://github.com/therealarnold666/zenbook-duo26-Ubuntu26.04/tree/main/patches/kernel)); it is not upstream yet.
 
 ## Is this for my laptop?
 
@@ -127,7 +143,7 @@ Run `sudo ./duo apply` from your desktop user's shell: `desktop-kde-duo` builds 
 </details>
 
 <details>
-<summary><b>📦 The 14 modules</b></summary>
+<summary><b>📦 The 15 modules</b></summary>
 
 | Module | What it changes | Kernels |
 |---|---|---|
@@ -145,6 +161,7 @@ Run `sudo ./duo apply` from your desktop user's shell: `desktop-kde-duo` builds 
 | `power-runtime-pm` | udev: runtime PM for PCI devices that ship without it | all |
 | `power-tpm-rng` | udev: fTPM not used as a hardware RNG | all |
 | `wifi-powersave-ac` | udev + NetworkManager dispatcher: Wi-Fi power save follows AC | all |
+| `system-health` | pacman hook after kernel updates + one check per login; notifies only when a fix is not active | all |
 
 `./duo list` marks modules that your running kernel doesn't need as "n/a".
 
@@ -161,6 +178,10 @@ journalctl -k -b --no-pager | grep -E 'PSR idle state|DSB|FIFO underrun|Pageflip
 ```
 
 If you had to force a reboot, the previous boot's log still has it: `journalctl -b -1 -k`. Please open an issue with the output.
+
+Known patterns:
+- `Timed out waiting for PSR Idle for re-enable` or `pipe A] flip_done timed out`: a Panel Replay hang on the top screen, reported on 7.1/7.2 by other UX8407AA users. Fallback: add `xe.enable_panel_replay=0 xe.enable_psr=1` to the kernel command line.
+- `PHY B failed`, `AUX B/DDI B/PHY B: timeout` or `pipe B] flip_done timed out`: the bottom-screen bug, see [above](#if-the-bottom-screen-stays-black).
 
 One freeze while pressing the brightness keys was seen on 7.2.9 and not reproduced since. The kernel kept logging through it, so the display stack hung, not the kernel. No PSR, DSB or I²C errors were logged.
 
@@ -272,6 +293,7 @@ Reports and measurements from other UX8407AA units are very welcome. `./duo scan
 - Charles Keepax (Cirrus Logic) for the ghost-RT722 SoundWire quirk for this model.
 - [asus-expertbook-linux](https://github.com/burakgon/asus-expertbook-linux), the sister project for the ExpertBook Ultra on the same platform: the power-profiles-daemon snap-back fix and the freeze runbook come from there.
 - [Omarchy](https://github.com/basecamp/omarchy) for its Panther Lake hardware notes.
+- [zenbook-duo-omarchy](https://github.com/scrambletools/zenbook-duo-omarchy) and [zenbook-duo26-Ubuntu26.04](https://github.com/therealarnold666/zenbook-duo26-Ubuntu26.04), the Omarchy and Ubuntu projects for the same laptop: their bottom-screen (eDP-2) investigations, recovery recipe and Panel Replay findings. Do not install them together with this repo: the Ubuntu project's touchscreen calibration matrix breaks touch under KWin, and both drive the same displays.
 
 ## License
 

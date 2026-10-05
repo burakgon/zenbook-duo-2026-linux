@@ -1,0 +1,12 @@
+# zenbook-duo-2026-linux (system-health): after a kernel update, say whether the
+# DKMS fixes were built for it. Runs after the DKMS install hook (70-*).
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Path
+Target = usr/lib/modules/*/vmlinuz
+
+[Action]
+Description = Checking zenbook-duo fixes for the installed kernels...
+When = PostTransaction
+Exec = /usr/lib/zenbook-duo/duo-health --kernels

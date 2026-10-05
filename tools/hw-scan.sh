@@ -269,7 +269,13 @@ health_summary() {
 	# Display
 	t="$(grep -c 'DSB 0 poll error' <<<"$k")"
 	((t == 0)) && pass "No xe DSB poll errors" || warn "xe DSB poll errors: $t"
-	grep -q -E "vblank wait timed out|Timed out waiting PSR idle|flip_done timed out" <<<"$k" && fail "xe vblank/PSR/flip timeouts present (risk of hang on suspend/modeset)"
+	# Bottom panel (eDP-2, pipe B / PHY B) wedge, xe #7764 / #9196: usually after powering on
+	# with the keyboard lying on the bottom screen. Only a full power reset clears it.
+	if grep -q -E "PHY B failed|DDI BUF B|pipe B\] flip_done timed out|AUX B/DDI B/PHY B: timeout|Failed to read DPCD register 0x60" <<<"$k"; then
+		fail "Bottom panel (eDP-2) wedged this boot: full power reset needed (unplug charger, hold power 15 s), then power on with the keyboard lifted"
+	fi
+	grep -q -i -E "vblank wait timed out|Timed out waiting (for )?PSR idle|pipe A\] flip_done timed out|DSB [0-9]+ timed out waiting for idle" <<<"$k" &&
+		fail "xe vblank/PSR/flip/DSB timeouts on the top panel (risk of hang on suspend/modeset; fallback: xe.enable_panel_replay=0 xe.enable_psr=1)"
 	grep -q "plane .* fault" <<<"$k" && warn "xe plane faults present"
 	# bpp of every active pipe (inactive pipes report bpp=0, e.g. while the screen is blanked)
 	t="$(as_root awk '/^\[CRTC/{a=0} /uapi: enable=yes, active=yes/{a=1} a && /pipe src=/{match($0,/bpp=[0-9]+/); print substr($0,RSTART+4,RLENGTH-4)}' \
