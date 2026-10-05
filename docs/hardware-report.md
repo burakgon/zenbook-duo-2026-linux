@@ -112,7 +112,7 @@ duo-rotate (`modules/desktop-kde-duo/src/duo-rotate.cpp`) is a Qt/libkscreen use
 
 - while the keyboard is docked over USB (0b05:1cd7), the laptop layout is fixed and the bottom panel is turned off; when undocked, the iio-sensor-proxy orientation is applied once it has been stable for ≥1 s;
 - top = sensor orientation (inverted/none/left/right), bottom = top + 180°; panels are stacked vertically or side by side according to the hinge;
-- touch and pen mapping (top orientation 8, bottom 0) is reapplied after every layout change;
+- touch and pen mapping (top orientation 8, bottom 0) is reapplied after every layout change, whenever KWin re-adds an input device, and after every resume. On resume i2c-hid re-probes the touchscreens and KWin re-adds them with the default orientation without any output change, which left the top panel's touch 180° off (seen after s2idle tests on 2026-10-05);
 - KWin's own auto-rotation is disabled (policy Never).
 
 Verified on hardware: laptop layout, upright (book) mode and touch. Not yet implemented: posture detection from the hinge sensor.

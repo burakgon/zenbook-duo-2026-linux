@@ -12,7 +12,7 @@ Makes KDE Plasma (Wayland) handle the two screens properly: correct rotation, la
 - Builds `duo-rotate` from `src/duo-rotate.cpp` and installs it as `/usr/lib/zenbook-duo/duo-rotate`, with the user unit `/etc/systemd/user/zenbook-duo-rotate.service`. duo-rotate:
   - while the keyboard is docked over USB (`0b05:1cd7`): laptop layout, bottom panel off; lifted off: bottom panel back on
   - otherwise follows the sensor once the orientation has been stable for 1 s; bottom panel = top + 180 degrees, stacked or side by side according to the hinge
-  - reapplies touch and pen mapping after every screen change, and sets KWin's own auto-rotation to Never
+  - reapplies touch and pen mapping after every screen change, whenever KWin re-adds an input device and after every resume (KWin resets the top touchscreen's orientation when i2c-hid re-probes it on resume), and sets KWin's own auto-rotation to Never
 - Installs `/usr/lib/zenbook-duo/kwin-output-prefs` and the user unit `/etc/systemd/user/zenbook-duo-kwin-output-prefs.service`. Before KWin starts, it sets `allowSdrSoftwareBrightness=false` for `eDP-2` in `~/.config/kwinoutputconfig.json`, so one slider and the brightness keys drive both panels' hardware backlights.
 - Both user units are enabled for every user (`systemctl --global`). Log out and back in to start them.
 
