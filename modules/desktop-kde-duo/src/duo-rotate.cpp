@@ -61,6 +61,12 @@ static const QString BOTTOM = QStringLiteral("eDP-2");
 
 static void log(const QString &s) { std::cerr << "duo-rotate: " << s.toStdString() << std::endl; }
 
+static int readSys(const QString &path)
+{
+    QFile f(path);
+    return f.open(QIODevice::ReadOnly) ? f.readAll().trimmed().toInt() : -1;
+}
+
 static bool keyboardDocked()
 {
     const QDir usb(QStringLiteral("/sys/bus/usb/devices"));
@@ -177,6 +183,7 @@ public:
             m_dockChanged = true; // enforce the panel state once at startup
             applyRotation();
             checkWedge(); // the login screen may already have wedged pipe B
+            QTimer::singleShot(3000, this, [this] { syncBottomBrightness(); });
         });
     }
 
@@ -197,6 +204,7 @@ public Q_SLOTS:
             log(QStringLiteral("resumed"));
             m_touch.start();
             m_dockStable.start(); // the keyboard may have been docked or lifted while asleep
+            QTimer::singleShot(3000, this, [this] { syncBottomBrightness(); });
         }
     }
 
@@ -273,6 +281,27 @@ private:
         p->start(QStringLiteral("journalctl"), {QStringLiteral("-k"), QStringLiteral("-b"), QStringLiteral("-o"), QStringLiteral("cat"),
                                                 QStringLiteral("--no-pager"), QStringLiteral("-n"), QStringLiteral("1"),
                                                 QStringLiteral("-g"), qEnvironmentVariable("DUO_ROTATE_WEDGE_PATTERN", WEDGE_PATTERN)});
+    }
+
+    // When eDP-2 is enabled again its backlight comes back at maximum (firmware), while
+    // PowerDevil only writes both backlights when the brightness changes. Copy the top
+    // panel's level over, through logind (allowed for the active session, no root).
+    void syncBottomBrightness()
+    {
+        const QString top = QStringLiteral("/sys/class/backlight/intel_backlight/"),
+                      bottom = QStringLiteral("/sys/class/backlight/card0-eDP-2-backlight/");
+        const int t = readSys(top + QStringLiteral("brightness")), tmax = readSys(top + QStringLiteral("max_brightness")),
+                  b = readSys(bottom + QStringLiteral("brightness")), bmax = readSys(bottom + QStringLiteral("max_brightness"));
+        if (t < 0 || tmax <= 0 || b < 0 || bmax <= 0)
+            return;
+        const uint target = uint(qint64(t) * bmax / tmax);
+        if (uint(b) == target)
+            return;
+        QDBusMessage m = QDBusMessage::createMethodCall(QStringLiteral("org.freedesktop.login1"), QStringLiteral("/org/freedesktop/login1/session/auto"),
+                                                        QStringLiteral("org.freedesktop.login1.Session"), QStringLiteral("SetBrightness"));
+        m << QStringLiteral("backlight") << QStringLiteral("card0-eDP-2-backlight") << target;
+        QDBusConnection::systemBus().call(m, QDBus::NoBlock);
+        log(QStringLiteral("bottom panel brightness %1 -> %2 (top %3/%4)").arg(b).arg(target).arg(t).arg(tmax));
     }
 
     void notify(const QString &summary, const QString &body)
@@ -371,8 +400,12 @@ private:
                 .arg(TOP, QString::fromLatin1(name(top)), BOTTOM, QString::fromLatin1(name(bottom))));
         auto *op = new KScreen::SetConfigOperation(m_config);
         connect(op, &KScreen::SetConfigOperation::finished, this, [this] { m_touch.start(); });
-        if (enabledBottom)
+        if (enabledBottom) {
             QTimer::singleShot(WEDGE_CHECK_MS, this, [this] { checkWedge(); });
+            // after the modeset, and once more in case the firmware resets it late
+            QTimer::singleShot(1500, this, [this] { syncBottomBrightness(); });
+            QTimer::singleShot(5000, this, [this] { syncBottomBrightness(); });
+        }
     }
 
     // Map each touchscreen/pen to its panel. The top digitizer reports upright

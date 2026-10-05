@@ -14,6 +14,7 @@ Makes KDE Plasma (Wayland) handle the two screens properly: correct rotation, la
   - otherwise follows the sensor once the orientation has been stable for 1 s; bottom panel = top + 180 degrees, stacked or side by side according to the hinge. The accelerometer is only claimed while the keyboard is lifted, so the sensor hub idles while docked
   - reapplies touch and pen mapping after every screen change, whenever KWin re-adds an input device and after every resume (KWin resets the top touchscreen's orientation when i2c-hid re-probes it), and sets KWin's own auto-rotation to Never
   - guards the bottom panel against the eDP-2 kernel bug (xe #7764 / #9196): never re-enables it while the system shuts down, and checks the kernel log at start and after each enable; on a hit it keeps the panel off for the rest of the boot and shows a notification with the power-reset steps
+  - copies the top panel's brightness to the bottom panel after enabling it (the firmware brings eDP-2 back at maximum brightness) and after resume, through logind's `SetBrightness` (no root)
   - idle cost: no periodic wakeups (measured 0 wakeups in 30 s)
 - Installs `/usr/lib/zenbook-duo/kwin-output-prefs` and the user unit `/etc/systemd/user/zenbook-duo-kwin-output-prefs.service`. Before KWin starts, it sets `allowSdrSoftwareBrightness=false` for `eDP-2` in `~/.config/kwinoutputconfig.json`, so one slider and the brightness keys drive both panels' hardware backlights.
 - Both user units are enabled for every user (`systemctl --global`). Log out and back in to start them.

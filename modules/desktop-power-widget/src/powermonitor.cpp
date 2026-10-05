@@ -195,7 +195,7 @@ private:
             m_socWatts = std::max(0.0, m_packageWatts - m_coreWatts);
         }
         if (m_onBattery) {
-            m_totalWatts = smooth(m_totalWatts, batW);
+            m_totalWatts = batW; // the fuel gauge already averages (updates about every 10 s)
             m_restWatts = m_raplAvailable ? std::max(0.0, m_totalWatts - m_packageWatts - m_memoryWatts) : -1;
         } else {
             m_totalWatts = -1; // not measurable on AC

@@ -230,6 +230,8 @@ Measured over 30 s idle on battery: `duo-rotate`, `zenbook-duo-profile-sync` and
 - duo-rotate: dock state from udev uevents (libudev monitor + 1 s debounce) instead of a 500 ms sysfs poll; the accelerometer is claimed from iio-sensor-proxy only while the keyboard is lifted.
 - profile sync: no 60 s re-check loop; it re-applies on PPD `ActiveProfile` changes and after `PrepareForSleep(false)`, and reads the profile with `busctl` (3 ms) instead of `powerprofilesctl` (Python, about 120 ms CPU).
 - system-health: no resident process (pacman hook + one oneshot per login).
+- Bottom panel cost, measured A/B with the keyboard docked (same keyboard charging state): eDP-2 on 11.0 W, off 9.1 W, so about 1.9 W at maximum brightness. The panel came back at 504/504 while the top panel was at 363/504: after eDP-2 is enabled again its backlight resets to maximum, and PowerDevil only writes both backlights on a brightness change. duo-rotate now copies the top level to eDP-2 after enabling it and after resume.
+- The battery fuel gauge (`BAT0/power_now`) updates about every 10 s and averages internally; short spikes do not show.
 - desktop-power-widget: a QML plugin inside plasmashell reads sysfs every 2 s (1 s while its popup is open), no helper process. Its breakdown uses RAPL `package-0`, `core` and `dram` (made readable for `wheel` by a udev rule); `psys` reads about 2x the battery drain on this model (21.6 W vs 9.9 W) and is not used.
 - Testing resume handling needs `systemctl suspend` (with an RTC alarm from `rtcwake -m no`): `rtcwake -m freeze` writes `/sys/power/state` directly and logind never emits `PrepareForSleep`.
 
