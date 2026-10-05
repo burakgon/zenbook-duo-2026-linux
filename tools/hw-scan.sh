@@ -216,8 +216,10 @@ fail() { printf '[FAIL] %s\n' "$*" | tee -a "$SUM"; }
 
 health_summary() {
 	local k drv t mmio_pl1
-	# the kernel log: dmesg needs root on most systems, the journal usually does not
-	k="$(as_root dmesg 2>/dev/null || journalctl -k -b -o cat --no-pager 2>/dev/null)"
+	# the whole boot's kernel log: the journal keeps early boot messages (calibration, firmware
+	# loads) that the dmesg ring buffer drops after a long uptime; dmesg is the fallback
+	k="$(journalctl -k -b -o cat --no-pager 2>/dev/null)"
+	[[ -n $k ]] || k="$(as_root dmesg 2>/dev/null)"
 	echo "Zenbook Duo health summary - kernel $KREL - $(date -Is)" >"$SUM"
 
 	grep -q "UX8407AA" /sys/class/dmi/id/product_name && pass "Model: $(cat /sys/class/dmi/id/product_name), BIOS $(cat /sys/class/dmi/id/bios_version)" ||
