@@ -2,46 +2,67 @@
 
 # zenbook-duo-linux
 
-**Linux support for the 2026 ASUS Zenbook Duo (UX8407AA)**: Intel Core Ultra Series 3 "Panther Lake",
-two 14" 2880×1800 OLED panels and a detachable keyboard. Every fix is a small module that you can
-apply, check and revert with one command.
+### Make the 2026 ASUS Zenbook Duo (UX8407AA) work properly on Linux.
+
+Touchscreens, sound, rotation, both screens, brightness, keyboard, battery and performance:
+one command fixes them, one command undoes it.
 
 [![License: GPL-2.0](https://img.shields.io/badge/license-GPL--2.0-c4b5fd?style=flat-square)](LICENSE)
 [![Linux 7.2+](https://img.shields.io/badge/linux-7.2%2B-86efac?style=flat-square)](#kernel-and-distribution-compatibility)
-[![Hardware](https://img.shields.io/badge/hardware-UX8407AA-fbbf24?style=flat-square)](#is-this-repo-for-me)
-[![No kernel rebuild](https://img.shields.io/badge/kernel%20rebuild-not%20required-86efac?style=flat-square)](#how-it-works)
+[![Hardware](https://img.shields.io/badge/hardware-UX8407AA-fbbf24?style=flat-square)](#is-this-for-my-laptop)
+[![No kernel rebuild](https://img.shields.io/badge/kernel%20rebuild-not%20required-86efac?style=flat-square)](#faq)
 [![Arch / CachyOS](https://img.shields.io/badge/distro-Arch%20%7C%20CachyOS-7dd3fc?style=flat-square)](#kernel-and-distribution-compatibility)
-
-[**Is this repo for me?**](#is-this-repo-for-me) ·
-[**Before / after**](#before--after) ·
-[**Quick install**](#quick-install) ·
-[**If the desktop freezes**](#if-the-desktop-freezes) ·
-[**FAQ**](#faq)
 
 </div>
 
 ---
 
-## Is this repo for me?
+## What it fixes
 
-Run this. It is read-only and needs no root:
+| | Plain Linux | With zenbook-duo-linux |
+|---|:---:|:---:|
+| 👆 **Top touchscreen and pen** | ❌ dead | ✅ works |
+| 🔊 **Speakers, microphones, headphones** | ❌ no sound on kernel 7.2 | ✅ works, with ASUS speaker tuning |
+| 🔄 **Auto-rotate and the two-screen layout** | ❌ upside down, touch breaks | ✅ follows how you hold it |
+| ⌨️ **Keyboard lying on the bottom screen** | ⚠️ bottom screen stays on | ✅ turns off, back on when lifted |
+| 🔆 **Screen brightness** | ❌ slider does nothing | ✅ one slider, both screens |
+| 🎨 **Colour** | ⚠️ 6-bit with dithering | ✅ 10-bit |
+| 🖱️ **Mouse cursor on the top screen** | ❌ ghost copies stay behind | ✅ clean |
+| 💡 **Keyboard backlight and Fn keys** | ❌ backlight stuck, most keys dead when attached | ✅ work, attached and on Bluetooth |
+| 🧭 **Rotation, light and hinge sensors** | ❌ missing | ✅ work |
+| 🚀 **Performance** | ⚠️ capped at 20 W | ✅ Windows power limits (up to 64 W) |
+| 🤫 **Quiet / battery-saver mode** | ⚠️ does nothing | ✅ quiet fans, lower power |
+| 📶 **Wi-Fi responsiveness** | ⚠️ lag spikes up to 158 ms | ✅ 7 ms when plugged in |
+| 🔋 **Idle power** | ⚠️ several devices never power down | ✅ idle devices power down |
+
+Already fine on plain Linux: sleep (about 0.9% battery per hour with the lid closed), the bottom touchscreen and pen, Wi-Fi 7, Bluetooth, webcam, NPU and video acceleration.
+Not yet: **HDR** (comes with a library update your distribution hasn't shipped yet), **VRR** (broken in the kernel for now).
+
+## Install
+
+```sh
+git clone https://github.com/burakgon/zenbook-duo-linux.git && cd zenbook-duo-linux
+sudo ./duo apply --recommended
+sudo reboot
+```
+
+After the reboot, `./duo list` should say **All modules healthy**. Changed your mind? `sudo ./duo revert --all` puts everything back.
+
+## Is this for my laptop?
+
+This check is read-only and needs no root:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/burakgon/zenbook-duo-linux/main/tools/check-hardware.sh | bash
 ```
 
-| Check | Expected | Why it matters |
-|---|---|---|
-| Model (DMI) | `ASUS Zenbook Duo UX8407AA` | Modules refuse other boards (`DUO_FORCE=1` overrides) |
-| CPU | Intel Core Ultra Series 3 (Panther Lake, family 6 model 204) | `xe` display, ISH, power tables |
-| Touchscreens | ACPI `RAYD0001` (top) and `RAYD0002` (bottom) | `touchscreen-hid`, touch mapping |
-| Audio | SoundWire, PCI subsystem `1043:1444`: CS42L43 + 2× CS35L56 | `audio-ghost-rt722` matches this board |
-| Sensor hub | Intel ISH `8086:e445` | Needs ASUS's signed firmware for rotation and ambient light |
-| Keyboard | ASUS `0b05:1cd7` (USB, docked) / `0b05:1cd8` (Bluetooth) | `keyboard-hid-asus` |
-| Distribution | Arch, CachyOS or another Arch derivative | `pacman`/DKMS helpers; config-only modules work anywhere |
-| Desktop | KDE Plasma 6 on Wayland | `desktop-kde-duo` (all other modules are desktop-independent) |
+Made for the **ASUS Zenbook Duo UX8407AA** (Intel Core Ultra Series 3) on **Arch / CachyOS** with **KDE Plasma** (Wayland).
+Most fixes also work on other distributions and desktops; see [compatibility](#kernel-and-distribution-compatibility).
 
-## Before / after
+## Details
+
+<details>
+<summary><b>🔬 What exactly was wrong, and how each fix works</b></summary>
 
 Measured on a UX8407AA with BIOS 310, `linux-cachyos` 7.2.9 and KDE Plasma 6.7.
 
@@ -69,31 +90,43 @@ Not there yet:
 
 Details, logs and upstream references for each line: [`docs/hardware-report.md`](docs/hardware-report.md), [`docs/research-notes.md`](docs/research-notes.md).
 
-## Quick install
+</details>
+
+<details>
+<summary><b>🧪 What the hardware check looks for</b></summary>
+
+| Check | Expected | Why it matters |
+|---|---|---|
+| Model (DMI) | `ASUS Zenbook Duo UX8407AA` | Modules refuse other boards (`DUO_FORCE=1` overrides) |
+| CPU | Intel Core Ultra Series 3 (Panther Lake, family 6 model 204) | `xe` display, ISH, power tables |
+| Touchscreens | ACPI `RAYD0001` (top) and `RAYD0002` (bottom) | `touchscreen-hid`, touch mapping |
+| Audio | SoundWire, PCI subsystem `1043:1444`: CS42L43 + 2× CS35L56 | `audio-ghost-rt722` matches this board |
+| Sensor hub | Intel ISH `8086:e445` | Needs ASUS's signed firmware for rotation and ambient light |
+| Keyboard | ASUS `0b05:1cd7` (USB, docked) / `0b05:1cd8` (Bluetooth) | `keyboard-hid-asus` |
+| Distribution | Arch, CachyOS or another Arch derivative | `pacman`/DKMS helpers; config-only modules work anywhere |
+| Desktop | KDE Plasma 6 on Wayland | `desktop-kde-duo` (all other modules are desktop-independent) |
+
+</details>
+
+<details>
+<summary><b>🛠️ Using duo: pick, check and undo single fixes</b></summary>
 
 ```sh
-git clone https://github.com/burakgon/zenbook-duo-linux.git
-cd zenbook-duo-linux
-./duo list                       # every module: needed here? applied? healthy?
-sudo ./duo apply --recommended   # all default modules
-sudo reboot
-./duo doctor                     # whole-machine PASS / WARN / FAIL summary
-```
-
-Run `sudo ./duo apply` from your desktop user's shell. `desktop-kde-duo` builds a small Qt program and enables per-user services for every user.
-
-### Or pick modules
-
-```sh
+./duo list                                   # every fix: needed here? applied? healthy?
 ./duo info power-dtt                         # what it does and why
-sudo ./duo apply touchscreen-hid power-dtt
-./duo status                                 # health check of every module
+sudo ./duo apply touchscreen-hid power-dtt   # apply only some
+./duo status                                 # health check of every fix
 sudo ./duo revert power-dtt                  # undo exactly what it changed
-sudo ./duo revert --all
+./duo doctor                                 # whole-machine PASS / WARN / FAIL summary
 ./duo scan --acpi                            # full hardware snapshot (serials, MACs, SSIDs redacted)
 ```
 
-## Modules
+Run `sudo ./duo apply` from your desktop user's shell: `desktop-kde-duo` builds a small Qt program and enables per-user services.
+
+</details>
+
+<details>
+<summary><b>📦 The 14 modules</b></summary>
 
 | Module | What it changes | Kernels |
 |---|---|---|
@@ -114,7 +147,10 @@ sudo ./duo revert --all
 
 `./duo list` marks modules that your running kernel doesn't need as "n/a".
 
-## If the desktop freezes
+</details>
+
+<details>
+<summary><b>🧊 If the desktop freezes</b></summary>
 
 If the picture stops but the mouse or keyboard still respond, or a TTY still works (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>F3</kbd>), capture the state before you reboot:
 
@@ -127,7 +163,10 @@ If you had to force a reboot, the previous boot's log still has it: `journalctl 
 
 One freeze while pressing the brightness keys was seen on 7.2.9 and not reproduced since. The kernel kept logging through it, so the display stack hung, not the kernel. No PSR, DSB or I²C errors were logged.
 
-## How it works
+</details>
+
+<details>
+<summary><b>⚙️ How it works (safety, revert, snapshots)</b></summary>
 
 ```
 duo                     CLI (bash)
@@ -150,6 +189,23 @@ hardware-scan/          ACPI tables (DSDT/SSDT .dat + .dsl) and the DTT data vau
 - **Kernel command line:** a marked block in `/etc/default/limine` (then `limine-update`) or in `/etc/default/grub` (then `grub-mkconfig`).
 - **No patched distribution packages:** fixes are kernel parameters, DKMS modules, udev/hwdb rules, firmware in `/usr/lib/firmware/updates`, systemd units and small tools. Nothing replaces a file that a package owns, so system updates never fight this repo.
 
+</details>
+
+<details>
+<summary><b>📮 Upstream status</b></summary>
+
+| Item | Status |
+|---|---|
+| Ghost RT722 audio quirk | `ca02ffd4975c` in 7.3-rc1. A 7.2.y backport request together with the ExpertBook and Zephyrus Duo quirks is drafted in [asus-expertbook-linux](https://github.com/burakgon/asus-expertbook-linux/blob/main/upstream-patches/stable-request-7.2-ghost-rt722.txt). |
+| `raydium_i2c_ts` leaves HID-over-I2C devices to `i2c-hid` | [`kernel/patches/0001`](kernel/patches/), to be submitted |
+| VRR DC balance (DSB poll errors) | `c034e8a46e4c` in 7.3-rc6, `Cc: stable` ([`kernel/patches/0002`](kernel/patches/)) |
+| Panel Replay Early Transport ghost cursor | to be reported to drm/xe |
+| `hid-asus` Zenbook Duo keyboard support | to be submitted |
+| HDR (DisplayID 2.0 HDR metadata) | fixed in libdisplay-info 0.4.0; Arch packaging update pending |
+| KDE: one backlight per built-in panel | KDE bug 525717 |
+
+</details>
+
 ## Kernel and distribution compatibility
 
 | | 7.2.x | 7.3.x | 7.4+ |
@@ -161,18 +217,6 @@ hardware-scan/          ACPI tables (DSDT/SSDT .dat + .dsl) and the DTT data vau
 `./duo status` after a kernel update tells you whether every fix is still active.
 
 Arch and Arch-based distributions (tested on CachyOS) get everything. On Debian, Ubuntu or Fedora, the config-only modules apply as they are (`touchscreen-hid`, `sensors-*`, `display-*`, `power-runtime-pm`, `power-tpm-rng`, `wifi-powersave-ac`, `power-profile-sync`). The modules that install packages call `pacman`, and the cmdline helper supports Limine and GRUB.
-
-## Upstream status
-
-| Item | Status |
-|---|---|
-| Ghost RT722 audio quirk | `ca02ffd4975c` in 7.3-rc1. A 7.2.y backport request together with the ExpertBook and Zephyrus Duo quirks is drafted in [asus-expertbook-linux](https://github.com/burakgon/asus-expertbook-linux/blob/main/upstream-patches/stable-request-7.2-ghost-rt722.txt). |
-| `raydium_i2c_ts` leaves HID-over-I2C devices to `i2c-hid` | [`kernel/patches/0001`](kernel/patches/), to be submitted |
-| VRR DC balance (DSB poll errors) | `c034e8a46e4c` in 7.3-rc6, `Cc: stable` ([`kernel/patches/0002`](kernel/patches/)) |
-| Panel Replay Early Transport ghost cursor | to be reported to drm/xe |
-| `hid-asus` Zenbook Duo keyboard support | to be submitted |
-| HDR (DisplayID 2.0 HDR metadata) | fixed in libdisplay-info 0.4.0; Arch packaging update pending |
-| KDE: one backlight per built-in panel | KDE bug 525717 |
 
 ## FAQ
 
