@@ -126,6 +126,14 @@ public:
                     SLOT(sensorChanged(QString, QVariantMap, QStringList)));
         m_orientation = m_sensor->property("AccelerometerOrientation").toString();
 
+        // KWin forgets a touchscreen's orientation whenever the device is re-added, e.g.
+        // when i2c-hid re-probes on resume, without any output change: remap then too.
+        QDBusConnection::sessionBus().connect(QStringLiteral("org.kde.KWin"), QStringLiteral("/org/kde/KWin/InputDevice"),
+                                              QStringLiteral("org.kde.KWin.InputDeviceManager"), QStringLiteral("deviceAdded"), this,
+                                              SLOT(inputDeviceAdded(QString)));
+        sys.connect(QStringLiteral("org.freedesktop.login1"), QStringLiteral("/org/freedesktop/login1"),
+                    QStringLiteral("org.freedesktop.login1.Manager"), QStringLiteral("PrepareForSleep"), this, SLOT(prepareForSleep(bool)));
+
         auto *op = new KScreen::GetConfigOperation();
         connect(op, &KScreen::GetConfigOperation::finished, this, [this](KScreen::ConfigOperation *o) {
             if (o->hasError()) {
@@ -143,6 +151,16 @@ public:
     }
 
 public Q_SLOTS:
+    void inputDeviceAdded(const QString &) { m_touch.start(); }
+
+    void prepareForSleep(bool sleeping)
+    {
+        if (!sleeping) {
+            log(QStringLiteral("resumed"));
+            m_touch.start();
+        }
+    }
+
     void sensorChanged(const QString &, const QVariantMap &changed, const QStringList &)
     {
         if (!changed.contains(QStringLiteral("AccelerometerOrientation")))
@@ -256,10 +274,17 @@ private:
             } else {
                 continue;
             }
-            if (dev.property("outputName").toString() != out)
+            bool fixed = false;
+            if (dev.property("outputName").toString() != out) {
                 dev.setProperty("outputName", out);
-            if (dev.property("orientationDBus").toInt() != orient)
+                fixed = true;
+            }
+            if (dev.property("orientationDBus").toInt() != orient) {
                 dev.setProperty("orientationDBus", orient);
+                fixed = true;
+            }
+            if (fixed)
+                log(QStringLiteral("touch: %1 -> %2 orientation %3").arg(n, out).arg(orient));
         }
     }
 
