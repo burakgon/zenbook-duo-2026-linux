@@ -233,7 +233,7 @@ hardware-scan/          ACPI tables (DSDT/SSDT .dat + .dsl) and the DTT data vau
 | `raydium_i2c_ts` leaves HID-over-I2C devices to `i2c-hid` | [`kernel/patches/0001`](kernel/patches/), to be submitted |
 | VRR DC balance (DSB poll errors) | `c034e8a46e4c` in 7.3-rc6, `Cc: stable` ([`kernel/patches/0002`](kernel/patches/)) |
 | Panel Replay Early Transport ghost cursor | to be reported to drm/xe |
-| Bottom panel after a docked power-on (TCSS power for Port B) | [xe #9196](https://gitlab.freedesktop.org/drm/xe/kernel/-/issues/9196); patch in [`modules/display-edp2-tcss/dkms/patches`](modules/display-edp2-tcss/dkms/patches/), to be submitted |
+| Bottom panel after a docked power-on (TCSS power for Port B) | [xe #9196](https://gitlab.freedesktop.org/drm/xe/kernel/-/issues/9196); [RFC sent to intel-gfx / intel-xe](https://lore.kernel.org/all/20261006-ptl-port-b-tcss-v1-1-240670342cd3@gmail.com/) on 2026-10-06, carried as DKMS in `display-edp2-tcss` |
 | `hid-asus` Zenbook Duo keyboard support | to be submitted |
 | HDR (DisplayID 2.0 HDR metadata) | fixed in libdisplay-info 0.4.0; Arch packaging update pending |
 | KDE: one backlight per built-in panel | KDE bug 525717 |
