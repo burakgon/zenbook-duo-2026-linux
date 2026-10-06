@@ -1,10 +1,10 @@
 [Unit]
-Description=Zenbook Duo: KWin output preferences (bottom panel follows the hardware brightness)
-Before=plasma-kwin_wayland.service
+Description=Zenbook Duo: KWin output preferences (one brightness for both panels; login screen posture)
+Before=plasma-kwin_wayland.service plasma-login-kwin_wayland.service
 
 [Service]
 Type=oneshot
 ExecStart=/usr/lib/zenbook-duo/kwin-output-prefs
 
 [Install]
-WantedBy=plasma-kwin_wayland.service
+WantedBy=plasma-kwin_wayland.service plasma-login-kwin_wayland.service

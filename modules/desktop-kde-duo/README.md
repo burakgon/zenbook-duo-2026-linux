@@ -5,6 +5,7 @@ Makes KDE Plasma (Wayland) handle the two screens properly: correct rotation, la
 ## The problem
 - KWin's auto-rotation rotates every screen the same way, but the top panel is mounted 180 degrees from the bottom one. It does not move the panels around the hinge, resets touch orientation after every rotation (touch stops working), and reacts to every brief tilt.
 - The bottom panel stays on under the docked keyboard and keeps drawing power.
+- The Plasma login screen shows the top panel upside down (the panel is mounted rotated and the login screen keeps its own display settings).
 - KDE treats the two panel backlights as one device bound to the top panel, and gives the bottom panel an extra software-dimming slider (KDE bug 525717).
 
 ## What it changes
@@ -17,6 +18,7 @@ Makes KDE Plasma (Wayland) handle the two screens properly: correct rotation, la
   - copies the top panel's brightness to the bottom panel after enabling it (the firmware brings eDP-2 back at maximum brightness) and after resume, through logind's `SetBrightness` (no root)
   - idle cost: no periodic wakeups (measured 0 wakeups in 30 s)
 - Installs `/usr/lib/zenbook-duo/kwin-output-prefs` and the user unit `/etc/systemd/user/zenbook-duo-kwin-output-prefs.service`. Before KWin starts, it sets `allowSdrSoftwareBrightness=false` for `eDP-2` in `~/.config/kwinoutputconfig.json`, so one slider and the brightness keys drive both panels' hardware backlights.
+- The same unit runs before the Plasma login screen's KWin (`plasma-login-kwin_wayland.service`, user `plasmalogin`), which has no duo-rotate: it turns the top panel the right way up (`Rotated180`), puts the bottom panel below it and maps each touchscreen and pen to its own panel (`/var/lib/plasmalogin/.config/kwinoutputconfig.json` and `kcminputrc`). Without it the login screen is upside down.
 - Both user units are enabled for every user (`systemctl --global`). Log out and back in to start them.
 
 ## Check

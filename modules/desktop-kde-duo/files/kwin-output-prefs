@@ -1,30 +1,76 @@
 #!/usr/bin/env python3
-# zenbook-duo-linux (desktop-kde-duo): runs before KWin starts.
+# zenbook-duo-linux (desktop-kde-duo): runs before KWin starts, in the user session
+# and on the Plasma login screen.
 #
 # The xe driver exposes a backlight per panel; stock PowerDevil writes the same value
 # to both, but KWin attaches that device to eDP-1 only and gives eDP-2 a software
 # dimming slider on top. KWin has no UI or API for its per-output
 # "allowSdrSoftwareBrightness" setting, so turn it off for eDP-2 in KWin's own config
 # file: eDP-2 then has no separate slider and simply follows eDP-1's hardware level.
+#
+# The login screen (user plasmalogin) has no duo-rotate, so give it the laptop posture
+# up front: eDP-1 is mounted upside down (Rotated180), eDP-2 sits below it, and each
+# touchscreen maps to its own panel (the top digitizer needs orientation 8 once its
+# output is rotated, as duo-rotate sets in the session).
 import json
 import os
+import pwd
+import subprocess
 import sys
 
-path = os.path.join(os.environ.get("XDG_CONFIG_HOME") or os.path.expanduser("~/.config"), "kwinoutputconfig.json")
+GREETER = pwd.getpwuid(os.getuid()).pw_name == "plasmalogin"
+config_dir = os.environ.get("XDG_CONFIG_HOME") or os.path.expanduser("~/.config")
+path = os.path.join(config_dir, "kwinoutputconfig.json")
 try:
     with open(path) as f:
         config = json.load(f)
 except (OSError, ValueError):
-    sys.exit(0)  # first login: KWin creates the file, this applies from the next login
+    sys.exit(0)  # first start: KWin creates the file, this applies from the next one
 
 changed = False
-for section in config:
-    if section.get("name") != "outputs":
-        continue
-    for output in section.get("data", []):
-        if output.get("connectorName") == "eDP-2" and output.get("allowSdrSoftwareBrightness", True):
-            output["allowSdrSoftwareBrightness"] = False
-            changed = True
+
+
+def put(obj, key, value):
+    global changed
+    if obj.get(key) != value:
+        obj[key] = value
+        changed = True
+
+
+outputs = next((s.get("data", []) for s in config if s.get("name") == "outputs"), [])
+for output in outputs:
+    if output.get("connectorName") == "eDP-2":
+        put(output, "allowSdrSoftwareBrightness", False)
+
+if GREETER:
+    index = {o.get("connectorName"): i for i, o in enumerate(outputs)}
+    top, bottom = index.get("eDP-1"), index.get("eDP-2")
+    if top is not None:
+        put(outputs[top], "transform", "Rotated180")
+        put(outputs[top], "autoRotation", "Never")
+    if bottom is not None:
+        put(outputs[bottom], "transform", "Normal")
+        put(outputs[bottom], "autoRotation", "Never")
+    if top is not None and bottom is not None:
+        mode = outputs[top].get("mode") or {}
+        height = round(mode.get("height", 1800) / (outputs[top].get("scale") or 1))
+        for setup in (s for sec in config if sec.get("name") == "setups" for s in sec.get("data", [])):
+            entries = {e.get("outputIndex"): e for e in setup.get("outputs", [])}
+            if top in entries and bottom in entries:
+                put(entries[top], "position", {"x": 0, "y": 0})
+                put(entries[bottom], "position", {"x": 0, "y": height})
+
+    # touchscreens and pens: [Libinput][vendor][product][name] in kcminputrc
+    touch = {"eDP-1": ("35845", "RAYD0001:00 2386:8C05", "8"), "eDP-2": ("35846", "RAYD0002:00 2386:8C06", "0")}
+    for connector, (product, name, orientation) in touch.items():
+        if connector not in index:
+            continue
+        uuid = outputs[index[connector]].get("uuid", "")
+        for device in (name, name + " Stylus"):
+            for key, value in (("Orientation", orientation), ("OutputUuid", uuid)):
+                subprocess.run(["kwriteconfig6", "--file", os.path.join(config_dir, "kcminputrc"),
+                                "--group", "Libinput", "--group", "9094", "--group", product,
+                                "--group", device, "--key", key, value], check=False)
 
 if changed:
     tmp = path + ".zenbook-duo"
