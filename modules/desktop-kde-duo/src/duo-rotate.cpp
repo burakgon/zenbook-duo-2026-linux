@@ -21,7 +21,8 @@
 //  * eDP-2 wedge (xe #7764 / #9196): booting with the keyboard docked leaves the
 //    bottom panel's PHY without refclk; the first enable of pipe B then fails and
 //    can hang the whole machine. So after a docked power-on the bottom panel is
-//    not enabled at all for that boot (the user is told to power on with the
+//    not enabled at all for that boot, unless the patched xe from
+//    modules/display-edp2-tcss is running (the user is told to power on with the
 //    keyboard lifted), it is never re-enabled while the system shuts down, and
 //    after each enable (and at start) the kernel log is checked for the wedge; if
 //    found, the panel stays off for the rest of the boot and the user is told how
@@ -63,6 +64,14 @@ static const QString TOP = QStringLiteral("eDP-1");
 static const QString BOTTOM = QStringLiteral("eDP-2");
 
 static void log(const QString &s) { std::cerr << "duo-rotate: " << s.toStdString() << std::endl; }
+
+// The patched xe from modules/display-edp2-tcss powers eDP-2's PHY itself, so a
+// docked power-on no longer breaks the bottom panel.
+static bool xeHandlesDockedBoot()
+{
+    QFile f(QStringLiteral("/sys/module/xe/parameters/zenbook_duo_edp2_tcss"));
+    return f.open(QIODevice::ReadOnly) && f.readAll().trimmed() == "Y";
+}
 
 // Was the keyboard on the pogo pins when the machine powered on? Its first USB
 // enumeration in this boot's kernel log then comes within the first seconds.
@@ -170,8 +179,12 @@ public:
         }
         m_docked = keyboardDocked();
         m_dockedAtBoot = dockedAtBoot();
-        if (m_dockedAtBoot)
+        if (m_dockedAtBoot && xeHandlesDockedBoot()) {
+            m_dockedAtBoot = false;
+            log(QStringLiteral("powered on with the keyboard docked; patched xe powers eDP-2, bottom panel allowed"));
+        } else if (m_dockedAtBoot) {
             log(QStringLiteral("powered on with the keyboard docked: bottom panel stays off this boot"));
+        }
 
         auto sys = QDBusConnection::systemBus();
         m_sensor = new QDBusInterface(QStringLiteral("net.hadess.SensorProxy"), QStringLiteral("/net/hadess/SensorProxy"),
