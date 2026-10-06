@@ -6,6 +6,6 @@
 pkgs=(git patch pahole)
 grep -q '^CONFIG_CC_IS_CLANG=y' "/usr/lib/modules/$(uname -r)/build/.config" 2>/dev/null && pkgs+=(clang llvm lld)
 duo_pkg_install "${pkgs[@]}"
-duo_dkms_install "$MOD_DIR/dkms" zenbook-duo-xe 1.0
+duo_dkms_install "$MOD_DIR/dkms" zenbook-duo-xe 1.1
 duo_install_file "$MOD_DIR/files/zenbook-duo-xe.conf" /etc/mkinitcpio.conf.d/zenbook-duo-xe.conf
 duo_need_initramfs

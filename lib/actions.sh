@@ -137,6 +137,12 @@ duo_cmdline_add() {
 duo_dkms_install() {
 	local src="$1" name="$2" ver="$3" k
 	duo_pkg_install dkms
+	# drop other registered versions of this package (an older release of the module)
+	local old
+	for old in $(dkms status -m "$name" 2>/dev/null | sed -n "s|^$name/\([^,]*\),.*|\1|p" | sort -u); do
+		[[ $old == "$ver" ]] && continue
+		dkms remove -m "$name" -v "$old" --all >/dev/null 2>&1 && rm -rf "/usr/src/$name-$old" && ok "removed dkms $name/$old"
+	done
 	rm -rf "/usr/src/$name-$ver"
 	cp -a "$src" "/usr/src/$name-$ver"
 	dkms add -m "$name" -v "$ver" >/dev/null 2>&1 || true
