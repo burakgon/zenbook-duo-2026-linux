@@ -25,6 +25,8 @@ one command fixes them, one command undoes it.
 | 🔊 **Speakers, microphones, headphones** | ❌ no sound on kernel 7.2 | ✅ works, with ASUS speaker tuning |
 | 🔄 **Auto-rotate and the two-screen layout** | ❌ upside down, touch breaks | ✅ follows how you hold it |
 | ⌨️ **Keyboard lying on the bottom screen** | ⚠️ bottom screen stays on | ✅ turns off, back on when lifted |
+| 🧊 **Powered on with the keyboard on it** | ❌ bottom screen lost, lifting the keyboard can freeze the laptop | ✅ bottom screen works |
+| 🔐 **Login screen** | ❌ upside down | ✅ right way up, follows rotation and the keyboard |
 | 🔆 **Screen brightness** | ❌ slider does nothing | ✅ one slider, both screens |
 | 🎨 **Colour** | ⚠️ 6-bit with dithering | ✅ 10-bit |
 | 🖱️ **Mouse cursor on the top screen** | ❌ ghost copies stay behind | ✅ clean |
@@ -51,13 +53,15 @@ sudo reboot
 After the reboot, `./duo list` should say **All modules healthy**. Changed your mind? `sudo ./duo revert --all` puts everything back.
 
 > [!IMPORTANT]
-> **Power the laptop on with the keyboard lifted off the bottom screen** (restarts too). After a power-on with the keyboard lying on it, a kernel bug breaks the bottom screen, and turning it on can freeze the whole system. `desktop-kde-duo` then keeps the bottom screen off for that boot ([details](#if-the-bottom-screen-stays-black)). Docking the keyboard after the desktop is up is fine.
+> **Without `display-edp2-tcss`, power the laptop on with the keyboard lifted off the bottom screen** (restarts too). After a power-on with the keyboard lying on it, a kernel bug breaks the bottom screen, and turning it on can freeze the whole system ([details](#if-the-bottom-screen-stays-black)). `display-edp2-tcss` fixes the bug in the driver; it is applied by default.
 
 ## If the bottom screen stays black
 
-A known kernel bug (xe #7764 / #9196): when the laptop powers on (or restarts) with the keyboard on the bottom screen, the display driver cannot bring that panel up later. The first attempt to turn it on fails; it can stall windows for 10 seconds or freeze the whole system, and a normal reboot does not fix it.
+A kernel bug (xe #9196): the bottom panel's display PHY sits in the Type-C subsystem and needs that subsystem's power, which the driver never requests; only the firmware does, and only when it lights the panel at power-on, which it skips while the keyboard covers it. After such a power-on (or restart) the first attempt to turn the panel on fails; it can stall windows for 10 seconds or freeze the whole system, and a normal reboot does not fix it.
 
-`desktop-kde-duo` remembers whether the keyboard was docked at power-on. If it was, lifting the keyboard leaves the bottom screen off for that boot and shows a notification instead of turning it on. Shut down and power on with the keyboard lifted to use it again.
+**`display-edp2-tcss` fixes it:** a DKMS build of the xe driver that requests that power itself (verified: docked power-on, then lifting, docking and lifting the keyboard again, all without an error). It is rebuilt on every kernel update.
+
+Without it (for example on a kernel the patched driver did not build for), `desktop-kde-duo` remembers whether the keyboard was docked at power-on. If it was, lifting the keyboard leaves the bottom screen off for that boot and shows a notification instead of turning it on. Shut down and power on with the keyboard lifted to use it again.
 
 If the bottom screen still fails (the kernel log check below, or the notification "Bottom screen stopped responding"), it stays off for the rest of that boot. To recover:
 
@@ -93,6 +97,8 @@ Measured on a UX8407AA with BIOS 310, `linux-cachyos` 7.2.9 and KDE Plasma 6.7.
 | **Accelerometer, ambient light, hinge sensor** (Intel ISH) | No sensors at all. The ISH rejects the generic firmware, so there is no auto-rotation and no auto-brightness. | All three sensors run on ASUS's signed ISH image, downloaded from ASUS and checksum-verified. | `sensors-ish-firmware` |
 | **Rotation** | Screens upside down (the top panel is mounted 180° rotated). KWin turns both panels the same way, touch stops working after any rotation, and a brief tilt flips the screen. | Correct orientation; both panels rotate together, laid out around the hinge (laptop, tent, book). Touch and pen follow every change. Rotation waits for a 1 s stable reading. | `sensors-accel-mount`, `desktop-kde-duo` |
 | **Keyboard on the bottom screen** | The bottom panel stays on under the keyboard and keeps drawing power. | The bottom panel turns off when the keyboard docks, and back on when you lift it. | `desktop-kde-duo` |
+| **Power-on with the keyboard docked** | The firmware leaves the bottom panel's PHY (Port B, a C20 PHY inside the Type-C subsystem) unpowered and xe never requests TCSS power for it: `PHY B failed to request refclk`, then pipe B timeouts or a hard hang when the keyboard is lifted. Survives warm reboots. | xe requests TCSS power before programming the PHY clocks and releases it when the panel turns off; the bottom panel works after any power-on. | `display-edp2-tcss` |
+| **Login screen** | Top panel upside down, panels side by side, touch not mapped. | The same duo-rotate runs on the login screen: correct orientation, rotation, touch mapping, panel off under the keyboard. | `desktop-kde-duo` |
 | **Brightness** | Slider and keys change a number in sysfs, but the OLEDs don't get dimmer: the panels only take brightness over DPCD/AUX. | One slider and the brightness keys change both panels' **hardware** backlight. There is no software dimming layer. | `display-dpcd-backlight`, `desktop-kde-duo` |
 | **Colour depth** | 6-bit + dithering (`bpp=18`): 2880×1800@144 Hz doesn't fit the eDP link at 8 bpc, and the driver drops bits instead of using DSC. | 10-bit (`bpp=30`) through DSC; Panel Replay keeps working, same power. | `display-dsc-10bit` |
 | **Cursor on the top screen** | 2–3 frozen copies of the cursor stay on screen (Panel Replay *Early Transport* bug). | One cursor. Only Early Transport is off; Panel Replay Selective Update keeps saving power. | `display-psr-et-off` |
@@ -146,7 +152,7 @@ Run `sudo ./duo apply` from your desktop user's shell: `desktop-kde-duo` builds 
 </details>
 
 <details>
-<summary><b>📦 The 16 modules</b></summary>
+<summary><b>📦 The 17 modules</b></summary>
 
 | Module | What it changes | Kernels |
 |---|---|---|
@@ -154,10 +160,11 @@ Run `sudo ./duo apply` from your desktop user's shell: `desktop-kde-duo` builds 
 | `audio-ghost-rt722` | DKMS `soundwire-intel` with the upstream ghost-RT722 quirk (ca02ffd4975c) | 7.2.x |
 | `sensors-ish-firmware` | ASUS-signed ISH firmware in `/usr/lib/firmware/updates` | all |
 | `sensors-accel-mount` | hwdb accelerometer mount matrix (panels mounted 180°) | all |
-| `desktop-kde-duo` | `duo-rotate` user service (rotation, hinge layout, touch mapping, keyboard dock) + one brightness slider for both panels | KDE Plasma |
+| `desktop-kde-duo` | `duo-rotate` user service, also on the login screen (rotation, hinge layout, touch mapping, keyboard dock) + one brightness slider for both panels | KDE Plasma |
 | `display-dpcd-backlight` | `xe.enable_dpcd_backlight=1` | all |
 | `display-psr-et-off` | Panel Replay Early Transport off (debugfs bit at boot) | all |
 | `display-dsc-10bit` | Forces DSC on both panels for 10 bpc (debugfs at boot) | all |
+| `display-edp2-tcss` | DKMS `xe` that requests Type-C subsystem power for the bottom panel (xe #9196), built from the running kernel's own sources | 7.x |
 | `keyboard-hid-asus` | DKMS `hid-asus`: Duo IDs, 16-byte feature reports, hotkey descriptor fix, Fn-lock, mic-mute LED | 7.2.x, 7.3.x |
 | `power-dtt` | `thermald --adaptive` with the BIOS's DTT tables | all |
 | `power-profile-sync` | Maps power-profiles-daemon profiles onto asus-wmi, the SoC slider and the Xe GPU | all |
@@ -226,6 +233,7 @@ hardware-scan/          ACPI tables (DSDT/SSDT .dat + .dsl) and the DTT data vau
 | `raydium_i2c_ts` leaves HID-over-I2C devices to `i2c-hid` | [`kernel/patches/0001`](kernel/patches/), to be submitted |
 | VRR DC balance (DSB poll errors) | `c034e8a46e4c` in 7.3-rc6, `Cc: stable` ([`kernel/patches/0002`](kernel/patches/)) |
 | Panel Replay Early Transport ghost cursor | to be reported to drm/xe |
+| Bottom panel after a docked power-on (TCSS power for Port B) | [xe #9196](https://gitlab.freedesktop.org/drm/xe/kernel/-/issues/9196); patch in [`modules/display-edp2-tcss/dkms/patches`](modules/display-edp2-tcss/dkms/patches/), to be submitted |
 | `hid-asus` Zenbook Duo keyboard support | to be submitted |
 | HDR (DisplayID 2.0 HDR metadata) | fixed in libdisplay-info 0.4.0; Arch packaging update pending |
 | KDE: one backlight per built-in panel | KDE bug 525717 |
@@ -238,6 +246,7 @@ hardware-scan/          ACPI tables (DSDT/SSDT .dat + .dsl) and the DTT data vau
 |---|---|---|---|
 | `audio-ghost-rt722` | DKMS, rebuilt on every kernel update | n/a (fixed upstream) | n/a |
 | `keyboard-hid-asus` | DKMS (7.2 source) | DKMS (7.3 source) | needs a new source until upstream |
+| `display-edp2-tcss` | DKMS (kernel's own source + patch) | DKMS | DKMS, as long as the patch applies |
 | everything else | ✅ | ✅ | ✅ |
 
 `./duo status` after a kernel update tells you whether every fix is still active.
@@ -249,7 +258,7 @@ Arch and Arch-based distributions (tested on CachyOS) get everything. On Debian,
 <details>
 <summary><b>Do I have to rebuild the kernel?</b></summary>
 
-No. Two modules use DKMS (`audio-ghost-rt722` on 7.2.x only, `keyboard-hid-asus`), which rebuilds them automatically on kernel updates. Everything else is configuration.
+No. Three modules use DKMS (`audio-ghost-rt722` on 7.2.x only, `keyboard-hid-asus`, `display-edp2-tcss`), which rebuilds them automatically on kernel updates. `display-edp2-tcss` downloads the running kernel's own graphics driver sources (a few MB) for each build. Everything else is configuration.
 </details>
 
 <details>
