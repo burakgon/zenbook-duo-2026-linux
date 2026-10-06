@@ -27,6 +27,10 @@ kernels() {
 			dkms status -m zenbook-duo-soundwire-intel -k "$ver" 2>/dev/null | grep -q installed ||
 				say "$ver: audio fix (soundwire-intel) did not build: no sound on this kernel; see: dkms status"
 		fi
+		if applied display-edp2-tcss && [[ $ver =~ ^7\. ]]; then
+			dkms status -m zenbook-duo-xe -k "$ver" 2>/dev/null | grep -q installed ||
+				say "$ver: bottom-screen fix (patched xe) did not build: power on with the keyboard lifted on this kernel; see: dkms status zenbook-duo-xe"
+		fi
 	done
 	if applied audio-ghost-rt722 && ((all73)); then
 		say "every installed kernel has the upstream audio fix now: 'sudo ./duo revert audio-ghost-rt722' is safe"
