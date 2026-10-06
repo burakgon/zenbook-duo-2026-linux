@@ -1,0 +1,11 @@
+[Unit]
+Description=Zenbook Duo: remember whether the keyboard was docked at power-on
+Before=display-manager.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/zenbook-duo/boot-dock
+
+[Install]
+WantedBy=multi-user.target

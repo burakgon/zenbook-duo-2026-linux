@@ -1,0 +1,7 @@
+#!/bin/sh
+# zenbook-duo-linux (desktop-kde-duo): record whether the keyboard was docked at
+# power-on, for duo-rotate (it also runs on the login screen, which cannot read the
+# kernel log). Docked = its first USB enumeration within 20 s of boot.
+t="$(dmesg 2>/dev/null | sed -n 's/^\[ *\([0-9.]*\)\].*idProduct=1cd7.*/\1/p' | head -n1)"
+mkdir -p /run/zenbook-duo
+if [ -n "$t" ] && awk -v t="$t" 'BEGIN { exit !(t < 20) }'; then echo 1; else echo 0; fi >/run/zenbook-duo/docked-at-boot

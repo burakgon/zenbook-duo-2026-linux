@@ -1,10 +1,13 @@
 # shellcheck shell=bash
-# KDE Plasma (Wayland) integration, as per-user services for every user:
+# KDE Plasma (Wayland) integration, as per-user services for every user, including the
+# Plasma login screen (user plasmalogin):
 #  * duo-rotate: follows the accelerometer (after it is stable for 1 s), rotates the two
 #    panels 180 degrees apart (the top panel is mounted upside down), lays them out
 #    around the hinge, maps each touchscreen/pen to its panel after every output change,
 #    and turns the bottom panel off while the keyboard is docked on it (USB 0b05:1cd7);
-#  * kwin-output-prefs: one brightness slider drives both panels' hardware backlights.
+#  * kwin-output-prefs: one brightness slider drives both panels' hardware backlights;
+#  * boot-dock (system, at boot): records whether the keyboard was docked at power-on
+#    in /run/zenbook-duo for duo-rotate, which cannot read the kernel log on the login screen.
 duo_pkg_install gcc pkgconf qt6-base libkscreen python
 build="$(mktemp -d)"
 /usr/lib/qt6/moc "$MOD_DIR/src/duo-rotate.cpp" -o "$build/duo-rotate.moc"
@@ -16,6 +19,9 @@ rm -rf "$build"
 duo_install_file "$MOD_DIR/files/kwin-output-prefs" /usr/lib/zenbook-duo/kwin-output-prefs 0755
 duo_install_file "$MOD_DIR/files/zenbook-duo-rotate.service" /etc/systemd/user/zenbook-duo-rotate.service
 duo_install_file "$MOD_DIR/files/zenbook-duo-kwin-output-prefs.service" /etc/systemd/user/zenbook-duo-kwin-output-prefs.service
+duo_install_file "$MOD_DIR/files/boot-dock" /usr/lib/zenbook-duo/boot-dock 0755
+duo_install_file "$MOD_DIR/files/zenbook-duo-boot-dock.service" /etc/systemd/system/zenbook-duo-boot-dock.service
+duo_enable_unit zenbook-duo-boot-dock.service --now
 duo_enable_user_unit zenbook-duo-rotate.service
 duo_enable_user_unit zenbook-duo-kwin-output-prefs.service
 info "log out and back in (or: systemctl --user start zenbook-duo-rotate) to start duo-rotate"

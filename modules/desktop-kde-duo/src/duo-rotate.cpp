@@ -1,5 +1,6 @@
 // duo-rotate: screen rotation, dual-panel layout and touch mapping for the
-// ASUS Zenbook Duo UX8407AA under KDE Plasma (Wayland).
+// ASUS Zenbook Duo UX8407AA under KDE Plasma (Wayland). Runs in the session and on
+// the Plasma login screen.
 //
 // Why not KWin's auto-rotate:
 //  * the top panel (eDP-1) is mounted upside down, the bottom one (eDP-2) is not,
@@ -75,8 +76,13 @@ static bool xeHandlesDockedBoot()
 
 // Was the keyboard on the pogo pins when the machine powered on? Its first USB
 // enumeration in this boot's kernel log then comes within the first seconds.
+// zenbook-duo-boot-dock.service records that at boot, since the login screen's user
+// cannot read the kernel log; the journal is the fallback.
 static bool dockedAtBoot()
 {
+    QFile rec(QStringLiteral("/run/zenbook-duo/docked-at-boot"));
+    if (rec.open(QIODevice::ReadOnly))
+        return rec.readAll().trimmed() == "1";
     QProcess p;
     p.start(QStringLiteral("journalctl"), {QStringLiteral("-k"), QStringLiteral("-b"), QStringLiteral("-o"), QStringLiteral("short-monotonic"),
                                            QStringLiteral("--no-pager"), QStringLiteral("-g"), QStringLiteral("idProduct=1cd7")});

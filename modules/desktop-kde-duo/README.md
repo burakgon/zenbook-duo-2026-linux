@@ -18,7 +18,8 @@ Makes KDE Plasma (Wayland) handle the two screens properly: correct rotation, la
   - copies the top panel's brightness to the bottom panel after enabling it (the firmware brings eDP-2 back at maximum brightness) and after resume, through logind's `SetBrightness` (no root)
   - idle cost: no periodic wakeups (measured 0 wakeups in 30 s)
 - Installs `/usr/lib/zenbook-duo/kwin-output-prefs` and the user unit `/etc/systemd/user/zenbook-duo-kwin-output-prefs.service`. Before KWin starts, it sets `allowSdrSoftwareBrightness=false` for `eDP-2` in `~/.config/kwinoutputconfig.json`, so one slider and the brightness keys drive both panels' hardware backlights.
-- The same unit runs before the Plasma login screen's KWin (`plasma-login-kwin_wayland.service`, user `plasmalogin`), which has no duo-rotate: it turns the top panel the right way up (`Rotated180`), puts the bottom panel below it and maps each touchscreen and pen to its own panel (`/var/lib/plasmalogin/.config/kwinoutputconfig.json` and `kcminputrc`). Without it the login screen is upside down.
+- Both user units also run on the Plasma login screen (user `plasmalogin`, `plasma-login-wayland.target`), so the login screen is the right way up, follows rotation, maps touch and turns the bottom panel off under the keyboard just like the session. The login screen's instance stops when you log in and the session's takes over.
+- Installs `/usr/lib/zenbook-duo/boot-dock` and enables `zenbook-duo-boot-dock.service` (system, at boot): it records in `/run/zenbook-duo/docked-at-boot` whether the keyboard was docked at power-on, which duo-rotate needs on the login screen, where it cannot read the kernel log.
 - Both user units are enabled for every user (`systemctl --global`). Log out and back in to start them.
 
 ## Check
