@@ -1,0 +1,46 @@
+From 67a10042c0225f36a577b75df48b942ba301b114 Mon Sep 17 00:00:00 2001
+From: burakgon <burakgon12@gmail.com>
+Date: Tue, 6 Oct 2026 22:09:46 +0300
+Subject: [PATCH 2/2] zenbook-duo-2026-linux: module parameter for the TCSS
+ change (not for upstream)
+
+xe.zenbook_duo_edp2_tcss=0 turns the change off for a boot, and its sysfs
+file tells desktop-kde-duo that the patched driver is running.
+---
+ drivers/gpu/drm/i915/display/intel_cx0_phy.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/i915/display/intel_cx0_phy.c b/drivers/gpu/drm/i915/display/intel_cx0_phy.c
+index a0f43f5..73ecd1c 100644
+--- a/drivers/gpu/drm/i915/display/intel_cx0_phy.c
++++ b/drivers/gpu/drm/i915/display/intel_cx0_phy.c
+@@ -5,6 +5,7 @@
+ 
+ #include <linux/log2.h>
+ #include <linux/math64.h>
++#include <linux/moduleparam.h>
+ 
+ #include <drm/drm_print.h>
+ 
+@@ -59,11 +60,17 @@ bool intel_encoder_is_c10phy(struct intel_encoder *encoder)
+  * port at boot, the PHY then never acknowledges its refclk and PLL
+  * requests.
+  */
++static bool zenbook_duo_edp2_tcss = true;
++module_param(zenbook_duo_edp2_tcss, bool, 0444);
++MODULE_PARM_DESC(zenbook_duo_edp2_tcss,
++		 "Request TCSS power for PTL port B's C20 PHY (zenbook-duo-2026-linux; default: true)");
++
+ static bool intel_cx0_needs_tcss_power(struct intel_encoder *encoder)
+ {
+ 	struct intel_display *display = to_intel_display(encoder);
+ 
+-	return display->platform.pantherlake &&
++	return zenbook_duo_edp2_tcss &&
++	       display->platform.pantherlake &&
+ 	       !intel_encoder_is_c10phy(encoder) &&
+ 	       !intel_encoder_is_tc(encoder);
+ }
+-- 
+2.56.0
+

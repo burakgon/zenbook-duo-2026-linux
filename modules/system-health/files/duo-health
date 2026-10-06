@@ -29,7 +29,7 @@ kernels() {
 		fi
 		if applied display-edp2-tcss && [[ $ver =~ ^7\. ]]; then
 			dkms status -m zenbook-duo-xe -k "$ver" 2>/dev/null | grep -q installed ||
-				say "$ver: bottom-screen fix (patched xe) did not build: power on with the keyboard lifted on this kernel; see: dkms status zenbook-duo-xe"
+				say "$ver: bottom-screen fix (patched xe) did not build (often a network hiccup fetching its sources): power on with the keyboard lifted on this kernel, or retry: sudo ./duo apply display-edp2-tcss"
 		fi
 	done
 	if applied audio-ghost-rt722 && ((all73)); then

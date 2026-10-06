@@ -12,6 +12,9 @@ set -euo pipefail
 kver="$1" kdir="$2"
 here="$(cd "$(dirname "$0")" && pwd)"
 cache=/var/cache/zenbook-duo/xe-src
+export GIT_TERMINAL_PROMPT=0
+# never hang a kernel update on a slow or dead network
+git_net() { timeout "$1" git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=30 "${@:2}"; }
 
 [[ $kver =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)(-rc[0-9]+)? ]] || { echo "unknown kernel version $kver" >&2; exit 1; }
 up="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}"
@@ -21,7 +24,9 @@ up+="${BASH_REMATCH[4]}"
 case "$kver" in
 *cachyos*)
 	repo=https://github.com/CachyOS/linux.git
-	tag="$(git ls-remote --tags --refs "$repo" "cachyos-$up-*" | sed 's|.*refs/tags/||' | sort -V | tail -n1)"
+	tag="$(git_net 60 ls-remote --tags --refs "$repo" "cachyos-$up-*" 2>/dev/null | sed 's|.*refs/tags/||' | sort -V | tail -n1 || true)"
+	# offline: the newest source tree of this version already in the cache
+	[[ -n $tag ]] || tag="$(ls -1 "$cache" 2>/dev/null | grep -E "^cachyos-${up//./\\.}-[0-9]+$" | sort -V | tail -n1 || true)"
 	;;
 *-arch[0-9]*)
 	repo=https://github.com/archlinux/linux.git
@@ -40,9 +45,9 @@ rm -rf src
 if [[ -d $cache/$tag/drivers/gpu/drm/xe ]]; then
 	cp -a "$cache/$tag" src
 else
-	git -c advice.detachedHead=false clone -q --depth 1 --filter=blob:none --no-checkout --branch "$tag" "$repo" src
+	git_net 600 -c advice.detachedHead=false clone -q --depth 1 --filter=blob:none --no-checkout --branch "$tag" "$repo" src
 	git -C src sparse-checkout set --no-cone /drivers/gpu/drm/xe/ /drivers/gpu/drm/i915/
-	git -C src checkout -q
+	git_net 600 -C src checkout -q
 	rm -rf src/.git
 	mkdir -p "$cache" && rm -rf "${cache:?}/$tag" && cp -a src "$cache/$tag"
 	# keep the three most recent source trees
