@@ -18,12 +18,14 @@
 //    the sensor hub can stay idle when the posture is fixed anyway;
 //  * after any output change (ours, KWin's or the user's), a re-added input device
 //    or a resume, re-apply touch mapping;
-//  * eDP-2 wedge (xe #7764 / #9196): booting with the keyboard docked can leave the
-//    bottom panel's PHY without refclk; every later modeset of pipe B then stalls.
-//    The bottom panel is never re-enabled while the system shuts down, and after
-//    each enable (and at start) the kernel log is checked for the wedge; if found,
-//    the panel stays off for the rest of the boot and the user is told how to
-//    recover (full power reset).
+//  * eDP-2 wedge (xe #7764 / #9196): booting with the keyboard docked leaves the
+//    bottom panel's PHY without refclk; the first enable of pipe B then fails and
+//    can hang the whole machine. So after a docked power-on the bottom panel is
+//    not enabled at all for that boot (the user is told to power on with the
+//    keyboard lifted), it is never re-enabled while the system shuts down, and
+//    after each enable (and at start) the kernel log is checked for the wedge; if
+//    found, the panel stays off for the rest of the boot and the user is told how
+//    to recover (full power reset).
 //
 // The accelerometer carries a mount matrix (modules/sensors-accel-mount) so its
 // orientation is expressed in the top panel's frame: laptop upright = bottom-up.
@@ -54,12 +56,30 @@ static constexpr int STABLE_MS = 1000;   // orientation must hold this long
 static constexpr int TOUCH_DELAY_MS = 400; // let KWin finish its own reset first
 static constexpr int DOCK_STABLE_MS = 1000; // dock state must hold this long (pogo pins bounce)
 static constexpr int WEDGE_CHECK_MS = 12000; // pipe B flip_done times out after 10 s
+static constexpr double DOCKED_BOOT_S = 20; // keyboard enumerated this soon after power-on: it was docked
 static const QString WEDGE_PATTERN = QStringLiteral(
     "PHY B failed|DDI BUF B|pipe B\\] flip_done timed out|AUX B/DDI B/PHY B: timeout|Failed to read DPCD register 0x60");
 static const QString TOP = QStringLiteral("eDP-1");
 static const QString BOTTOM = QStringLiteral("eDP-2");
 
 static void log(const QString &s) { std::cerr << "duo-rotate: " << s.toStdString() << std::endl; }
+
+// Was the keyboard on the pogo pins when the machine powered on? Its first USB
+// enumeration in this boot's kernel log then comes within the first seconds.
+static bool dockedAtBoot()
+{
+    QProcess p;
+    p.start(QStringLiteral("journalctl"), {QStringLiteral("-k"), QStringLiteral("-b"), QStringLiteral("-o"), QStringLiteral("short-monotonic"),
+                                           QStringLiteral("--no-pager"), QStringLiteral("-g"), QStringLiteral("idProduct=1cd7")});
+    if (!p.waitForFinished(5000))
+        return false;
+    // "[    1.303215] host kernel: usb 3-6: New USB device found, ..., idProduct=1cd7, ..."
+    const QByteArray first = p.readAllStandardOutput().split('\n').value(0);
+    const int open = first.indexOf('['), close = first.indexOf(']');
+    bool ok = false;
+    const double t = open >= 0 && close > open ? first.mid(open + 1, close - open - 1).trimmed().toDouble(&ok) : 0;
+    return ok && t < DOCKED_BOOT_S;
+}
 
 static int readSys(const QString &path)
 {
@@ -149,6 +169,9 @@ public:
             poll->start(2000);
         }
         m_docked = keyboardDocked();
+        m_dockedAtBoot = dockedAtBoot();
+        if (m_dockedAtBoot)
+            log(QStringLiteral("powered on with the keyboard docked: bottom panel stays off this boot"));
 
         auto sys = QDBusConnection::systemBus();
         m_sensor = new QDBusInterface(QStringLiteral("net.hadess.SensorProxy"), QStringLiteral("/net/hadess/SensorProxy"),
@@ -354,6 +377,15 @@ private:
             if (b->isEnabled() == m_docked) {
                 if (!m_docked && m_wedged) {
                     log(QStringLiteral("bottom panel stays off: eDP-2 wedged this boot"));
+                } else if (!m_docked && m_dockedAtBoot) {
+                    log(QStringLiteral("bottom panel stays off: powered on with the keyboard docked"));
+                    if (!m_toldDockedBoot) {
+                        m_toldDockedBoot = true;
+                        notify(QStringLiteral("Bottom screen off until a restart"),
+                               QStringLiteral("The laptop was powered on with the keyboard lying on the bottom screen. Turning that "
+                                              "screen on now would hit a kernel bug that can freeze the system. Shut down and power "
+                                              "on with the keyboard lifted off to use it."));
+                    }
                 } else if (!m_docked && shuttingDown()) {
                     log(QStringLiteral("bottom panel stays off: system is shutting down"));
                 } else {
@@ -379,8 +411,10 @@ private:
             switch (top) {
             case Rotation::Inverted: tp = {0, 0}; bp = {0, int(ts.height())}; break;       // bottom panel below
             case Rotation::None: bp = {0, 0}; tp = {0, int(bs.height())}; break;           // tent: bottom panel above
-            case Rotation::Left: bp = {0, 0}; tp = {int(bs.width()), 0}; break;            // book: bottom panel on the left
-            case Rotation::Right: tp = {0, 0}; bp = {int(ts.width()), 0}; break;           // book: bottom panel on the right
+            // Left/Right are RandR 90/270 (counter-clockwise): Left puts the scan-out top
+            // edge, and so the hinge, on the right side of the image.
+            case Rotation::Left: tp = {0, 0}; bp = {int(ts.width()), 0}; break;            // book: bottom panel on the right
+            case Rotation::Right: bp = {0, 0}; tp = {int(bs.width()), 0}; break;           // book: bottom panel on the left
             default: break;
             }
             if (t->pos() != tp || b->pos() != bp) {
@@ -453,6 +487,8 @@ private:
     bool m_claimed = false;
     bool m_shuttingDown = false;
     bool m_wedged = false;
+    bool m_dockedAtBoot = false;
+    bool m_toldDockedBoot = false;
     udev *m_udev = nullptr;
     udev_monitor *m_udevMon = nullptr;
     QTimer m_stable, m_touch, m_dockStable;

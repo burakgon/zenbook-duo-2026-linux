@@ -51,13 +51,15 @@ sudo reboot
 After the reboot, `./duo list` should say **All modules healthy**. Changed your mind? `sudo ./duo revert --all` puts everything back.
 
 > [!IMPORTANT]
-> **Power the laptop on with the keyboard lifted off the bottom screen.** Booting with the keyboard lying on it can trigger a kernel bug that loses the bottom screen until a full power reset ([details](#if-the-bottom-screen-stays-black)). Docking it after the desktop is up is fine.
+> **Power the laptop on with the keyboard lifted off the bottom screen** (restarts too). After a power-on with the keyboard lying on it, a kernel bug breaks the bottom screen, and turning it on can freeze the whole system. `desktop-kde-duo` then keeps the bottom screen off for that boot ([details](#if-the-bottom-screen-stays-black)). Docking the keyboard after the desktop is up is fine.
 
 ## If the bottom screen stays black
 
-A known kernel bug (xe #7764 / #9196): when the laptop powers on with the keyboard on the bottom screen, the display driver can lose that panel. It stays black, windows can freeze for a few seconds, shutdown takes a minute, and a normal reboot does not bring it back.
+A known kernel bug (xe #7764 / #9196): when the laptop powers on (or restarts) with the keyboard on the bottom screen, the display driver cannot bring that panel up later. The first attempt to turn it on fails; it can stall windows for 10 seconds or freeze the whole system, and a normal reboot does not fix it.
 
-`desktop-kde-duo` notices this, keeps the bottom screen off for the rest of that boot and shows a notification. To recover:
+`desktop-kde-duo` remembers whether the keyboard was docked at power-on. If it was, lifting the keyboard leaves the bottom screen off for that boot and shows a notification instead of turning it on. Shut down and power on with the keyboard lifted to use it again.
+
+If the bottom screen still fails (the kernel log check below, or the notification "Bottom screen stopped responding"), it stays off for the rest of that boot. To recover:
 
 1. Shut down, unplug the charger.
 2. Hold the power button for 15 seconds, wait a minute.
