@@ -19,6 +19,7 @@ rm -rf "$build"
 duo_install_file "$MOD_DIR/files/kwin-output-prefs" /usr/lib/zenbook-duo/kwin-output-prefs 0755
 duo_install_file "$MOD_DIR/files/zenbook-duo-rotate.service" /etc/systemd/user/zenbook-duo-rotate.service
 duo_install_file "$MOD_DIR/files/zenbook-duo-kwin-output-prefs.service" /etc/systemd/user/zenbook-duo-kwin-output-prefs.service
+duo_install_file "$MOD_DIR/files/50-zenbook-duo-login-sensors.rules" /etc/polkit-1/rules.d/50-zenbook-duo-login-sensors.rules
 duo_install_file "$MOD_DIR/files/boot-dock" /usr/lib/zenbook-duo/boot-dock 0755
 duo_install_file "$MOD_DIR/files/zenbook-duo-boot-dock.service" /etc/systemd/system/zenbook-duo-boot-dock.service
 duo_enable_unit zenbook-duo-boot-dock.service --now

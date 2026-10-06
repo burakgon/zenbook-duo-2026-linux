@@ -19,6 +19,7 @@ Makes KDE Plasma (Wayland) handle the two screens properly: correct rotation, la
   - idle cost: no periodic wakeups (measured 0 wakeups in 30 s)
 - Installs `/usr/lib/zenbook-duo/kwin-output-prefs` and the user unit `/etc/systemd/user/zenbook-duo-kwin-output-prefs.service`. Before KWin starts, it sets `allowSdrSoftwareBrightness=false` for `eDP-2` in `~/.config/kwinoutputconfig.json`, so one slider and the brightness keys drive both panels' hardware backlights.
 - Both user units also run on the Plasma login screen (user `plasmalogin`, `plasma-login-wayland.target`), so the login screen is the right way up, follows rotation, maps touch and turns the bottom panel off under the keyboard just like the session. The login screen's instance stops when you log in and the session's takes over.
+- Installs `/etc/polkit-1/rules.d/50-zenbook-duo-login-sensors.rules`: lets the login screen's user claim the accelerometer (iio-sensor-proxy only allows active user sessions by default).
 - Installs `/usr/lib/zenbook-duo/boot-dock` and enables `zenbook-duo-boot-dock.service` (system, at boot): it records in `/run/zenbook-duo/docked-at-boot` whether the keyboard was docked at power-on, which duo-rotate needs on the login screen, where it cannot read the kernel log.
 - Both user units are enabled for every user (`systemctl --global`). Log out and back in to start them.
 

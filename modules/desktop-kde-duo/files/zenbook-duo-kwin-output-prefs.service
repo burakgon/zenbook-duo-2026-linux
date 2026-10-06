@@ -1,5 +1,5 @@
 [Unit]
-Description=Zenbook Duo: KWin output preferences (one brightness for both panels; login screen posture)
+Description=Zenbook Duo: KWin output preferences (one brightness for both panels)
 Before=plasma-kwin_wayland.service plasma-login-kwin_wayland.service
 
 [Service]

@@ -3,13 +3,17 @@ Description=Zenbook Duo: rotation, dual-panel layout, touch mapping and keyboard
 # Runs in the Plasma session and on the Plasma login screen (user plasmalogin).
 PartOf=graphical-session.target plasma-login-wayland.target
 After=graphical-session.target plasma-kwin_wayland.service plasma-login-kwin_wayland.service
-# KWin puts WAYLAND_DISPLAY into the systemd user environment; not set on X11
-ConditionEnvironment=WAYLAND_DISPLAY
+# Wayland sessions only. The login screen's manager has no WAYLAND_DISPLAY: its KWin
+# serves the default socket (wayland-0).
+ConditionEnvironment=|WAYLAND_DISPLAY
+ConditionUser=|plasmalogin
 
 [Service]
+Environment=QT_QPA_PLATFORM=wayland
 ExecStart=/usr/lib/zenbook-duo/duo-rotate
+# on the login screen it may start before KWin's socket is up
 Restart=on-failure
-RestartSec=3
+RestartSec=2
 
 [Install]
 WantedBy=graphical-session.target plasma-login-wayland.target

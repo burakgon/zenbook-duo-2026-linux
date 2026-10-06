@@ -1,0 +1,8 @@
+// zenbook-duo-2026-linux (desktop-kde-duo): the Plasma login screen runs as user
+// plasmalogin in a greeter session, which iio-sensor-proxy's default policy
+// (allow_active) does not cover. Let it claim the accelerometer so duo-rotate can
+// follow rotation there as well.
+polkit.addRule(function (action, subject) {
+    if (action.id == "net.hadess.SensorProxy.claim-sensor" && subject.user == "plasmalogin")
+        return polkit.Result.YES;
+});
