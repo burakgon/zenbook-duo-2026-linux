@@ -20,7 +20,7 @@ Makes Wi-Fi roaming work on WPA3 networks whose access points keep state across 
   - The build takes about 10 seconds.
   - If the clone or the build fails, the stock mac80211 stays in use.
   - mac80211 is not in the initramfs, so no initramfs rebuild is needed.
-- Installs the pacman hook `/etc/pacman.d/hooks/65-zenbook-duo-mac80211-sources.hook`. pacman 7.1 runs hooks, the DKMS one included, without network access. This hook asks for it (`NetworkAccess = allowed`) and downloads a new kernel's `net/mac80211` into the cache right before the DKMS hook builds.
+- Installs the pacman hook `/etc/pacman.d/hooks/65-zenbook-duo-mac80211-sources.hook`. CachyOS's pacman runs hooks, the DKMS one included, without network access. This hook asks for it (`NetworkAccess = allowed`; the line is left out for a pacman that does not know the option, such as Arch's 7.1, which runs hooks with network) and downloads a new kernel's `net/mac80211` into the cache right before the DKMS hook builds.
 - Installs packages if missing: `git`, `patch`, `pahole`, and `clang`, `llvm`, `lld` for clang-built kernels.
 
 ## Check

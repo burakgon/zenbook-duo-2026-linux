@@ -66,6 +66,17 @@ duo_write_file() {
 	rm -f "$tmp"
 }
 
+# duo_install_pacman_hook SRC DEST: NetworkAccess (CachyOS pacman, network-isolated
+# hooks) is an invalid option to a pacman that does not know it, and pacman then
+# refuses every transaction. Such a pacman runs hooks with network: drop the line.
+duo_install_pacman_hook() {
+	if grep -qa NetworkAccess /usr/lib/libalpm.so; then
+		duo_install_file "$1" "$2"
+	else
+		grep -v '^NetworkAccess' "$1" | duo_write_file "$2"
+	fi
+}
+
 # Back up a pre-existing file the first time we overwrite it. Prints backup path or "-".
 _backup_once() {
 	local dest="$1" bak

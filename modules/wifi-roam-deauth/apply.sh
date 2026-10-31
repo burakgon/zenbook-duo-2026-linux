@@ -8,5 +8,5 @@ pkgs=(git patch pahole)
 grep -q '^CONFIG_CC_IS_CLANG=y' "/usr/lib/modules/$(uname -r)/build/.config" 2>/dev/null && pkgs+=(clang llvm lld)
 duo_pkg_install "${pkgs[@]}"
 duo_dkms_install "$MOD_DIR/dkms" zenbook-duo-mac80211 1.1
-# pacman 7.1 hooks have no network: fetch a new kernel's sources before DKMS builds
-duo_install_file "$MOD_DIR/files/65-zenbook-duo-mac80211-sources.hook" /etc/pacman.d/hooks/65-zenbook-duo-mac80211-sources.hook
+# hooks may have no network (CachyOS pacman): fetch a new kernel's sources before DKMS builds
+duo_install_pacman_hook "$MOD_DIR/files/65-zenbook-duo-mac80211-sources.hook" /etc/pacman.d/hooks/65-zenbook-duo-mac80211-sources.hook
